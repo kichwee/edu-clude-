@@ -1,0 +1,207 @@
+package com.example.educloud.ui.screens.home
+
+import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.EmojiEvents
+import androidx.compose.material.icons.filled.School
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import com.example.educloud.theme.EduCloudInk
+import com.example.educloud.theme.EduCloudLeaf
+import com.example.educloud.theme.EduCloudMutedInk
+import com.example.educloud.theme.EduCloudSun
+import com.example.educloud.theme.PrimaryContainer
+import com.example.educloud.theme.PrimaryFixed
+import com.example.educloud.theme.SecondaryFixed
+import com.example.educloud.theme.SurfaceContainerLowest
+import com.example.educloud.theme.TertiaryFixed
+import com.example.educloud.ui.components.AmbientCard
+import com.example.educloud.ui.components.EduBottomNav
+import com.example.educloud.ui.components.EduNavTab
+import com.example.educloud.ui.components.StorybookPage
+
+data class Achievement(
+    val title: String,
+    val description: String,
+    val earned: Boolean,
+    val emoji: String,
+)
+
+/**
+ * ProfileScreen — profile + achievements stub.
+ * Adapts Achievements_17.html / the Profile tab concept.
+ */
+@Composable
+fun ProfileScreen(
+    learnerAlias: String,
+    grade: String = "Grade 3",
+    xpPoints: Int = 340,
+    achievements: List<Achievement> = sampleAchievements,
+    onNavigateTab: (EduNavTab) -> Unit,
+) {
+    Scaffold(
+        bottomBar = {
+            EduBottomNav(activeTab = EduNavTab.Profile, onTabSelected = onNavigateTab)
+        },
+    ) { innerPadding ->
+        StorybookPage {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding)
+                    .padding(horizontal = 20.dp)
+                    .verticalScroll(rememberScrollState()),
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                Spacer(Modifier.height(24.dp))
+
+                // ── Avatar + name ─────────────────────────────────────────
+                Box(
+                    modifier = Modifier
+                        .size(96.dp)
+                        .clip(CircleShape)
+                        .background(EduCloudLeaf.copy(.15f)),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    // Storybook-style canvas portrait background
+                    Canvas(modifier = Modifier.fillMaxSize()) {
+                        drawCircle(EduCloudLeaf.copy(.08f), radius = size.minDimension / 2f)
+                    }
+                    Text(
+                        text = learnerAlias.firstOrNull()?.uppercaseChar()?.toString() ?: "A",
+                        style = MaterialTheme.typography.displaySmall,
+                        color = EduCloudLeaf,
+                        fontWeight = FontWeight.ExtraBold,
+                    )
+                }
+
+                Spacer(Modifier.height(12.dp))
+                Text(
+                    text = learnerAlias.ifBlank { "Learner" },
+                    style = MaterialTheme.typography.headlineSmall,
+                    fontWeight = FontWeight.Bold,
+                    color = EduCloudInk,
+                )
+                Text(text = grade, style = MaterialTheme.typography.bodyMedium, color = EduCloudMutedInk)
+
+                Spacer(Modifier.height(20.dp))
+
+                // ── XP / points chip ────────────────────────────────────────
+                Row(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(99.dp))
+                        .background(PrimaryFixed.copy(.6f))
+                        .padding(horizontal = 20.dp, vertical = 10.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                ) {
+                    Icon(Icons.Filled.Star, contentDescription = null, tint = EduCloudLeaf, modifier = Modifier.size(20.dp))
+                    Text(
+                        text = "$xpPoints XP",
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = EduCloudLeaf,
+                    )
+                }
+
+                Spacer(Modifier.height(28.dp))
+
+                // ── Achievements section ─────────────────────────────────────
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Text("Achievements", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = EduCloudInk)
+                    Text("${achievements.count { it.earned }} / ${achievements.size}",
+                        style = MaterialTheme.typography.labelLarge, color = EduCloudMutedInk)
+                }
+
+                Spacer(Modifier.height(12.dp))
+
+                achievements.forEach { a ->
+                    AchievementRow(achievement = a)
+                    Spacer(Modifier.height(10.dp))
+                }
+
+                Spacer(Modifier.height(16.dp))
+            }
+        }
+    }
+}
+
+@Composable
+private fun AchievementRow(achievement: Achievement) {
+    AmbientCard(
+        modifier = Modifier.fillMaxWidth(),
+        containerColor = if (achievement.earned) PrimaryFixed.copy(.25f) else SurfaceContainerLowest,
+        cornerRadius = 16,
+    ) {
+        Row(
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+        ) {
+            // Badge icon
+            Box(
+                modifier = Modifier
+                    .size(48.dp)
+                    .clip(CircleShape)
+                    .background(if (achievement.earned) PrimaryContainer else Color(0xFFE3E2E0)),
+                contentAlignment = Alignment.Center,
+            ) {
+                Text(achievement.emoji, style = MaterialTheme.typography.titleLarge)
+            }
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = achievement.title,
+                    style = MaterialTheme.typography.titleSmall,
+                    fontWeight = FontWeight.Bold,
+                    color = if (achievement.earned) EduCloudInk else EduCloudMutedInk,
+                )
+                Text(
+                    text = achievement.description,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = EduCloudMutedInk,
+                )
+            }
+            if (achievement.earned) {
+                Icon(Icons.Filled.EmojiEvents, contentDescription = null, tint = EduCloudLeaf, modifier = Modifier.size(22.dp))
+            }
+        }
+    }
+}
+
+private val sampleAchievements = listOf(
+    Achievement("First Lesson",   "Completed your first lesson",      earned = true,  emoji = "📖"),
+    Achievement("Quick Learner",  "Finished 3 lessons in a day",      earned = true,  emoji = "⚡"),
+    Achievement("Math Star",      "Scored 100% on a maths quiz",      earned = false, emoji = "⭐"),
+    Achievement("Week Warrior",   "Learned 5 days in a row",          earned = false, emoji = "🏆"),
+    Achievement("Equal Shares",   "Mastered the Equal Shares lesson",  earned = true,  emoji = "🥭"),
+)

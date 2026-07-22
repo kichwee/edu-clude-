@@ -1,0 +1,38 @@
+# Environments & Secrets
+.env
+*.env
+*.key
+*.pem
+.venv/
+venv/
+ENV/
+
+# Temporary preview files
+pdf-preview-*.jpg
+
+# Private content staging
+private-content-staging/
+content-input/
+
+# Python & Django
+__pycache__/
+*.py[cod]
+*$py.class
+*.sqlite3
+*.log
+
+# Android & Gradle
+.gradle/
+build/
+app/build/
+.idea/
+*.iml
+local.properties
+.navigation/
+android-app/model-packs/
+*.litertlm*
+*.xnnpack_cache*
+
+# OS artifacts
+.DS_Store
+Thumbs.db
