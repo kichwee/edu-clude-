@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>EduCloud - Name Setup</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;700&amp;family=Plus+Jakarta+Sans:wght@700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-highest": "#e3e2e0",
+                        "surface-tint": "#3b6a1b",
+                        "tertiary-container": "#4f9ac7",
+                        "surface-variant": "#e3e2e0",
+                        "secondary-fixed": "#ffdcc5",
+                        "error-container": "#ffdad6",
+                        "tertiary-fixed-dim": "#86cffe",
+                        "outline": "#72796a",
+                        "on-primary": "#ffffff",
+                        "on-primary-container": "#133200",
+                        "primary-fixed": "#baf293",
+                        "on-background": "#1a1c1a",
+                        "tertiary-fixed": "#c7e7ff",
+                        "on-tertiary-container": "#002f45",
+                        "inverse-primary": "#9fd67a",
+                        "surface-container": "#efeeeb",
+                        "primary-container": "#6da04b",
+                        "secondary": "#944b00",
+                        "error": "#ba1a1a",
+                        "on-error": "#ffffff",
+                        "primary-fixed-dim": "#9fd67a",
+                        "surface-dim": "#dbdad7",
+                        "on-tertiary-fixed-variant": "#004c6c",
+                        "surface": "#faf9f6",
+                        "background": "#faf9f6",
+                        "surface-container-high": "#e9e8e5",
+                        "surface-bright": "#faf9f6",
+                        "inverse-on-surface": "#f2f1ee",
+                        "on-secondary-fixed-variant": "#703700",
+                        "on-secondary-container": "#6e3600",
+                        "on-primary-fixed": "#0a2100",
+                        "tertiary": "#00658e",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "secondary-fixed-dim": "#ffb783",
+                        "surface-container-lowest": "#ffffff",
+                        "inverse-surface": "#2f312f",
+                        "primary": "#3b6a1b",
+                        "on-surface-variant": "#42493c",
+                        "secondary-container": "#fe9b4e",
+                        "on-primary-fixed-variant": "#235102",
+                        "on-tertiary-fixed": "#001e2e",
+                        "on-surface": "#1a1c1a",
+                        "on-secondary-fixed": "#301400",
+                        "outline-variant": "#c2c9b8",
+                        "surface-container-low": "#f4f3f1",
+                        "on-error-container": "#93000a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack-gap": "16px",
+                        "xs": "4px",
+                        "sm": "8px",
+                        "xl": "32px",
+                        "lg": "24px",
+                        "md": "16px",
+                        "unit": "4px",
+                        "container-padding": "20px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Be Vietnam Pro"],
+                        "headline-lg": ["Plus Jakarta Sans"],
+                        "display-lg": ["Plus Jakarta Sans"],
+                        "headline-lg-mobile": ["Plus Jakarta Sans"],
+                        "headline-md": ["Plus Jakarta Sans"],
+                        "label-lg": ["Plus Jakarta Sans"],
+                        "body-lg": ["Be Vietnam Pro"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "headline-lg": ["28px", { "lineHeight": "1.3", "fontWeight": "700" }],
+                        "display-lg": ["36px", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "800" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "1.3", "fontWeight": "700" }],
+                        "headline-md": ["22px", { "lineHeight": "1.3", "fontWeight": "700" }],
+                        "label-lg": ["14px", { "lineHeight": "1.2", "fontWeight": "700" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.filled {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md h-screen w-full flex flex-col items-center justify-center overflow-hidden">
+<!-- Mobile Container mimicking a phone screen -->
+<div class="relative w-full max-w-md h-full max-h-[850px] bg-surface-bright sm:rounded-[40px] sm:shadow-2xl flex flex-col overflow-hidden sm:border-[8px] border-surface-container-highest">
+<!-- Header / Back Button Area -->
+<header class="flex items-center justify-between px-container-padding py-md w-full z-10 absolute top-0 left-0">
+<button aria-label="Go back" class="text-on-surface-variant p-2 rounded-full hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<span class="text-label-lg font-label-lg text-on-surface-variant">Your name</span>
+<div class="w-10"></div> <!-- Spacer for balance -->
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-1 flex flex-col px-container-padding pt-24 pb-8 z-10 relative">
+<div class="mb-8">
+<h1 class="text-headline-lg-mobile font-headline-lg-mobile text-on-surface mb-xs">What should we call you?</h1>
+<p class="text-body-md font-body-md text-on-surface-variant">This helps us personalise your learning.</p>
+</div>
+<!-- Input Field -->
+<div class="mb-stack-gap">
+<label class="block text-label-lg font-label-lg text-on-surface-variant mb-xs" for="learner-name">Your name</label>
+<div class="relative">
+<input class="w-full bg-surface-container-lowest border border-outline-variant text-on-surface text-body-lg font-body-lg rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent shadow-sm transition-all" id="learner-name" placeholder="Enter your name" type="text" value="Amina"/>
+</div>
+</div>
+<!-- Device Saving Note -->
+<div class="flex items-center justify-center text-on-surface-variant text-label-lg font-label-lg mt-sm mb-auto">
+<span class="material-symbols-outlined text-[18px] mr-2">lock</span>
+                Saved on this device
+            </div>
+<!-- Bottom Illustration and Button Area -->
+<div class="mt-auto relative w-full h-64 flex flex-col justify-end">
+<!-- Background Illustration Placeholder -->
+<div class="absolute inset-0 z-0 pointer-events-none w-full h-full">
+<img alt="" class="w-full h-full object-contain object-bottom" data-alt="A warm, tactile illustration of a young child sitting on the grass reading a book, surrounded by soft, organic green plants and leaves. The style is reminiscent of a high-quality children's storybook, with a soft, natural color palette dominated by warm greens, creams, and earthy tones. The lighting is gentle and inviting, casting soft shadows that give depth to the scene." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCtk6P5ndoz0-FVBkaUCgVGRqSjCO_KC1Ulzl9JsvFBtrSmh9dEKF2ku_KWkoeap1XcX-xwmHqfHWTH0rZtpBZHpR9voqw6CGBq2D96x5UoUAioyggKfX2YsAMFrxxGFzakMJqroiY7c4itOSIixfzlKAocFj317XOgHiq4l9l_itAdIF_R9-mw8C6xlC1ZMHBjLksr8-aAeLXp-XEkCKgSSogQ2XckCUdck7aFEN8uoQx0KLW1i7sOXdF7wcSOW5wJ61cDBesCmlE"/>
+</div>
+<!-- Action Button -->
+<div class="relative z-10 mt-auto pb-4">
+<button class="w-full bg-primary text-on-primary text-headline-md font-headline-md py-4 rounded-xl shadow-[0px_4px_20px_rgba(59,106,27,0.3)] hover:scale-[0.98] active:scale-95 transition-transform duration-150 flex items-center justify-center">
+                        Continue
+                    </button>
+</div>
+</div>
+</main>
+<!-- Ambient Background Elements to match the aesthetic -->
+<div class="absolute inset-0 pointer-events-none z-0 overflow-hidden">
+<!-- Subtle gradient to mimic the warm sky -->
+<div class="absolute top-0 w-full h-1/3 bg-gradient-to-b from-[#FFF5E1] to-transparent opacity-50"></div>
+<!-- Decorative sun/cloud blob (CSS representation) -->
+<div class="absolute top-10 right-10 w-24 h-24 bg-[#FFE8C2] rounded-full blur-2xl opacity-60"></div>
+</div>
+</div>
+</body></html>

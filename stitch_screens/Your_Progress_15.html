@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>EduCloud - Progress</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;700&amp;family=Plus+Jakarta+Sans:wght@700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-highest": "#e3e2e0",
+                        "surface-tint": "#3b6a1b",
+                        "tertiary-container": "#4f9ac7",
+                        "surface-variant": "#e3e2e0",
+                        "secondary-fixed": "#ffdcc5",
+                        "error-container": "#ffdad6",
+                        "tertiary-fixed-dim": "#86cffe",
+                        "outline": "#72796a",
+                        "on-primary": "#ffffff",
+                        "on-primary-container": "#133200",
+                        "primary-fixed": "#baf293",
+                        "on-background": "#1a1c1a",
+                        "tertiary-fixed": "#c7e7ff",
+                        "on-tertiary-container": "#002f45",
+                        "inverse-primary": "#9fd67a",
+                        "surface-container": "#efeeeb",
+                        "primary-container": "#6da04b",
+                        "secondary": "#944b00",
+                        "error": "#ba1a1a",
+                        "on-error": "#ffffff",
+                        "primary-fixed-dim": "#9fd67a",
+                        "surface-dim": "#dbdad7",
+                        "on-tertiary-fixed-variant": "#004c6c",
+                        "surface": "#faf9f6",
+                        "background": "#faf9f6",
+                        "surface-container-high": "#e9e8e5",
+                        "surface-bright": "#faf9f6",
+                        "inverse-on-surface": "#f2f1ee",
+                        "on-secondary-fixed-variant": "#703700",
+                        "on-secondary-container": "#6e3600",
+                        "on-primary-fixed": "#0a2100",
+                        "tertiary": "#00658e",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "secondary-fixed-dim": "#ffb783",
+                        "surface-container-lowest": "#ffffff",
+                        "inverse-surface": "#2f312f",
+                        "primary": "#3b6a1b",
+                        "on-surface-variant": "#42493c",
+                        "secondary-container": "#fe9b4e",
+                        "on-primary-fixed-variant": "#235102",
+                        "on-tertiary-fixed": "#001e2e",
+                        "on-surface": "#1a1c1a",
+                        "on-secondary-fixed": "#301400",
+                        "outline-variant": "#c2c9b8",
+                        "surface-container-low": "#f4f3f1",
+                        "on-error-container": "#93000a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "2xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack-gap": "16px",
+                        "xs": "4px",
+                        "sm": "8px",
+                        "xl": "32px",
+                        "lg": "24px",
+                        "md": "16px",
+                        "unit": "4px",
+                        "container-padding": "20px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Be Vietnam Pro"],
+                        "headline-lg": ["Plus Jakarta Sans"],
+                        "display-lg": ["Plus Jakarta Sans"],
+                        "headline-lg-mobile": ["Plus Jakarta Sans"],
+                        "headline-md": ["Plus Jakarta Sans"],
+                        "label-lg": ["Plus Jakarta Sans"],
+                        "body-lg": ["Be Vietnam Pro"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "headline-lg": ["28px", { "lineHeight": "1.3", "fontWeight": "700" }],
+                        "display-lg": ["36px", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "800" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "1.3", "fontWeight": "700" }],
+                        "headline-md": ["22px", { "lineHeight": "1.3", "fontWeight": "700" }],
+                        "label-lg": ["14px", { "lineHeight": "1.2", "fontWeight": "700" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Be Vietnam Pro', sans-serif;
+            background-color: theme('colors.background');
+            color: theme('colors.on-background');
+        }
+        h1, h2, h3, h4, h5, h6, .font-headline-lg-mobile, .font-headline-md, .font-label-lg {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined[data-weight="fill"] {
+            font-variation-settings: 'FILL' 1;
+        }
+        
+        /* Ambient shadows for cards */
+        .ambient-shadow {
+            box-shadow: 0px 4px 20px rgba(59, 106, 27, 0.05);
+        }
+        
+        /* Hide scrollbar for clean storybook feel */
+        ::-webkit-scrollbar {
+            width: 0px;
+            background: transparent;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="antialiased min-h-screen flex flex-col pb-[80px] md:pb-0">
+<!-- TopAppBar -->
+<header class="bg-background dark:bg-background text-primary dark:text-inverse-primary docked full-width top-0 bg-background dark:bg-background flat no-shadows flex justify-between items-center px-container-padding py-md w-full sticky z-40">
+<div class="flex items-center gap-sm">
+<img class="w-10 h-10 rounded-full object-cover border-2 border-surface-container-highest" data-alt="A small, circular avatar portrait of a happy young African girl with braided hair, rendered in a soft, warm 3D illustrative style reminiscent of modern high-quality children's books." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAv3X5IF9CH92aLQduILjlRZU6TH-GFfOBKL5tXc1fdzC6CkQ1Uk9k0l2Uxaq7ZNMC8BWmNumoavWUnDYtwJn00Hu-l9EhxsjNLXXl_A9nX8Rp4sBpcGzcw-Xc_dA_v3y0IkfsLFRlcooj2oo-Kg7EJbssZWOe8FV_LBW5p-fQVvosoya2jprA34FeX3lNKTNk4fmuY2dhRvsauM7riul_V0ACCRSm8pdZzYfXok8bX2UkrQQEwzRZMUQ215QC0vI05Gjfb5eAjamQ"/>
+</div>
+<div class="text-headline-lg-mobile font-headline-lg-mobile font-bold text-surface-tint dark:text-inverse-primary">
+            EduCloud
+        </div>
+<div class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container-low dark:hover:bg-surface-container-highest transition-colors text-primary dark:text-inverse-primary cursor-pointer active:scale-95 transition-transform duration-150">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-1 w-full max-w-[600px] mx-auto px-container-padding flex flex-col gap-stack-gap">
+<!-- Header Section -->
+<div class="pt-sm pb-md">
+<h1 class="text-headline-lg-mobile font-headline-lg-mobile text-on-background mb-xs">Your progress</h1>
+<p class="text-body-lg font-body-lg text-on-surface-variant max-w-[250px]">You are making wonderful progress!</p>
+</div>
+<!-- Illustration Hero -->
+<div class="relative w-full h-[200px] mb-sm rounded-2xl overflow-hidden bg-surface-container-low flex justify-end items-end pr-lg">
+<img class="object-contain h-[180px] z-10" data-alt="A warm, charming 3D illustration of a young boy of color wearing an explorer outfit, holding a large stylized map and looking off into the distance with a smile. The background suggests a soft, magical natural setting with warm earthy tones, highly textured and tactile like a physical children's book." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBgpSRfmWuilAX5rfbhk2IIdzs7MV63NYL5ceBHkVRZRN_zh6oqJNzH1htl2EVwukuBWR48lnCNb5_f3yFzE2yuK4h1F64m8JA2m8ptdOwLgLV79CsFBsDKI34bpCDoGg4fz7Y8Kwl-cALKyhSSPWa_4xao5ke3JJtb8bplBMhaC6C6gnmnno_6doiWgneqvg36aMHe10MUVJFt9g6bPUeweTs4EodJo4G7ddwsPcS2Xa6_9D7Ilao3KsC5ApU47nGJAchZh_-9lmo"/>
+<!-- Decorative background elements -->
+<div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(circle at 20% 50%, theme('colors.primary-container') 0%, transparent 50%);"></div>
+</div>
+<!-- This Week Stats Grid -->
+<div class="mb-sm">
+<h2 class="text-label-lg font-label-lg text-on-surface-variant mb-sm uppercase tracking-wider">This week</h2>
+<div class="grid grid-cols-3 gap-sm">
+<!-- Stat Card 1 -->
+<div class="bg-surface-container-lowest rounded-2xl p-md flex flex-col ambient-shadow">
+<span class="text-label-lg font-label-lg text-on-surface-variant mb-xs">Lessons</span>
+<span class="text-headline-lg-mobile font-headline-lg-mobile text-primary">12</span>
+</div>
+<!-- Stat Card 2 -->
+<div class="bg-surface-container-lowest rounded-2xl p-md flex flex-col ambient-shadow">
+<span class="text-label-lg font-label-lg text-on-surface-variant mb-xs">Time</span>
+<span class="text-headline-lg-mobile font-headline-lg-mobile text-primary">2h 15m</span>
+</div>
+<!-- Stat Card 3 -->
+<div class="bg-surface-container-lowest rounded-2xl p-md flex flex-col ambient-shadow">
+<span class="text-label-lg font-label-lg text-on-surface-variant mb-xs">Topics</span>
+<span class="text-headline-lg-mobile font-headline-lg-mobile text-primary">7</span>
+</div>
+</div>
+</div>
+<!-- Motivation Banner -->
+<div class="bg-secondary-fixed/30 rounded-2xl p-md flex items-center justify-between mb-xl">
+<span class="text-body-md font-body-md font-bold text-on-secondary-container">Keep going! 💪</span>
+</div>
+<!-- Hidden desktop nav spacer to keep structure -->
+<div class="hidden md:block h-20"></div>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden bg-surface-container-lowest dark:bg-inverse-surface shadow-[0px_-4px_20px_rgba(0,0,0,0.05)] docked full-width bottom-0 rounded-t-xl fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-2 pb-6">
+<div class="flex flex-col items-center justify-center text-on-surface-variant dark:text-surface-variant px-4 py-1 hover:text-primary dark:hover:text-primary-fixed-dim cursor-pointer transition-colors">
+<span class="material-symbols-outlined mb-1" data-icon="home">home</span>
+<span class="text-label-lg font-label-lg text-[10px]">Today</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant dark:text-surface-variant px-4 py-1 hover:text-primary dark:hover:text-primary-fixed-dim cursor-pointer transition-colors">
+<span class="material-symbols-outlined mb-1" data-icon="menu_book">menu_book</span>
+<span class="text-label-lg font-label-lg text-[10px]">Learn</span>
+</div>
+<div class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim bg-secondary-fixed dark:bg-on-secondary-fixed-variant rounded-full px-4 py-1 scale-90 transition-all duration-200 ease-out cursor-pointer">
+<span class="material-symbols-outlined mb-1" data-icon="leaderboard" data-weight="fill">leaderboard</span>
+<span class="text-label-lg font-label-lg text-[10px]">Progress</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant dark:text-surface-variant px-4 py-1 hover:text-primary dark:hover:text-primary-fixed-dim cursor-pointer transition-colors">
+<span class="material-symbols-outlined mb-1" data-icon="person">person</span>
+<span class="text-label-lg font-label-lg text-[10px]">Profile</span>
+</div>
+</nav>
+</body></html>

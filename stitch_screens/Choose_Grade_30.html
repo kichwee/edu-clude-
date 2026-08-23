@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>EduCloud - Choose Your Grade</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;700&amp;family=Plus+Jakarta+Sans:wght@700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-highest": "#e3e2e0",
+                    "surface-tint": "#3b6a1b",
+                    "tertiary-container": "#4f9ac7",
+                    "surface-variant": "#e3e2e0",
+                    "secondary-fixed": "#ffdcc5",
+                    "error-container": "#ffdad6",
+                    "tertiary-fixed-dim": "#86cffe",
+                    "outline": "#72796a",
+                    "on-primary": "#ffffff",
+                    "on-primary-container": "#133200",
+                    "primary-fixed": "#baf293",
+                    "on-background": "#1a1c1a",
+                    "tertiary-fixed": "#c7e7ff",
+                    "on-tertiary-container": "#002f45",
+                    "inverse-primary": "#9fd67a",
+                    "surface-container": "#efeeeb",
+                    "primary-container": "#6da04b",
+                    "secondary": "#944b00",
+                    "error": "#ba1a1a",
+                    "on-error": "#ffffff",
+                    "primary-fixed-dim": "#9fd67a",
+                    "surface-dim": "#dbdad7",
+                    "on-tertiary-fixed-variant": "#004c6c",
+                    "surface": "#faf9f6",
+                    "background": "#faf9f6",
+                    "surface-container-high": "#e9e8e5",
+                    "surface-bright": "#faf9f6",
+                    "inverse-on-surface": "#f2f1ee",
+                    "on-secondary-fixed-variant": "#703700",
+                    "on-secondary-container": "#6e3600",
+                    "on-primary-fixed": "#0a2100",
+                    "tertiary": "#00658e",
+                    "on-tertiary": "#ffffff",
+                    "on-secondary": "#ffffff",
+                    "secondary-fixed-dim": "#ffb783",
+                    "surface-container-lowest": "#ffffff",
+                    "inverse-surface": "#2f312f",
+                    "primary": "#3b6a1b",
+                    "on-surface-variant": "#42493c",
+                    "secondary-container": "#fe9b4e",
+                    "on-primary-fixed-variant": "#235102",
+                    "on-tertiary-fixed": "#001e2e",
+                    "on-surface": "#1a1c1a",
+                    "on-secondary-fixed": "#301400",
+                    "outline-variant": "#c2c9b8",
+                    "surface-container-low": "#f4f3f1",
+                    "on-error-container": "#93000a"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "stack-gap": "16px",
+                    "xs": "4px",
+                    "sm": "8px",
+                    "xl": "32px",
+                    "lg": "24px",
+                    "md": "16px",
+                    "unit": "4px",
+                    "container-padding": "20px"
+            },
+            "fontFamily": {
+                    "body-md": [
+                            "Be Vietnam Pro"
+                    ],
+                    "headline-lg": [
+                            "Plus Jakarta Sans"
+                    ],
+                    "display-lg": [
+                            "Plus Jakarta Sans"
+                    ],
+                    "headline-lg-mobile": [
+                            "Plus Jakarta Sans"
+                    ],
+                    "headline-md": [
+                            "Plus Jakarta Sans"
+                    ],
+                    "label-lg": [
+                            "Plus Jakarta Sans"
+                    ],
+                    "body-lg": [
+                            "Be Vietnam Pro"
+                    ]
+            },
+            "fontSize": {
+                    "body-md": [
+                            "16px",
+                            {
+                                    "lineHeight": "1.5",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "headline-lg": [
+                            "28px",
+                            {
+                                    "lineHeight": "1.3",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "display-lg": [
+                            "36px",
+                            {
+                                    "lineHeight": "1.2",
+                                    "letterSpacing": "-0.02em",
+                                    "fontWeight": "800"
+                            }
+                    ],
+                    "headline-lg-mobile": [
+                            "24px",
+                            {
+                                    "lineHeight": "1.3",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "headline-md": [
+                            "22px",
+                            {
+                                    "lineHeight": "1.3",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "label-lg": [
+                            "14px",
+                            {
+                                    "lineHeight": "1.2",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "body-lg": [
+                            "18px",
+                            {
+                                    "lineHeight": "1.6",
+                                    "fontWeight": "500"
+                            }
+                    ]
+            }
+    },
+        },
+      }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface font-body-md antialiased min-h-screen flex flex-col relative overflow-hidden selection:bg-primary-fixed selection:text-on-primary-fixed">
+<!-- Ambient decorative background to enhance the storybook feel -->
+<div class="absolute top-0 right-0 w-[40vw] h-[40vw] max-w-[300px] max-h-[300px] bg-secondary-fixed/30 rounded-full blur-[60px] -z-10 -translate-y-1/3 translate-x-1/3 pointer-events-none"></div>
+<div class="absolute bottom-10 left-0 w-[50vw] h-[50vw] max-w-[400px] max-h-[400px] bg-primary-fixed/20 rounded-full blur-[80px] -z-10 translate-y-1/4 -translate-x-1/4 pointer-events-none"></div>
+<main class="flex-1 flex flex-col px-container-padding py-8 relative z-10 w-full max-w-md mx-auto">
+<!-- Header Area -->
+<header class="mb-10 w-full">
+<p class="text-label-lg font-label-lg text-on-surface-variant mb-6">Choose your grade</p>
+<h1 class="text-headline-lg-mobile font-headline-lg-mobile text-on-surface text-center px-4 leading-tight">Choose the lessons that fit you</h1>
+</header>
+<!-- Grade Selection Grid -->
+<div class="grid grid-cols-2 gap-md mb-auto w-full">
+<!-- Inactive Chip 1 -->
+<button class="w-full bg-surface-container-lowest border-2 border-outline-variant/30 rounded-[24px] py-4 px-6 flex justify-center items-center shadow-sm hover:bg-surface-container-low transition-all duration-200 active:scale-95 group">
+<span class="font-body-lg text-body-lg text-on-surface group-hover:text-primary transition-colors">Grade 1</span>
+</button>
+<!-- Inactive Chip 2 -->
+<button class="w-full bg-surface-container-lowest border-2 border-outline-variant/30 rounded-[24px] py-4 px-6 flex justify-center items-center shadow-sm hover:bg-surface-container-low transition-all duration-200 active:scale-95 group">
+<span class="font-body-lg text-body-lg text-on-surface group-hover:text-primary transition-colors">Grade 2</span>
+</button>
+<!-- Active Chip 3 -->
+<button class="w-full bg-secondary-container border-2 border-secondary-container rounded-[24px] py-4 px-6 flex justify-between items-center shadow-[0px_6px_20px_rgba(254,155,78,0.35)] transition-all duration-200 relative overflow-hidden active:scale-95 scale-105 z-10">
+<span class="font-body-lg text-body-lg text-on-secondary-container font-bold relative z-10">Grade 3</span>
+<span class="material-symbols-outlined text-on-secondary-container text-[24px] relative z-10" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<!-- Subtle inner highlight to make it feel tactile and lifted -->
+<div class="absolute inset-0 bg-gradient-to-b from-white/20 to-transparent pointer-events-none"></div>
+</button>
+<!-- Inactive Chip 4 -->
+<button class="w-full bg-surface-container-lowest border-2 border-outline-variant/30 rounded-[24px] py-4 px-6 flex justify-center items-center shadow-sm hover:bg-surface-container-low transition-all duration-200 active:scale-95 group">
+<span class="font-body-lg text-body-lg text-on-surface group-hover:text-primary transition-colors">Grade 4</span>
+</button>
+<!-- Inactive Chip 5 -->
+<button class="w-full bg-surface-container-lowest border-2 border-outline-variant/30 rounded-[24px] py-4 px-6 flex justify-center items-center shadow-sm hover:bg-surface-container-low transition-all duration-200 active:scale-95 group">
+<span class="font-body-lg text-body-lg text-on-surface group-hover:text-primary transition-colors">Grade 5</span>
+</button>
+<!-- Inactive Chip 6 -->
+<button class="w-full bg-surface-container-lowest border-2 border-outline-variant/30 rounded-[24px] py-4 px-6 flex justify-center items-center shadow-sm hover:bg-surface-container-low transition-all duration-200 active:scale-95 group">
+<span class="font-body-lg text-body-lg text-on-surface group-hover:text-primary transition-colors">Grade 6</span>
+</button>
+</div>
+<!-- Bottom Action Area -->
+<div class="mt-12 flex flex-col items-center w-full">
+<!-- Illustrative Element -->
+<div class="w-full max-w-[200px] aspect-[4/3] mb-6 relative">
+<img class="w-full h-full object-contain drop-shadow-xl" data-alt="A charming, tactile 3D illustration of a stack of school books and a small notebook resting on a soft patch of green grass with small decorative leaves. The style is soft, nurturing, and high-quality storybook, featuring organic rounded shapes, warm ambient lighting, and rich but muted colors that perfectly complement a cream background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCqdALAA4Yg0gJKDnADA7t3lrNaOEztgKF587NuCwvOK8mrydFQIuRGt1a3g8PaLt8yiiqiCZ_t829cX4f4BIzQLaDj3_CC5FZdb8nF94lfVEGDl4rQ1L2RM3X9MDs9oApzekTUm1C5eQO6bnqXmZabYkTuJ6Lapowx07XobT1KoY-e9qer0TjmzjjgeUJmYTorLAz2Qu2XUNtP9dmXJKtoOV5gqDB2OOYE8yOYnMd7K61fZzXfqUGDzXG7XDhcx2AzbkkklX8z3Ww"/>
+</div>
+<!-- Primary Action Button -->
+<button class="w-full bg-primary text-on-primary py-4 px-8 rounded-[24px] shadow-[0px_8px_24px_rgba(59,106,27,0.35)] active:scale-[0.98] transition-all duration-200 flex justify-center items-center relative overflow-hidden group">
+<span class="font-label-lg text-label-lg relative z-10 group-hover:-translate-y-0.5 transition-transform">Continue</span>
+<!-- Inner top highlight for 3D tactile feel -->
+<div class="absolute inset-x-0 top-0 h-1/2 bg-gradient-to-b from-white/10 to-transparent pointer-events-none"></div>
+</button>
+</div>
+</main>
+</body></html>

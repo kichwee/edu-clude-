@@ -1,0 +1,72 @@
+{
+  "schema_version": "1",
+  "pack_id": "grade3-rule-tutor-v1",
+  "content_version": "grade3-rule-based-demo-0.4",
+  "label": "Grade 3 Maths tutor",
+  "lessons": [
+    {
+      "id": "g3-t1-w1-l1-position",
+      "topic": "Positions in order",
+      "source": "Term 1 · Week 1 · Lesson 1 · Book p.2",
+      "explanation": "Position tells where someone is in an order. Count from first.",
+      "definition": "A position tells the order of someone or something in a line.",
+      "teaching_steps": ["Start at the first person.", "Count each position in order.", "Name the position you reach."],
+      "matching_terms": ["position", "order", "first", "second", "third", "fourth", "fifth", "mary", "john"],
+      "practice_prompt": "In the same line, what position is Mary?",
+      "hint": "Start at the first person and count one place at a time.",
+      "question": "What position is Mary in the line?",
+      "options": ["1. Third", "2. Fourth", "3. Fifth"],
+      "correct_option": "3",
+      "correction": "Mary is fifth."
+      ,"answer_rules": [{"evidence_terms": ["mary"], "answer": "fifth", "explanation": "Counting from the first person, Mary is fifth."}]
+    },
+    {
+      "id": "g3-t1-w2-l1-counting-twos",
+      "topic": "Counting in twos",
+      "source": "Term 1 · Week 2 · Lesson 1 · Book p.14",
+      "explanation": "Counting in twos means adding two each time.",
+      "definition": "Counting in twos changes a number by two each time.",
+      "teaching_steps": ["Find the change between two numbers.", "Add two for each next number.", "Check that every jump is two."],
+      "matching_terms": ["count", "counting", "twos", "two", "next", "sequence", "302", "304", "306", "511", "513", "515", "517", "519", "610", "612", "614"],
+      "practice_prompt": "Continue 610, 612, 614, __, __.",
+      "hint": "Find the change, then add two again.",
+      "question": "610, 612, 614, __, __",
+      "options": ["1. 616, 618", "2. 615, 616", "3. 618, 620"],
+      "correct_option": "1",
+      "correction": "After 614 come 616 and 618."
+      ,"answer_rules": [{"evidence_terms": ["511", "513", "515"], "answer": "517, 519", "explanation": "Add two after 515, then add two again."}]
+    },
+    {
+      "id": "g3-t1-w2-l2-tens-ones",
+      "topic": "Tens and ones",
+      "source": "Term 1 · Week 2 · Lesson 2 · Book p.16",
+      "explanation": "A two-digit number has tens and ones. 36 is 3 tens and 6 ones.",
+      "definition": "Tens are groups of ten, and ones are single units.",
+      "teaching_steps": ["Look at the tens digit.", "Say how many tens it shows.", "Look at the ones digit and say how many ones it shows."],
+      "matching_terms": ["tens", "ones", "place value", "36", "number"],
+      "practice_prompt": "How many tens and ones are in 36?",
+      "hint": "The left digit shows tens. The right digit shows ones.",
+      "question": "How many tens and ones are in 36?",
+      "options": ["1. 6 tens, 3 ones", "2. 3 tens, 6 ones", "3. 36 tens"],
+      "correct_option": "2",
+      "correction": "36 is 3 tens and 6 ones."
+      ,"answer_rules": [{"evidence_terms": ["36"], "answer": "3 tens and 6 ones", "explanation": "In 36, 3 is the tens digit and 6 is the ones digit."}]
+    },
+    {
+      "id": "g3-t1-w2-l4-number-words",
+      "topic": "Number words",
+      "source": "Term 1 · Week 2 · Lesson 4 · Book p.18",
+      "explanation": "Numbers can be written using words. 25 is twenty five.",
+      "definition": "A number name writes a number using words.",
+      "teaching_steps": ["Read the number.", "Say its number name.", "Write the number name in words."],
+      "matching_terms": ["number", "words", "write", "twenty", "five", "25"],
+      "practice_prompt": "Write 25 in words.",
+      "hint": "Say the number, then write the words you hear.",
+      "question": "How is 25 written in words?",
+      "options": ["1. Twenty five", "2. Fifty two", "3. Two five"],
+      "correct_option": "1",
+      "correction": "25 is written as twenty five."
+      ,"answer_rules": [{"evidence_terms": ["25"], "answer": "twenty five", "explanation": "25 is written in words as twenty five."}]
+    }
+  ]
+}

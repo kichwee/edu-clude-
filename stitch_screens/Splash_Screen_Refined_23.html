@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>EduCloud Splash Screen</title>
+<!-- Font -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          },
+          colors: {
+            surface: '#faf9f6',
+            brand: '#1e3a8a', // Dark Navy/Teal for EduCloud text
+            button: '#bae6fd', // Light blue for button
+          },
+          borderRadius: {
+            'xl': '1rem', // Roundness matching the design system
+            'full': '9999px',
+          }
+        }
+      }
+    }
+  </script>
+<style data-purpose="layout-styles">
+    /* Custom styles for full-screen mobile layout */
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      width: 100%;
+      overflow: hidden; /* Prevent scrolling on splash screen */
+      background-color: #faf9f6; /* Fallback surface color */
+    }
+    
+    .splash-container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .background-image {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      z-index: 0;
+    }
+
+    .content-overlay {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      padding: 4rem 2rem 3rem 2rem;
+    }
+  </style>
+</head>
+<body>
+<!-- BEGIN: SplashScreen -->
+<main class="splash-container">
+<!-- Background Illustration -->
+<!-- Using a placeholder for the lush green meadow and children reading -->
+<img alt="Storybook illustration of a boy and girl reading in a meadow" class="background-image" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBebGNdtqiNMzWf8t50bAaUT97y0qaWWbg-zSjgGpfW4eusCoqf4SP-zpgya_i1EtS3tPvenyiHREiJ3KtJ78JXnlShFInB0X9OJVyIe022MRXCuA4rGSFI3rslLmN0LupZQGJYGlbTN4p_ZzfOyVFqH4CMmNDTXrRv--3OsdYZ57lmcKniPIa_RGOylfn4M18sqdGYau8WzeJ5nvTF9nxdIoCMDBgSwz5Vu1MhIKPpNkzA1VeLCoWEY3W7BlRa0XFGCiALqHuT-IA"/>
+<div class="content-overlay">
+<!-- Top Section: Brand Name and Tagline -->
+<div class="flex flex-col items-center pt-8 text-center" data-purpose="branding">
+<h1 class="text-5xl font-extrabold text-brand tracking-tight mb-2">EduCloud</h1>
+<p class="text-lg font-medium text-brand/80">Learn. Grow. Shine.</p>
+</div>
+<!-- Bottom Section: Call to Action -->
+<div class="w-full pb-8 flex justify-center" data-purpose="call-to-action">
+<button class="bg-button text-gray-900 font-bold py-4 px-10 rounded-full text-lg shadow-lg hover:bg-sky-300 transition-colors duration-200 active:scale-95 w-full max-w-xs">
+          START ADVENTURE
+        </button>
+</div>
+</div>
+</main>
+<!-- END: SplashScreen -->
+</body></html>

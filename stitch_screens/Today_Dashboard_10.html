@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>EduCloud - Today</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;700&amp;family=Plus+Jakarta+Sans:wght@700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-highest": "#e3e2e0",
+                        "surface-tint": "#3b6a1b",
+                        "tertiary-container": "#4f9ac7",
+                        "surface-variant": "#e3e2e0",
+                        "secondary-fixed": "#ffdcc5",
+                        "error-container": "#ffdad6",
+                        "tertiary-fixed-dim": "#86cffe",
+                        "outline": "#72796a",
+                        "on-primary": "#ffffff",
+                        "on-primary-container": "#133200",
+                        "primary-fixed": "#baf293",
+                        "on-background": "#1a1c1a",
+                        "tertiary-fixed": "#c7e7ff",
+                        "on-tertiary-container": "#002f45",
+                        "inverse-primary": "#9fd67a",
+                        "surface-container": "#efeeeb",
+                        "primary-container": "#6da04b",
+                        "secondary": "#944b00",
+                        "error": "#ba1a1a",
+                        "on-error": "#ffffff",
+                        "primary-fixed-dim": "#9fd67a",
+                        "surface-dim": "#dbdad7",
+                        "on-tertiary-fixed-variant": "#004c6c",
+                        "surface": "#faf9f6",
+                        "background": "#faf9f6",
+                        "surface-container-high": "#e9e8e5",
+                        "surface-bright": "#faf9f6",
+                        "inverse-on-surface": "#f2f1ee",
+                        "on-secondary-fixed-variant": "#703700",
+                        "on-secondary-container": "#6e3600",
+                        "on-primary-fixed": "#0a2100",
+                        "tertiary": "#00658e",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "secondary-fixed-dim": "#ffb783",
+                        "surface-container-lowest": "#ffffff",
+                        "inverse-surface": "#2f312f",
+                        "primary": "#3b6a1b",
+                        "on-surface-variant": "#42493c",
+                        "secondary-container": "#fe9b4e",
+                        "on-primary-fixed-variant": "#235102",
+                        "on-tertiary-fixed": "#001e2e",
+                        "on-surface": "#1a1c1a",
+                        "on-secondary-fixed": "#301400",
+                        "outline-variant": "#c2c9b8",
+                        "surface-container-low": "#f4f3f1",
+                        "on-error-container": "#93000a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "2xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack-gap": "16px",
+                        "xs": "4px",
+                        "sm": "8px",
+                        "xl": "32px",
+                        "lg": "24px",
+                        "md": "16px",
+                        "unit": "4px",
+                        "container-padding": "20px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Be Vietnam Pro"],
+                        "headline-lg": ["Plus Jakarta Sans"],
+                        "display-lg": ["Plus Jakarta Sans"],
+                        "headline-lg-mobile": ["Plus Jakarta Sans"],
+                        "headline-md": ["Plus Jakarta Sans"],
+                        "label-lg": ["Plus Jakarta Sans"],
+                        "body-lg": ["Be Vietnam Pro"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "headline-lg": ["28px", { "lineHeight": "1.3", "fontWeight": "700" }],
+                        "display-lg": ["36px", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "800" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "1.3", "fontWeight": "700" }],
+                        "headline-md": ["22px", { "lineHeight": "1.3", "fontWeight": "700" }],
+                        "label-lg": ["14px", { "lineHeight": "1.2", "fontWeight": "700" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { background-color: #faf9f6; }
+        .ambient-shadow { box-shadow: 0px 4px 20px rgba(59, 106, 27, 0.08); }
+        .tactile-button-shadow { box-shadow: 0px 4px 0px rgba(0, 0, 0, 0.1); }
+        .tactile-button:active { transform: translateY(2px); box-shadow: 0px 2px 0px rgba(0, 0, 0, 0.1); }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md antialiased pb-24 md:pb-0">
+<!-- TopAppBar -->
+<header class="bg-background dark:bg-background full-width top-0 z-40 sticky">
+<div class="flex justify-between items-center px-container-padding py-md w-full">
+<div class="flex items-center gap-sm">
+<img class="w-10 h-10 rounded-full object-cover border-2 border-surface-container-highest" data-alt="A warm, illustrated profile picture of a young African girl with braided hair, smiling gently. The style is soft, tactile, and reminiscent of a high-quality children's storybook illustration with a light cream background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBR5x_DSbc52XGAKcLAC6_OHkxXygMwN7iosUsIwloJBoJfP1AQGtchuSUatG7WLp6X_6ZDT8I47GyQvKWAM1hyGvXDK4KB7Hfv7SZyIZyr3pVgJzp8HzfPRXYPIWCJV1TmSxdg6b8CsdDTJfenntte5bvL6djZGLvtSNxi_JhtNGPilf9Lo0jkALMHrICz03Es3dZh0mzmE-_IZ-5QznXkAD1QhluADyvCfUSoybTFJlh2OQp9JoO8h54QjPw3UY7PMmKN2xcsUuo"/>
+<div class="flex flex-col">
+<span class="text-body-md font-body-md text-on-surface-variant">Good afternoon,</span>
+<span class="text-headline-md font-headline-md text-primary">Amina! ☀️</span>
+</div>
+</div>
+<div class="flex items-center gap-md">
+<div class="bg-primary-container/20 text-primary px-3 py-1 rounded-full text-label-lg font-label-lg flex items-center gap-1 border border-primary/20">
+<span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+                    Offline ready
+                </div>
+<button class="text-primary dark:text-inverse-primary hover:bg-surface-container-low dark:hover:bg-surface-container-highest transition-colors rounded-full p-2 scale-95 transition-transform duration-150">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">settings</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="px-container-padding pt-sm pb-xl max-w-2xl mx-auto space-y-xl">
+<!-- Continue Journey Card -->
+<section class="relative">
+<div class="bg-surface-container-low rounded-2xl p-lg ambient-shadow overflow-hidden relative">
+<!-- Decorative background elements -->
+<div class="absolute -right-10 -top-10 w-40 h-40 bg-primary-fixed/30 rounded-full blur-2xl"></div>
+<div class="absolute -left-10 -bottom-10 w-32 h-32 bg-secondary-fixed/30 rounded-full blur-xl"></div>
+<div class="relative z-10">
+<div class="flex justify-between items-start mb-sm">
+<span class="text-label-lg font-label-lg text-on-surface-variant uppercase tracking-wider">Continue your journey</span>
+</div>
+<h2 class="text-headline-lg-mobile font-headline-lg-mobile text-on-primary-container mb-xs">Equal shares</h2>
+<p class="text-body-md font-body-md text-on-surface-variant mb-lg flex items-center gap-2">
+                        Mathematics <span class="w-1 h-1 rounded-full bg-outline"></span> 3 min
+                    </p>
+<!-- Illustration Placeholder -->
+<div class="w-full h-48 rounded-xl bg-surface-container-highest mb-lg overflow-hidden relative border border-surface-dim">
+<img class="w-full h-full object-cover object-center absolute inset-0" data-alt="A beautifully rendered, warm digital illustration of two woven baskets filled with ripe, golden mangoes. The setting feels organic and tactile, placed on a soft grassy surface with a few green leaves scattered around. The lighting is soft and natural, emphasizing a gentle, storybook aesthetic tailored for early childhood education." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB3fKDXcyB5SuDvEZckVnFbT1qjHsdGdaH4BG55DFr0PWGwHICtk0wDLPJUDnM5xoUie5uSGADphAZQhTFthxo14VjDloLg5IUYRuMrD_7OOZhukrCouTwToKylb-G8eqXKQnkjNTGf-qZZH92tZI_2reXPttLbJjzTouXdt_-eNTyBcxsJ0JlLs40ATwiSzjYf9Lc9JUBnC-HvMmNK9oRrE-Xhmdm0QbSPuZjgKCHHDe1Kl-urWM-2lWTTBJlTA8Wov7G0DQPvcMA"/>
+</div>
+<button class="w-full bg-primary text-on-primary py-3 px-6 rounded-xl text-label-lg font-label-lg tactile-button tactile-button-shadow transition-all flex items-center justify-center gap-2">
+                        Continue
+                        <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Quick Actions Bento -->
+<section class="grid grid-cols-2 gap-sm">
+<!-- Review Lesson -->
+<button class="bg-surface-container-lowest border border-surface-container-highest rounded-2xl p-md flex flex-col items-center justify-center gap-sm hover:bg-surface-container-low transition-colors text-center ambient-shadow group relative overflow-hidden">
+<div class="w-16 h-16 bg-secondary-fixed/50 rounded-full flex items-center justify-center mb-xs group-hover:scale-105 transition-transform">
+<img class="w-12 h-12 object-contain" data-alt="A cute, stylized illustration of a friendly orange radio or device character with small antennae. It has a warm, tactile, clay-like appearance, fitting a playful storybook educational theme." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCs_fnxO82Pr3_c1tHfHbWHMAjc6DTA0ISpFjLC6A4IZSJiisgLsIMNFxaJ5BCd_Rdsrdyc8glWOWGqDGve19mhC61cPPzxnlxpzalJSfdmlXBpSSyzaf09TM55QaVkCJB93tZ6_yWEnAO6861S5UyoIQZfRgWON8E0i55U00RAtxcev9y9Od5IcN7JW1kKTMj2T9iHhkeI-GBZa2pWD2eyOpv1QS8wDfndjpHjz8qAMOm76x4_5mPsqXT2zdRM2gnYoTNQGkq5Y1w"/>
+</div>
+<div>
+<h3 class="text-label-lg font-label-lg text-on-background">Review 1 lesson</h3>
+<p class="text-[12px] text-on-surface-variant mt-1">Quick practice</p>
+</div>
+</button>
+<!-- Explore Subjects -->
+<button class="bg-surface-container-lowest border border-surface-container-highest rounded-2xl p-md flex flex-col items-center justify-center gap-sm hover:bg-surface-container-low transition-colors text-center ambient-shadow group relative overflow-hidden">
+<div class="w-16 h-16 bg-tertiary-fixed/50 rounded-full flex items-center justify-center mb-xs group-hover:scale-105 transition-transform">
+<img class="w-12 h-12 object-contain" data-alt="A charming, soft illustration of a stylized blue microscope character or icon. It looks friendly and approachable, rendered in a 3D tactile style typical of high-quality modern children's books, set against a soft background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCuUmlv_8YREw1KN8UOUwZP7FNcGY-k2y74JvHIWb0ipokDggcC1HsCJ1OSr0zIDoq3d3GPOl9eXS7Ogm0BsHvP1jXWXXDkOcfVaiFFbyYBarAEJYIZP1zemehLHyGWkGAEsna7Oq9M0-8ozSyVEV43rZB-MMfXAprp8JbGx021JykwkO5M7IUtDlDYY8SwJt0hU0enko5kwxenVhLbvXlbi-SzPkapG4GQw7QQwJytU9Yhy4sCw5-vwLEckvDAWedXBMdmswdjpuo"/>
+</div>
+<div>
+<h3 class="text-label-lg font-label-lg text-on-background">Explore subjects</h3>
+<p class="text-[12px] text-on-surface-variant mt-1">Find something new</p>
+</div>
+</button>
+</section>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden bg-surface-container-lowest dark:bg-inverse-surface shadow-[0px_-4px_20px_rgba(0,0,0,0.05)] docked full-width bottom-0 rounded-t-xl fixed left-0 w-full z-50 flex justify-around items-center px-4 py-2 pb-6 pt-3">
+<!-- Active: Today -->
+<a class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim bg-secondary-fixed dark:bg-on-secondary-fixed-variant rounded-full px-4 py-1 scale-90 transition-all duration-200 ease-out group" href="#">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="text-label-lg font-label-lg text-[10px]">Today</span>
+</a>
+<!-- Inactive: Learn -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-surface-variant px-4 py-1 hover:text-primary dark:hover:text-primary-fixed-dim transition-colors group" href="#">
+<span class="material-symbols-outlined mb-1 group-hover:-translate-y-1 transition-transform">menu_book</span>
+<span class="text-label-lg font-label-lg text-[10px]">Learn</span>
+</a>
+<!-- Inactive: Progress -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-surface-variant px-4 py-1 hover:text-primary dark:hover:text-primary-fixed-dim transition-colors group" href="#">
+<span class="material-symbols-outlined mb-1 group-hover:-translate-y-1 transition-transform">leaderboard</span>
+<span class="text-label-lg font-label-lg text-[10px]">Progress</span>
+</a>
+<!-- Inactive: Profile -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-surface-variant px-4 py-1 hover:text-primary dark:hover:text-primary-fixed-dim transition-colors group" href="#">
+<span class="material-symbols-outlined mb-1 group-hover:-translate-y-1 transition-transform">person</span>
+<span class="text-label-lg font-label-lg text-[10px]">Profile</span>
+</a>
+</nav>
+</body></html>

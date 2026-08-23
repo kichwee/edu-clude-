@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>EduCloud - Subject Explorer</title>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;700&amp;family=Plus+Jakarta+Sans:wght@700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Configuration -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-highest": "#e3e2e0",
+                        "surface-tint": "#3b6a1b",
+                        "tertiary-container": "#4f9ac7",
+                        "surface-variant": "#e3e2e0",
+                        "secondary-fixed": "#ffdcc5",
+                        "error-container": "#ffdad6",
+                        "tertiary-fixed-dim": "#86cffe",
+                        "outline": "#72796a",
+                        "on-primary": "#ffffff",
+                        "on-primary-container": "#133200",
+                        "primary-fixed": "#baf293",
+                        "on-background": "#1a1c1a",
+                        "tertiary-fixed": "#c7e7ff",
+                        "on-tertiary-container": "#002f45",
+                        "inverse-primary": "#9fd67a",
+                        "surface-container": "#efeeeb",
+                        "primary-container": "#6da04b",
+                        "secondary": "#944b00",
+                        "error": "#ba1a1a",
+                        "on-error": "#ffffff",
+                        "primary-fixed-dim": "#9fd67a",
+                        "surface-dim": "#dbdad7",
+                        "on-tertiary-fixed-variant": "#004c6c",
+                        "surface": "#faf9f6",
+                        "background": "#faf9f6",
+                        "surface-container-high": "#e9e8e5",
+                        "surface-bright": "#faf9f6",
+                        "inverse-on-surface": "#f2f1ee",
+                        "on-secondary-fixed-variant": "#703700",
+                        "on-secondary-container": "#6e3600",
+                        "on-primary-fixed": "#0a2100",
+                        "tertiary": "#00658e",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "secondary-fixed-dim": "#ffb783",
+                        "surface-container-lowest": "#ffffff",
+                        "inverse-surface": "#2f312f",
+                        "primary": "#3b6a1b",
+                        "on-surface-variant": "#42493c",
+                        "secondary-container": "#fe9b4e",
+                        "on-primary-fixed-variant": "#235102",
+                        "on-tertiary-fixed": "#001e2e",
+                        "on-surface": "#1a1c1a",
+                        "on-secondary-fixed": "#301400",
+                        "outline-variant": "#c2c9b8",
+                        "surface-container-low": "#f4f3f1",
+                        "on-error-container": "#93000a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "2xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack-gap": "16px",
+                        "xs": "4px",
+                        "sm": "8px",
+                        "md": "16px",
+                        "lg": "24px",
+                        "xl": "32px",
+                        "unit": "4px",
+                        "container-padding": "20px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Be Vietnam Pro"],
+                        "headline-lg": ["Plus Jakarta Sans"],
+                        "display-lg": ["Plus Jakarta Sans"],
+                        "headline-lg-mobile": ["Plus Jakarta Sans"],
+                        "headline-md": ["Plus Jakarta Sans"],
+                        "label-lg": ["Plus Jakarta Sans"],
+                        "body-lg": ["Be Vietnam Pro"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "headline-lg": ["28px", { "lineHeight": "1.3", "fontWeight": "700" }],
+                        "display-lg": ["36px", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "800" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "1.3", "fontWeight": "700" }],
+                        "headline-md": ["22px", { "lineHeight": "1.3", "fontWeight": "700" }],
+                        "label-lg": ["14px", { "lineHeight": "1.2", "fontWeight": "700" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            /* Warm cream surface base */
+            background-color: theme('colors.background');
+            color: theme('colors.on-background');
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        .storybook-shadow {
+            box-shadow: 0px 4px 20px rgba(59, 106, 27, 0.08); /* primary mixed neutral shadow */
+        }
+        
+        .storybook-card-active {
+            transition: transform 0.15s ease-out, box-shadow 0.15s ease-out;
+        }
+        
+        .storybook-card-active:active {
+            transform: translateY(2px) scale(0.98);
+            box-shadow: 0px 2px 10px rgba(59, 106, 27, 0.05);
+        }
+
+        /* Hide scrollbar for clean storybook feel */
+        ::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-body-md bg-background min-h-screen flex flex-col pb-24">
+<!-- TopAppBar -->
+<header class="bg-background flex justify-between items-center px-container-padding py-md w-full sticky top-0 z-40 flat no shadows">
+<div class="flex items-center gap-sm">
+<!-- Leading Avatar -->
+<div class="w-10 h-10 rounded-full overflow-hidden border-2 border-surface-container-high">
+<img alt="Child profile picture" class="w-full h-full object-cover" data-alt="A warm, highly detailed, soft-shaded illustration of a young African girl with braided hair, smiling gently. The style is reminiscent of high-quality physical storybooks, utilizing a natural color palette and soft edges, creating a comforting and nurturing educational atmosphere." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAklA4WtgLmUnfqnVS0J57umJX7e5CuzAQYz3KDC9ZVioYGVneNSNIiGLguvAghjYifhkc9mke4nvAwN0LQf1soCuDE5_WVTErev-Cz1xHpDoCU7iCH9_BWpkG1lz1NGyt7_uofhN7wNUaOeas3ZG8lkcU-G1EOmAKc9JQdl0oT_OkJ-mp3vXN7OFx3pjFOr2YWRVnLgE4L3wk__EF2d-GeLB_zaXW4wroNO5J0d9z9od7OaNhchv3RSnWH4BLLTSGSVhsaNA_d7Lg"/>
+</div>
+<h1 class="text-headline-lg-mobile font-headline-lg-mobile font-bold text-surface-tint">EduCloud</h1>
+</div>
+<!-- Trailing Icon -->
+<button aria-label="Settings" class="w-10 h-10 flex items-center justify-center rounded-full text-primary hover:bg-surface-container-low transition-colors scale-95 transition-transform duration-150">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">settings</span>
+</button>
+</header>
+<!-- Main Canvas -->
+<main class="flex-1 px-container-padding flex flex-col gap-lg max-w-2xl mx-auto w-full pt-sm">
+<!-- Header Section -->
+<section class="text-center">
+<h2 class="text-headline-lg-mobile font-headline-lg-mobile text-on-background mb-xs">Where shall we explore today?</h2>
+<p class="text-body-md font-body-md text-on-surface-variant">Pick a subject to start your learning journey.</p>
+</section>
+<!-- Subject Grid -->
+<section class="grid grid-cols-2 gap-md">
+<!-- Mathematics Card -->
+<button class="storybook-card-active bg-surface-container-lowest rounded-2xl overflow-hidden storybook-shadow flex flex-col text-left group">
+<div class="h-32 w-full bg-tertiary-container relative overflow-hidden">
+<img alt="Mathematics Illustration" class="w-full h-full object-cover" data-alt="A tactile, organic illustration of a vibrant outdoor fruit stand. A young child is counting bright yellow mangoes arranged in woven baskets. The scene is set in a warm, nurturing environment with soft, ambient lighting, rendered in a high-quality storybook art style with subtle depth and rich, natural colors." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA1XQhTIqWjeZRcR5uEmGOxvSvfFbqaMS3X4l39aylvFPir5Veuq4BfRMkHKldTXUkAGqeSvBMY4jXtzwYufh4RsK3rlGz2LqKr_80RN3m2xq1-Nl8JorEpMUzTZ-23dRo1lmmQElJB7qbIDBg_7DPMMFwiyuaSUDwxy3qnwswmMEZQHLBFLn59FfS2NDzPJyIsaCWgtfkUtpDyX7x67ptmsqedd_0G6nWPEmbx8LJ_m6MCWiNCfl2Wh40jBLceR4mpLB55R0NoxHw"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+</div>
+<div class="p-sm bg-tertiary-container text-center">
+<span class="text-label-lg font-label-lg text-on-primary">Mathematics</span>
+</div>
+</button>
+<!-- English Card -->
+<button class="storybook-card-active bg-surface-container-lowest rounded-2xl overflow-hidden storybook-shadow flex flex-col text-left group">
+<div class="h-32 w-full bg-primary-container relative overflow-hidden">
+<img alt="English Illustration" class="w-full h-full object-cover" data-alt="A serene, detailed illustration of an open storybook resting on a grassy knoll beneath a large, leafy tree. The scene evokes a sense of calm discovery and early childhood literacy, using soft edges, warm sunlight filtering through the leaves, and a handcrafted, tactile visual style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDQwNPczDkz-jjBl8d50z1edT_jUsSpbk3fy1c_nTtrIdjmYAVrLFqC_rGYgtl8fGeTxr3lc1XqjkdxTBu5eJzdKwFQO5r8wKXHQDhfiviIQxA0TxSjd4QJUrPFsiXftm9tOXnLpWSzucmeNuw2cUkLq04QBbq5q__F0-uaJWbwGN4fTTtSKoN--NFrnqmCGoXFsVSm70MmxbQ1PPc_IURqLEZNja9OhrLu-TEqaIcJriTvmKtcgNpwcuzkW910Os9uOBL6KPGpX7o"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+</div>
+<div class="p-sm bg-primary-container text-center">
+<span class="text-label-lg font-label-lg text-on-primary">English</span>
+</div>
+</button>
+<!-- Kiswahili Card -->
+<button class="storybook-card-active bg-surface-container-lowest rounded-2xl overflow-hidden storybook-shadow flex flex-col text-left group">
+<div class="h-32 w-full bg-secondary-container relative overflow-hidden">
+<img alt="Kiswahili Illustration" class="w-full h-full object-cover" data-alt="A warm, inviting illustration of two children sitting together on a woven mat, engaged in conversation while looking at a picture card. The setting is cozy, featuring organic shapes and a comforting, storybook aesthetic with earthy tones like soft browns and warm oranges." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDh2ITbeO4-aX-0KdEh8AMMW8UV3CR4wYcPPauWlR9ZDMxW1qa1dQHRTFY2-6imq7Vk_la5D6PScKzZQ7o_tb9i3SIv0zwSsFa76v-Ogg1Tz_f6T75waE9lfXjL5seRPTH-DgzLNQPdRyOBKA-BnT41CioMHeEz69M4Vyvs-m2VKOdFlj8Bk_Er_PC-AJAjxtszBrlMu-InLYcDk-ExnEfwDBXED_6Nkk8C-Z0QE6O-ZHRSAs7uFw46EXvzFfFupQNCVEIR92seVwE"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+</div>
+<div class="p-sm bg-secondary-container text-center">
+<span class="text-label-lg font-label-lg text-on-secondary-container">Kiswahili</span>
+</div>
+</button>
+<!-- Science & Tech Card -->
+<button class="storybook-card-active bg-surface-container-lowest rounded-2xl overflow-hidden storybook-shadow flex flex-col text-left group">
+<div class="h-32 w-full bg-tertiary-fixed-dim relative overflow-hidden">
+<img alt="Science &amp; Tech Illustration" class="w-full h-full object-cover" data-alt="A delightful, stylized illustration of a wooden table holding a simple brass microscope, a magnifying glass, and a small potted plant. The artwork employs soft, diffuse shadows and a tactile, handcrafted feel, encouraging curiosity in a safe, nurturing educational setting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC1weg8a4SOYnDsQw93WZ3aNxviSDOHBhUl__CXpZ1mFgx_143A-PFJLXQOsaKeH_rkoxgzlMKmNJnMa5vObK1hbGaAV-3K3PNEI580QRye2tIlURKlXeREZV5uDlHAq_38aDVJTzO9lorQXvBv0FP7vKk4mFkGp4etWBVRcLLb8_AmyVa_vZepSYxrdYeeyS_6mFif6-Wt9syV9rhLOW572iWV8YAYvbUjEFTcfQwDBQUsALblqK8TEfYOUmC18kpcooGBLHQgHoE"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+</div>
+<div class="p-sm bg-tertiary-fixed-dim text-center">
+<span class="text-label-lg font-label-lg text-on-tertiary-fixed-variant">Science &amp; Tech</span>
+</div>
+</button>
+<!-- Social Studies Card -->
+<button class="storybook-card-active bg-surface-container-lowest rounded-2xl overflow-hidden storybook-shadow flex flex-col text-left group">
+<div class="h-32 w-full bg-primary-fixed relative overflow-hidden">
+<img alt="Social Studies Illustration" class="w-full h-full object-cover" data-alt="A vast, gentle illustration of a savanna landscape at sunset, featuring silhouettes of an elephant and a baobab tree against a warm, gradient sky. The style is reminiscent of a high-end physical children's book, using ambient shading and soft colors to evoke a sense of global wonder." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA7TugrEYqPmrJzHRa82elm3c9qvI86547FNEdO9b23n_cpbS1DcRpyMElVfi6C2xcFpqJEKdDYVxcVHtwECV7aPRu9qpSTh4JtZpdFb0v-uM9EAbi5gJNYwyBMihl2_HJNFKcZ7GNe2JOhPQTdfZAXG8spCrSbQo8AaNCqHeG1SdClzqryIrAZcQD5mobLGFK3xNq79wtY19E4l9zURjDVpoYvnsizMTZFl9PodsqVkCTsBzpXOP_alOlG3_0e8AjynVhrb_2WNKI"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+</div>
+<div class="p-sm bg-primary-fixed text-center">
+<span class="text-label-lg font-label-lg text-on-primary-fixed-variant">Social Studies</span>
+</div>
+</button>
+<!-- Creative Arts Card -->
+<button class="storybook-card-active bg-surface-container-lowest rounded-2xl overflow-hidden storybook-shadow flex flex-col text-left group">
+<div class="h-32 w-full bg-secondary-fixed relative overflow-hidden">
+<img alt="Creative Arts Illustration" class="w-full h-full object-cover" data-alt="A charming, organic illustration of a wooden artist's palette dotted with vibrant blobs of paint, alongside two thick, tactile paintbrushes resting on a textured cream surface. The image exudes a playful, creative energy while maintaining the soft, comforting aesthetic of the overall storybook design system." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAg14jhz7oAolauF39I-djB3XwVJqWNP-vxIPN8z05vBzuKzpRPpiPMZKIYQ-tp_mg8OwGBPmxD43zQtrf3R6S3_ReaqRys9KFoRkWgtDFdCOAftiWWUg_vZEFQt84R_rllplphRQC4frCMwkSKNASsPO4DmJ-FK3v7FoyquWz5QlaMNdJ4dhJSZQUF_Quc5e644LWdkDjiF4r0BgKXl623NnBr1WPU6CZvXlxTTszZ_ULpCrkbNPY6V41TjEVNylAZ3N2OVQNtxUc"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+</div>
+<div class="p-sm bg-secondary-fixed text-center">
+<span class="text-label-lg font-label-lg text-on-secondary-fixed-variant">Creative Arts</span>
+</div>
+</button>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-2 bg-surface-container-lowest shadow-[0px_-4px_20px_rgba(0,0,0,0.05)] rounded-t-xl md:hidden">
+<!-- Today (Inactive) -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary px-4 py-1 group" href="#">
+<span class="material-symbols-outlined mb-1 group-hover:scale-110 transition-transform" style="font-variation-settings: 'FILL' 0;">home</span>
+<span class="text-label-lg font-label-lg">Today</span>
+</a>
+<!-- Learn (Active) -->
+<a class="flex flex-col items-center justify-center text-secondary bg-secondary-fixed rounded-full px-4 py-1 scale-90 transition-all duration-200 ease-out" href="#">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">menu_book</span>
+<span class="text-label-lg font-label-lg">Learn</span>
+</a>
+<!-- Progress (Inactive) -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary px-4 py-1 group" href="#">
+<span class="material-symbols-outlined mb-1 group-hover:scale-110 transition-transform" style="font-variation-settings: 'FILL' 0;">leaderboard</span>
+<span class="text-label-lg font-label-lg">Progress</span>
+</a>
+<!-- Profile (Inactive) -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary px-4 py-1 group" href="#">
+<span class="material-symbols-outlined mb-1 group-hover:scale-110 transition-transform" style="font-variation-settings: 'FILL' 0;">person</span>
+<span class="text-label-lg font-label-lg">Profile</span>
+</a>
+</nav>
+</body></html>

@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>EduCloud - Equal Shares Activity</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&amp;family=Be+Vietnam+Pro:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-highest": "#e3e2e0",
+                        "surface-tint": "#3b6a1b",
+                        "tertiary-container": "#4f9ac7",
+                        "surface-variant": "#e3e2e0",
+                        "secondary-fixed": "#ffdcc5",
+                        "error-container": "#ffdad6",
+                        "tertiary-fixed-dim": "#86cffe",
+                        "outline": "#72796a",
+                        "on-primary": "#ffffff",
+                        "on-primary-container": "#133200",
+                        "primary-fixed": "#baf293",
+                        "on-background": "#1a1c1a",
+                        "tertiary-fixed": "#c7e7ff",
+                        "on-tertiary-container": "#002f45",
+                        "inverse-primary": "#9fd67a",
+                        "surface-container": "#efeeeb",
+                        "primary-container": "#6da04b",
+                        "secondary": "#944b00",
+                        "error": "#ba1a1a",
+                        "on-error": "#ffffff",
+                        "primary-fixed-dim": "#9fd67a",
+                        "surface-dim": "#dbdad7",
+                        "on-tertiary-fixed-variant": "#004c6c",
+                        "surface": "#faf9f6",
+                        "background": "#faf9f6",
+                        "surface-container-high": "#e9e8e5",
+                        "surface-bright": "#faf9f6",
+                        "inverse-on-surface": "#f2f1ee",
+                        "on-secondary-fixed-variant": "#703700",
+                        "on-secondary-container": "#6e3600",
+                        "on-primary-fixed": "#0a2100",
+                        "tertiary": "#00658e",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "secondary-fixed-dim": "#ffb783",
+                        "surface-container-lowest": "#ffffff",
+                        "inverse-surface": "#2f312f",
+                        "primary": "#3b6a1b",
+                        "on-surface-variant": "#42493c",
+                        "secondary-container": "#fe9b4e",
+                        "on-primary-fixed-variant": "#235102",
+                        "on-tertiary-fixed": "#001e2e",
+                        "on-surface": "#1a1c1a",
+                        "on-secondary-fixed": "#301400",
+                        "outline-variant": "#c2c9b8",
+                        "surface-container-low": "#f4f3f1",
+                        "on-error-container": "#93000a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px",
+                        "2xl": "1.5rem"
+                    },
+                    "spacing": {
+                        "stack-gap": "16px",
+                        "xs": "4px",
+                        "sm": "8px",
+                        "xl": "32px",
+                        "lg": "24px",
+                        "md": "16px",
+                        "unit": "4px",
+                        "container-padding": "20px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Be Vietnam Pro", "sans-serif"],
+                        "headline-lg": ["Plus Jakarta Sans", "sans-serif"],
+                        "display-lg": ["Plus Jakarta Sans", "sans-serif"],
+                        "headline-lg-mobile": ["Plus Jakarta Sans", "sans-serif"],
+                        "headline-md": ["Plus Jakarta Sans", "sans-serif"],
+                        "label-lg": ["Plus Jakarta Sans", "sans-serif"],
+                        "body-lg": ["Be Vietnam Pro", "sans-serif"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "headline-lg": ["28px", { "lineHeight": "1.3", "fontWeight": "700" }],
+                        "display-lg": ["36px", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "800" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "1.3", "fontWeight": "700" }],
+                        "headline-md": ["22px", { "lineHeight": "1.3", "fontWeight": "700" }],
+                        "label-lg": ["14px", { "lineHeight": "1.2", "fontWeight": "700" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "500" }]
+                    },
+                    "boxShadow": {
+                        "ambient": "0px 4px 20px rgba(59, 106, 27, 0.08)",
+                        "ambient-lg": "0px 8px 30px rgba(59, 106, 27, 0.12)",
+                        "button": "0px 4px 0px rgba(35, 81, 2, 0.2)",
+                        "button-pressed": "0px 0px 0px rgba(35, 81, 2, 0)"
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.fill {
+            font-variation-settings: 'FILL' 1;
+        }
+        
+        .draggable-item {
+            touch-action: none;
+            user-select: none;
+            cursor: grab;
+        }
+        .draggable-item:active {
+            cursor: grabbing;
+        }
+        
+        /* Custom progress bar styles */
+        .progress-dots {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        .progress-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #dbdad7; /* surface-dim */
+        }
+        .progress-dot.active {
+            background-color: #3b6a1b; /* primary */
+            width: 24px;
+            border-radius: 4px;
+        }
+        
+        /* Button active state for bottom shadow */
+        .btn-3d:active {
+            transform: translateY(4px);
+            box-shadow: 0px 0px 0px rgba(35, 81, 2, 0);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md antialiased min-h-screen flex flex-col items-center justify-center">
+<!-- Mobile Device Container for Preview -->
+<div class="w-full max-w-[400px] h-[850px] max-h-screen bg-surface relative overflow-hidden flex flex-col md:rounded-[40px] md:shadow-ambient-lg md:border-[8px] md:border-surface-container-highest">
+<!-- Top App Bar (Task Context) -->
+<div class="flex justify-between items-center px-container-padding py-md w-full shrink-0 z-10 bg-surface">
+<button class="w-10 h-10 flex items-center justify-center rounded-full bg-surface-container-low text-on-surface hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<div class="progress-dots">
+<div class="progress-dot"></div>
+<div class="progress-dot active"></div>
+<div class="progress-dot"></div>
+<div class="progress-dot"></div>
+<div class="progress-dot"></div>
+</div>
+<button class="w-10 h-10 flex items-center justify-center rounded-full text-on-surface-variant hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined">more_horiz</span>
+</button>
+</div>
+<!-- Main Content Area -->
+<main class="flex-1 overflow-y-auto px-container-padding flex flex-col relative z-0">
+<!-- Instruction Text -->
+<div class="text-center mt-lg mb-xl">
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface mb-xs">
+                    Put 8 mangoes into
+                </h1>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface">
+                    2 equal groups.
+                </h1>
+</div>
+<!-- Draggable Area -->
+<div class="flex-1 flex flex-col relative">
+<!-- Mangoes Pool -->
+<div class="grid grid-cols-4 gap-4 mb-xl max-w-[280px] mx-auto min-h-[120px]" id="mango-pool">
+<!-- Mango 1 -->
+<div class="draggable-item flex justify-center" draggable="true" id="mango-1">
+<img class="w-14 h-14 drop-shadow-md object-contain pointer-events-none" data-alt="A detailed, vibrant, painterly illustration of a single ripe, juicy orange-yellow mango with a small green leaf attached to the stem, set against a transparent background, rendered in a warm, storybook educational style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCZBfinYJFMdyii_ECmVE7A9o6rysj7eBcEAjnvXlQ1ENcDJcjEf5v4o4ErBwKk0bDBV3DQ2Cl1mTfqdN45efbbxJ44cyZIVQ5eQxtgG0upPV3JDuejv8ZQAjrXfrIWDe9aa0608Hloe-tYAcqzpqTNXfIyNCsA3MkAF5c3853kOJwjgSdjc2yVSEt7nJ7yKhvMZTI7w3JSsXB3UDLNKc1ayATUYean-udr8Z6-5ZtNYHGIPHyhWlCP7JpE4Aj5uGqYoaX1RskMiRg"/>
+</div>
+<!-- Mango 2 -->
+<div class="draggable-item flex justify-center" draggable="true" id="mango-2">
+<img class="w-14 h-14 drop-shadow-md object-contain pointer-events-none" data-alt="A detailed, vibrant, painterly illustration of a single ripe, juicy orange-yellow mango with a small green leaf attached to the stem, set against a transparent background, rendered in a warm, storybook educational style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDeGaTTMp5f6Fq0wpo_DRmazEDe_rUnF066wLFoCi8bKvWExfE_9DvlCQ4Mg-wxzwIHJHdq6rIxeMhRvACWKoEi0qB99rdIJul4ehAHl3tqXlVBBfPfSPwI57RAKb16xBlguWLANhxvDlNRtx4i-rhkLKelAeNuUrsk1jEdXaBLX9SIgHqiEYWp1P-PQSZ6-RZIFPSPxufX_cnfjPokVIhwcgFFDauNyFvgeBSP1qTwzrY4KVZD-qXsZ2LWD2EHPMx3Ulr2K7EQb4Y"/>
+</div>
+<!-- Mango 3 -->
+<div class="draggable-item flex justify-center" draggable="true" id="mango-3">
+<img class="w-14 h-14 drop-shadow-md object-contain pointer-events-none" data-alt="A detailed, vibrant, painterly illustration of a single ripe, juicy orange-yellow mango with a small green leaf attached to the stem, set against a transparent background, rendered in a warm, storybook educational style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD3lnGbLiKCa2oDu3w5AS5mUWyyM8FFRHBEqa4Sdzd__N6mWgwL-Xz7MKxQ5oTBMIgKYz8eh1N9G9RVdxNmeoTzVhIEMT-FLYc3uU-pudQz-DW1Ol0uGhvCpQNGJryDacpLv3ZOfHcfueL8JRAw_QS-g2Z0Y8C-uFbpdYCRtP2GWetpZ49GfdGRqPuIN5CvusrXCBiwUQ7o0Hu4vvGy2dStSSynoRKMEFbKBJwSZ4u3Ohc7Nrfaa3HgoZC8iZBwZNuv003Cjm1JO7M"/>
+</div>
+<!-- Mango 4 -->
+<div class="draggable-item flex justify-center" draggable="true" id="mango-4">
+<img class="w-14 h-14 drop-shadow-md object-contain pointer-events-none" data-alt="A detailed, vibrant, painterly illustration of a single ripe, juicy orange-yellow mango with a small green leaf attached to the stem, set against a transparent background, rendered in a warm, storybook educational style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDMc_GRLsIAlOQivC9SJltyLBtfgRm0Enx1AdE5kDiKNeY76UtRkAvDNKptD-aAkh4i2aehIQoXuo1qWZK_getFsYDpR0OFgP_3x30AN7fJr7xJWkD-NHjz6sa3LrS06Wg3EKzcM65w4xHye2YMTuJQWexVz8sA3xZe7oVaGMQUSoKuaU8ztkIrflqgoTpCvv0bnnZvq8qyrcwYrHbi03aDrGkS0OLgpp-svktm9O67aEKDlb0uHAV5vZFyhA8aSt5J_3ZMnM0dF-E"/>
+</div>
+<!-- Mango 5 -->
+<div class="draggable-item flex justify-center" draggable="true" id="mango-5">
+<img class="w-14 h-14 drop-shadow-md object-contain pointer-events-none" data-alt="A detailed, vibrant, painterly illustration of a single ripe, juicy orange-yellow mango with a small green leaf attached to the stem, set against a transparent background, rendered in a warm, storybook educational style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCJI5zcn4JxtoSzkkvZb7RlycjhmWJzGEnTwxJ7f3Bz8AEcFccxiFS4BXprr50jTPOubpi6bpTvndT23Gt-u-JGwGCUvvOG2m-OWfD_SyqRxzU6hbjQsjsBOVKd3ygCAMCx7Ne-frBis66r6pyhz0zXNN2OH1KgsT4f7O9LNmuRsy4LlPZUnUfoXlDT3imPqc1MJInVBD0UXp7S3xFhUr1A_Fga2mMNKyFuM379xqyjBNWrGWrg8JiNmBgahsHEuL_tAhwIpJshxRA"/>
+</div>
+<!-- Mango 6 -->
+<div class="draggable-item flex justify-center" draggable="true" id="mango-6">
+<img class="w-14 h-14 drop-shadow-md object-contain pointer-events-none" data-alt="A detailed, vibrant, painterly illustration of a single ripe, juicy orange-yellow mango with a small green leaf attached to the stem, set against a transparent background, rendered in a warm, storybook educational style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDKqdwJb_z7iCXKrRwam_cPexlAiNUJnpB3TXcRZOrhtMNFpbtKcYIpb-pf9azyYP1tbT_sFSHlP_taTiqOx2FqhoJ1go5y7mD9eSYC-CwDOcWZeOds97FeES6GphxLXwwkxSDTG4bhBNKpma6wrenMGwQmU1j7soCy_FYLICrDPGTkqiZJpPct-7bJFC2ton3D_ZoNZDjtht79QuJFABFbeGhqKIsx1WunaoQuwxG1cHz3OcKy83KPw4-iNZz4HG4BC9pvOJ-d-Rg"/>
+</div>
+<!-- Mango 7 -->
+<div class="draggable-item flex justify-center" draggable="true" id="mango-7">
+<img class="w-14 h-14 drop-shadow-md object-contain pointer-events-none" data-alt="A detailed, vibrant, painterly illustration of a single ripe, juicy orange-yellow mango with a small green leaf attached to the stem, set against a transparent background, rendered in a warm, storybook educational style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDgKPUfOhoHSPzYXADvsyMFV8m5ox0nwxM1nr2fu_FuMg6fVxpEfx2KiIkQo9KdpxhN_adpEAJTPoYuyKVO6g8flohPm9dzZOjbjFSILURc3TKH1vOE9Z_JS_wcaM3qdI1Mei75ipMMdyTtjenP5LxA5TTijGuRBdCaD1SR9yRdfYT3_dItJYZYrJ_5_FeNBYGJMPbuPfKV2c0puLwQeS2S89kvqHRUHinxP4iBYE7AtQ582eiIz65SV4DvSvzVmVKTSSe2yNRMV6Y"/>
+</div>
+<!-- Mango 8 -->
+<div class="draggable-item flex justify-center" draggable="true" id="mango-8">
+<img class="w-14 h-14 drop-shadow-md object-contain pointer-events-none" data-alt="A detailed, vibrant, painterly illustration of a single ripe, juicy orange-yellow mango with a small green leaf attached to the stem, set against a transparent background, rendered in a warm, storybook educational style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB9Au4J69IJgvWxhs2PjL0fiT9LEyw6TL5SLbLaxlouDvFZSrLQhpanF-3JfCLxUDmieiCI1iQOxoJpAtLUNL6SUFb8lM571ecfCxHmh4F_FJbSD-qltbI1jXbZ0dpzIdz0nesod6ZnIAubDJgrsiCbtbfOp3QxEZy4Wt-spMfcVLqo9aHqqc3kpWPUfxK_vQQcvMke2_EXiM_9qOV0goF07NRp7VdQ8tO8bwm7tYq3RbUiTDfACVF6IN6kmrfVKVfsMsmXxNhkzp8"/>
+</div>
+</div>
+<!-- Drop Targets (Baskets) -->
+<div class="flex justify-between mt-auto mb-lg">
+<!-- Basket 1 -->
+<div class="relative w-[140px] h-[120px] flex flex-col items-center justify-end droptarget" id="basket-1">
+<!-- Items dropped here will be positioned absolutely or flexed above basket base -->
+<div class="absolute bottom-6 w-[120px] h-[60px] flex flex-wrap justify-center items-end gap-1 z-0 pointer-events-none" id="basket-1-content"></div>
+<img class="w-[140px] h-auto object-contain z-10 pointer-events-none" data-alt="A beautifully illustrated, woven wicker basket with a rounded rim and sturdy texture. The lighting is soft and warm, typical of a high-quality children's book illustration. The inside of the basket is visible and empty, ready to receive items." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBMpmGWOLjZ9sjrfJApjLnqW4G3D6DtkmRW4vBlfs4UKvKJCAOMEbtuhuzMCTz0OikGJGQ-rlwAMHS7jHfn6ywce8aZ5OJD0hT2RV86KyFDiygeBJPYHkm2gmGoNQ8NVLmNwrAxQDB8x2RxOWWAomiL2wKq1A5hvesNt_COKXqyHJSHuwGi87IEho9oFpmfFztIwaP8na3cdNTl1qM1LLLveu9B4e78CLv-Ooa7jlfiD_IxRIj3bT0hx6g4Ztr2C9QQ5Q9grTMB33Y"/>
+</div>
+<!-- Basket 2 -->
+<div class="relative w-[140px] h-[120px] flex flex-col items-center justify-end droptarget" id="basket-2">
+<div class="absolute bottom-6 w-[120px] h-[60px] flex flex-wrap justify-center items-end gap-1 z-0 pointer-events-none" id="basket-2-content"></div>
+<img class="w-[140px] h-auto object-contain z-10 pointer-events-none" data-alt="A beautifully illustrated, woven wicker basket with a rounded rim and sturdy texture. The lighting is soft and warm, typical of a high-quality children's book illustration. The inside of the basket is visible and empty, ready to receive items." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA3inGpfvhgU8BirHxou-1PB3wUCkEQxBXi15K-ETa7Wg5jc2Jih9QcMUuYXN-TFdbC6EmD9ZSqZjxt0DfjnVqW9wFlbXzzdMCgPhyvPJe0zH3gXPtyax_fOyPenuExzF_omqEkYcz-bLU8amfKBGi3V0hRiwXqNKqwQ4_FiLIdS6ndZqOTqcxoPR5PHA45v2k6LeKJaYDyQgUFu-Yqf-NykGGBhB2ibpYINdxTWRAwT1cM0IyiE6Xl4x7NZ3DaWbDcU16tBiE-NNo"/>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Action Bar (Contextual FAB Replacement for Task) -->
+<div class="bg-surface px-container-padding py-md pb-xl shrink-0 z-20 flex gap-md">
+<button class="flex-1 py-4 px-6 rounded-2xl bg-surface-container-low text-on-surface font-label-lg text-label-lg text-center hover:bg-surface-container transition-colors shadow-button btn-3d">
+                Hint
+            </button>
+<button class="flex-[2] py-4 px-6 rounded-2xl bg-primary text-on-primary font-label-lg text-label-lg text-center hover:bg-primary-container transition-colors shadow-button btn-3d">
+                Check
+            </button>
+</div>
+</div>
+<!-- Basic Drag and Drop Script -->
+<script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const draggables = document.querySelectorAll('.draggable-item');
+            const dropTargets = document.querySelectorAll('.droptarget, #mango-pool');
+
+            draggables.forEach(draggable => {
+                draggable.addEventListener('dragstart', () => {
+                    draggable.classList.add('dragging', 'opacity-50', 'scale-110');
+                });
+
+                draggable.addEventListener('dragend', () => {
+                    draggable.classList.remove('dragging', 'opacity-50', 'scale-110');
+                });
+            });
+
+            dropTargets.forEach(target => {
+                target.addEventListener('dragover', e => {
+                    e.preventDefault();
+                    target.classList.add('scale-105', 'transition-transform');
+                });
+
+                target.addEventListener('dragleave', () => {
+                     target.classList.remove('scale-105');
+                });
+
+                target.addEventListener('drop', e => {
+                    e.preventDefault();
+                    target.classList.remove('scale-105');
+                    const draggable = document.querySelector('.dragging');
+                    if (draggable) {
+                        // Very basic visual movement logic for demo purposes
+                        if (target.id.startsWith('basket')) {
+                            const contentArea = document.getElementById(`${target.id}-content`);
+                            draggable.classList.add('absolute');
+                            draggable.style.width = '40px';
+                            draggable.style.height = '40px';
+                            contentArea.appendChild(draggable);
+                        } else if (target.id === 'mango-pool') {
+                            draggable.classList.remove('absolute');
+                            draggable.style.width = '';
+                            draggable.style.height = '';
+                            target.appendChild(draggable);
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+</body></html>

@@ -36,3 +36,7 @@ android-app/model-packs/
 # OS artifacts
 .DS_Store
 Thumbs.db
+
+# Local agent tooling & scratch transcripts (not project content)
+.agents/
+edu-cloud/temp_*.txt

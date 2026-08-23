@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>EduCloud - Learning Path</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;700&amp;family=Plus+Jakarta+Sans:wght@700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-highest": "#e3e2e0",
+                        "surface-tint": "#3b6a1b",
+                        "tertiary-container": "#4f9ac7",
+                        "surface-variant": "#e3e2e0",
+                        "secondary-fixed": "#ffdcc5",
+                        "error-container": "#ffdad6",
+                        "tertiary-fixed-dim": "#86cffe",
+                        "outline": "#72796a",
+                        "on-primary": "#ffffff",
+                        "on-primary-container": "#133200",
+                        "primary-fixed": "#baf293",
+                        "on-background": "#1a1c1a",
+                        "tertiary-fixed": "#c7e7ff",
+                        "on-tertiary-container": "#002f45",
+                        "inverse-primary": "#9fd67a",
+                        "surface-container": "#efeeeb",
+                        "primary-container": "#6da04b",
+                        "secondary": "#944b00",
+                        "error": "#ba1a1a",
+                        "on-error": "#ffffff",
+                        "primary-fixed-dim": "#9fd67a",
+                        "surface-dim": "#dbdad7",
+                        "on-tertiary-fixed-variant": "#004c6c",
+                        "surface": "#faf9f6",
+                        "background": "#faf9f6",
+                        "surface-container-high": "#e9e8e5",
+                        "surface-bright": "#faf9f6",
+                        "inverse-on-surface": "#f2f1ee",
+                        "on-secondary-fixed-variant": "#703700",
+                        "on-secondary-container": "#6e3600",
+                        "on-primary-fixed": "#0a2100",
+                        "tertiary": "#00658e",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "secondary-fixed-dim": "#ffb783",
+                        "surface-container-lowest": "#ffffff",
+                        "inverse-surface": "#2f312f",
+                        "primary": "#3b6a1b",
+                        "on-surface-variant": "#42493c",
+                        "secondary-container": "#fe9b4e",
+                        "on-primary-fixed-variant": "#235102",
+                        "on-tertiary-fixed": "#001e2e",
+                        "on-surface": "#1a1c1a",
+                        "on-secondary-fixed": "#301400",
+                        "outline-variant": "#c2c9b8",
+                        "surface-container-low": "#f4f3f1",
+                        "on-error-container": "#93000a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "2xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack-gap": "16px",
+                        "xs": "4px",
+                        "sm": "8px",
+                        "xl": "32px",
+                        "lg": "24px",
+                        "md": "16px",
+                        "unit": "4px",
+                        "container-padding": "20px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Be Vietnam Pro"],
+                        "headline-lg": ["Plus Jakarta Sans"],
+                        "display-lg": ["Plus Jakarta Sans"],
+                        "headline-lg-mobile": ["Plus Jakarta Sans"],
+                        "headline-md": ["Plus Jakarta Sans"],
+                        "label-lg": ["Plus Jakarta Sans"],
+                        "body-lg": ["Be Vietnam Pro"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "headline-lg": ["28px", { "lineHeight": "1.3", "fontWeight": "700" }],
+                        "display-lg": ["36px", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "800" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "1.3", "fontWeight": "700" }],
+                        "headline-md": ["22px", { "lineHeight": "1.3", "fontWeight": "700" }],
+                        "label-lg": ["14px", { "lineHeight": "1.2", "fontWeight": "700" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            -webkit-tap-highlight-color: transparent;
+        }
+        .storybook-shadow {
+            box-shadow: 0px 4px 20px rgba(59, 106, 27, 0.08);
+        }
+        .storybook-shadow-active {
+            box-shadow: 0px 2px 10px rgba(59, 106, 27, 0.05);
+            transform: translateY(2px);
+        }
+        .path-line {
+            width: 4px;
+            background-color: #efeeeb; /* surface-container */
+            position: absolute;
+            left: 28px;
+            top: 24px;
+            bottom: -24px;
+            z-index: 0;
+        }
+        .path-line.completed {
+            background-color: #6da04b; /* primary-container */
+        }
+        .path-node {
+            z-index: 10;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col antialiased">
+<!-- TopAppBar -->
+<header class="bg-background flex justify-between items-center px-container-padding py-md w-full sticky top-0 z-40">
+<div class="flex items-center gap-sm">
+<button class="w-10 h-10 rounded-full overflow-hidden focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 flex items-center justify-center bg-surface-container hover:bg-surface-container-low transition-colors active:scale-95 duration-150">
+<span class="material-symbols-outlined text-on-surface-variant">arrow_back</span>
+</button>
+</div>
+<h1 class="text-headline-md font-headline-md text-on-surface">Learning path</h1>
+<div class="w-10 h-10"></div> <!-- Placeholder for balance -->
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-grow px-container-padding pb-[100px] pt-sm max-w-md mx-auto w-full relative">
+<div class="relative bg-surface rounded-2xl p-sm storybook-shadow mb-lg">
+<!-- Item 1: Completed -->
+<div class="relative flex items-center gap-md p-md rounded-xl hover:bg-surface-container-low transition-colors cursor-pointer group">
+<div class="path-line completed"></div>
+<div class="w-10 h-10 rounded-full bg-primary-container text-on-primary flex items-center justify-center path-node shrink-0 shadow-sm">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">check</span>
+</div>
+<div class="flex-grow">
+<h3 class="text-body-lg font-body-lg text-on-surface group-hover:text-primary transition-colors">Equal shares</h3>
+<p class="text-label-lg font-label-lg text-primary mt-1">Completed</p>
+</div>
+<div class="w-8 h-8 rounded-full bg-surface-container-highest flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+</div>
+<!-- Item 2: Completed -->
+<div class="relative flex items-center gap-md p-md rounded-xl hover:bg-surface-container-low transition-colors cursor-pointer group">
+<div class="path-line completed"></div>
+<div class="w-10 h-10 rounded-full bg-primary-container text-on-primary flex items-center justify-center path-node shrink-0 shadow-sm">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">check</span>
+</div>
+<div class="flex-grow">
+<h3 class="text-body-lg font-body-lg text-on-surface group-hover:text-primary transition-colors">Add within 100</h3>
+<p class="text-label-lg font-label-lg text-primary mt-1">Completed</p>
+</div>
+<div class="w-8 h-8 rounded-full bg-surface-container-highest flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+</div>
+<!-- Item 3: In Progress (Active) -->
+<div class="relative flex items-center gap-md p-md rounded-xl bg-secondary-fixed/30 border-2 border-secondary-fixed-dim storybook-shadow cursor-pointer">
+<div class="path-line"></div>
+<div class="w-10 h-10 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center path-node shrink-0 shadow-sm ring-4 ring-background">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+</div>
+<div class="flex-grow">
+<h3 class="text-body-lg font-body-lg text-on-surface font-bold">Groups &amp; multiplication</h3>
+<p class="text-label-lg font-label-lg text-secondary mt-1">In progress</p>
+</div>
+<div class="w-8 h-8 shrink-0"></div> <!-- Placeholder -->
+</div>
+<!-- Item 4: Locked -->
+<div class="relative flex items-center gap-md p-md rounded-xl opacity-60">
+<div class="path-line"></div>
+<div class="w-10 h-10 rounded-full bg-surface-container-highest text-on-surface-variant flex items-center justify-center path-node shrink-0">
+<span class="material-symbols-outlined">lock</span>
+</div>
+<div class="flex-grow">
+<h3 class="text-body-lg font-body-lg text-on-surface-variant">Fractions</h3>
+<p class="text-label-lg font-label-lg text-on-surface-variant mt-1">Locked</p>
+</div>
+<div class="w-8 h-8 shrink-0"></div> <!-- Placeholder -->
+</div>
+<!-- Item 5: Locked -->
+<div class="relative flex items-center gap-md p-md rounded-xl opacity-60">
+<!-- No path line extending down from the last item -->
+<div class="w-10 h-10 rounded-full bg-surface-container-highest text-on-surface-variant flex items-center justify-center path-node shrink-0">
+<span class="material-symbols-outlined">lock</span>
+</div>
+<div class="flex-grow">
+<h3 class="text-body-lg font-body-lg text-on-surface-variant">Geometry</h3>
+<p class="text-label-lg font-label-lg text-on-surface-variant mt-1">Locked</p>
+</div>
+<div class="w-8 h-8 shrink-0"></div> <!-- Placeholder -->
+</div>
+</div>
+<div class="flex justify-center mt-lg mb-xl">
+<button class="bg-secondary-fixed text-on-secondary-fixed-variant font-label-lg text-label-lg py-3 px-6 rounded-full storybook-shadow hover:bg-secondary-fixed-dim transition-colors active:storybook-shadow-active">
+                See all topics
+            </button>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="bg-surface-container-lowest shadow-[0px_-4px_20px_rgba(0,0,0,0.05)] fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-2 rounded-t-2xl md:hidden pb-safe">
+<!-- Inactive Tab: Today -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:text-primary transition-colors group" href="#">
+<div class="w-16 h-8 flex items-center justify-center rounded-full group-hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined text-[24px]">home</span>
+</div>
+<span class="text-label-lg font-label-lg mt-1">Today</span>
+</a>
+<!-- Inactive Tab: Learn -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:text-primary transition-colors group" href="#">
+<div class="w-16 h-8 flex items-center justify-center rounded-full group-hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined text-[24px]">menu_book</span>
+</div>
+<span class="text-label-lg font-label-lg mt-1">Learn</span>
+</a>
+<!-- Active Tab: Progress -->
+<a class="flex flex-col items-center justify-center text-secondary bg-transparent px-4 py-1" href="#">
+<div class="w-16 h-8 flex items-center justify-center rounded-full bg-secondary-fixed text-on-secondary-fixed-variant">
+<span class="material-symbols-outlined text-[24px]" style="font-variation-settings: 'FILL' 1;">leaderboard</span>
+</div>
+<span class="text-label-lg font-label-lg mt-1 text-on-surface">Progress</span>
+</a>
+<!-- Inactive Tab: Profile -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:text-primary transition-colors group" href="#">
+<div class="w-16 h-8 flex items-center justify-center rounded-full group-hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined text-[24px]">person</span>
+</div>
+<span class="text-label-lg font-label-lg mt-1">Profile</span>
+</a>
+</nav>
+<!-- Support for safe area inset on iOS -->
+<style>
+        .pb-safe {
+            padding-bottom: env(safe-area-inset-bottom, 16px);
+        }
+    </style>
+</body></html>

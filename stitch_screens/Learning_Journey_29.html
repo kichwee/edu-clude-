@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>EduCloud - Learning Journey</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500&amp;family=Plus+Jakarta+Sans:wght@700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-highest": "#e3e2e0",
+                        "surface-tint": "#3b6a1b",
+                        "tertiary-container": "#4f9ac7",
+                        "surface-variant": "#e3e2e0",
+                        "secondary-fixed": "#ffdcc5",
+                        "error-container": "#ffdad6",
+                        "tertiary-fixed-dim": "#86cffe",
+                        "outline": "#72796a",
+                        "on-primary": "#ffffff",
+                        "on-primary-container": "#133200",
+                        "primary-fixed": "#baf293",
+                        "on-background": "#1a1c1a",
+                        "tertiary-fixed": "#c7e7ff",
+                        "on-tertiary-container": "#002f45",
+                        "inverse-primary": "#9fd67a",
+                        "surface-container": "#efeeeb",
+                        "primary-container": "#6da04b",
+                        "secondary": "#944b00",
+                        "error": "#ba1a1a",
+                        "on-error": "#ffffff",
+                        "primary-fixed-dim": "#9fd67a",
+                        "surface-dim": "#dbdad7",
+                        "on-tertiary-fixed-variant": "#004c6c",
+                        "surface": "#faf9f6",
+                        "background": "#faf9f6",
+                        "surface-container-high": "#e9e8e5",
+                        "surface-bright": "#faf9f6",
+                        "inverse-on-surface": "#f2f1ee",
+                        "on-secondary-fixed-variant": "#703700",
+                        "on-secondary-container": "#6e3600",
+                        "on-primary-fixed": "#0a2100",
+                        "tertiary": "#00658e",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "secondary-fixed-dim": "#ffb783",
+                        "surface-container-lowest": "#ffffff",
+                        "inverse-surface": "#2f312f",
+                        "primary": "#3b6a1b",
+                        "on-surface-variant": "#42493c",
+                        "secondary-container": "#fe9b4e",
+                        "on-primary-fixed-variant": "#235102",
+                        "on-tertiary-fixed": "#001e2e",
+                        "on-surface": "#1a1c1a",
+                        "on-secondary-fixed": "#301400",
+                        "outline-variant": "#c2c9b8",
+                        "surface-container-low": "#f4f3f1",
+                        "on-error-container": "#93000a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px",
+                        "2xl": "1.5rem"
+                    },
+                    "spacing": {
+                        "stack-gap": "16px",
+                        "xs": "4px",
+                        "sm": "8px",
+                        "xl": "32px",
+                        "lg": "24px",
+                        "md": "16px",
+                        "unit": "4px",
+                        "container-padding": "20px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Be Vietnam Pro", "sans-serif"],
+                        "headline-lg": ["Plus Jakarta Sans", "sans-serif"],
+                        "display-lg": ["Plus Jakarta Sans", "sans-serif"],
+                        "headline-lg-mobile": ["Plus Jakarta Sans", "sans-serif"],
+                        "headline-md": ["Plus Jakarta Sans", "sans-serif"],
+                        "label-lg": ["Plus Jakarta Sans", "sans-serif"],
+                        "body-lg": ["Be Vietnam Pro", "sans-serif"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "headline-lg": ["28px", { "lineHeight": "1.3", "fontWeight": "700" }],
+                        "display-lg": ["36px", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "800" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "1.3", "fontWeight": "700" }],
+                        "headline-md": ["22px", { "lineHeight": "1.3", "fontWeight": "700" }],
+                        "label-lg": ["14px", { "lineHeight": "1.2", "fontWeight": "700" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.filled {
+            font-variation-settings: 'FILL' 1;
+        }
+        
+        /* Custom scrollbar for web if needed */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #e3e2e0;
+            border-radius: 4px;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col antialiased">
+<!-- Top App Bar -->
+<header class="flex justify-between items-center px-container-padding py-md w-full bg-background docked full-width top-0 z-10 sticky">
+<div class="flex items-center gap-sm cursor-pointer hover:bg-surface-container-low transition-colors rounded-full p-2 -ml-2">
+<span class="material-symbols-outlined text-primary text-[28px]" data-icon="chevron_left">chevron_left</span>
+</div>
+<h1 class="text-headline-md font-headline-md text-on-background flex-1 text-center pr-[44px]">Your learning journey</h1>
+</header>
+<!-- Main Content Canvas - The Map -->
+<main class="flex-1 relative overflow-hidden bg-[#E6F3E6]">
+<!-- Background Illustration Wrapper -->
+<div class="absolute inset-0 z-0">
+<div class="bg-cover bg-bottom w-full h-full opacity-90" data-alt="A lush, warm, illustrative landscape for an early childhood education app. Rolling green hills with soft, tactile textures resembling a high-quality physical storybook. A winding river flows through the scene. In the distance, cozy huts and gentle, organic trees. The colors are warm, inviting, and natural, evoking comfort and curiosity." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBu2OQby_43BZHJxPL1EOvcv_F4fH5_f0BpTveb3EeONFcr8Xa79afJS71H-Ok9TIwCURcpJMq9tYd4YfvbXQk5K8sv0sN3CiJHKuzSEolLuEVz5VZkk0Q-xp1kzZ5OWtBW9N31Fb2rVcAHDJnX5lo3HBjwysVEWpkglLRXyiYpZAfattUsNgn2ZkiiYYRveCxKV_X_Y6uvIrndLWQeCYs08N6zNWmsS24VrHUHnxX5wStwYAIYFZuLix8lc7LiugjP8kI_F1GwKCM')"></div>
+</div>
+<!-- Scrollable Map Area -->
+<div class="relative z-10 w-full h-full overflow-y-auto pb-[140px] px-container-padding" id="map-container">
+<!-- SVG Path connecting nodes -->
+<svg class="absolute inset-0 w-full h-[800px] pointer-events-none" style="z-index: -1;">
+<path d="M 100,50 C 150,150 250,100 300,200 C 350,300 200,350 200,450 C 200,550 150,600 150,700" fill="none" stroke="#e3e2e0" stroke-linecap="round" stroke-linejoin="round" stroke-width="12"></path>
+<path class="animate-[dash_2s_ease-out_forwards]" d="M 100,50 C 150,150 250,100 300,200 C 350,300 200,350 200,450" fill="none" stroke="#6da04b" stroke-dasharray="1000" stroke-dashoffset="1000" stroke-linecap="round" stroke-linejoin="round" stroke-width="12"></path>
+<style>
+                    @keyframes dash {
+                      to {
+                        stroke-dashoffset: 0;
+                      }
+                    }
+                </style>
+</svg>
+<!-- Map Nodes -->
+<div class="relative w-full h-[800px]">
+<!-- Node 1: Completed -->
+<div class="absolute left-[80px] top-[40px] flex items-center group cursor-pointer">
+<div class="bg-surface-container-lowest rounded-full py-2 px-4 shadow-[0px_4px_20px_rgba(59,106,27,0.15)] flex items-center gap-xs border border-surface-container-low transition-transform duration-150 active:scale-95">
+<span class="text-label-lg font-label-lg text-on-surface">Sharing equally</span>
+<div class="w-6 h-6 rounded-full bg-primary flex items-center justify-center shadow-inner">
+<span class="material-symbols-outlined text-on-primary text-[16px] filled" data-icon="check">check</span>
+</div>
+</div>
+</div>
+<!-- Node 2: Completed -->
+<div class="absolute left-[180px] top-[140px] flex items-center group cursor-pointer">
+<div class="bg-surface-container-lowest rounded-full py-2 px-4 shadow-[0px_4px_20px_rgba(59,106,27,0.15)] flex items-center gap-xs border border-surface-container-low transition-transform duration-150 active:scale-95">
+<div class="w-6 h-6 rounded-full bg-primary flex items-center justify-center shadow-inner">
+<span class="material-symbols-outlined text-on-primary text-[16px] filled" data-icon="check">check</span>
+</div>
+<span class="text-label-lg font-label-lg text-on-surface">Add within 100</span>
+</div>
+</div>
+<!-- Node 3: Current / Active Focus -->
+<div class="absolute left-[120px] top-[260px] flex items-center flex-col gap-2 z-20">
+<div class="relative animate-bounce">
+<div class="w-10 h-10 bg-secondary-container rounded-full shadow-[0px_4px_16px_rgba(254,155,78,0.4)] flex items-center justify-center border-2 border-surface-container-lowest">
+<img class="w-8 h-8 rounded-full object-cover" data-alt="A small, cute 3D avatar of a child's face, smiling warmly, acting as a map pin. Soft lighting, storybook style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAUuUic8QGFGK7Exa6N5pVFMUQKD6gHHsbaZJULu5xNzr51Q5y5ZE3W6vnwUBXm3p-J3cE5CW139O0Q48S4pFSuI0_kWujSTwcqSig2gEqdA0vxFOtKWNElbU2n1GVZWQ2ELWoUrg6XSzcI6CtbMGCNHnAS5sg1-shZtZs5MRMPrqHjnEkR0RV1qFs3_lU7iqHuojHuXWQPFzITXMMk-PDb7OPvljVeaUZENxIOBbERMHY4pFbUk0H2Sh486tNQM-HdUQRLdT4nDmA"/>
+</div>
+<div class="absolute -bottom-1 left-1/2 -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-6 border-transparent border-t-secondary-container"></div>
+</div>
+<div class="bg-surface-container-lowest rounded-xl p-3 shadow-lg border border-surface-container-low w-[180px] text-center">
+<div class="w-full bg-surface-container-highest rounded-full h-2 mb-2 overflow-hidden">
+<div class="bg-primary h-full w-[60%] rounded-full"></div>
+</div>
+<span class="text-label-lg font-label-lg text-on-surface block leading-tight">Groups &amp; multiplication</span>
+</div>
+</div>
+<!-- Node 4: Locked -->
+<div class="absolute left-[200px] top-[420px] flex items-center group opacity-80">
+<div class="bg-surface-container-low rounded-full py-2 px-4 shadow-sm flex items-center gap-xs border border-surface-container-high">
+<div class="w-6 h-6 rounded-full bg-surface-variant flex items-center justify-center">
+<span class="material-symbols-outlined text-on-surface-variant text-[16px]" data-icon="lock">lock</span>
+</div>
+<span class="text-label-lg font-label-lg text-on-surface-variant">Fractions</span>
+</div>
+</div>
+<!-- Node 5: Locked -->
+<div class="absolute left-[130px] top-[540px] flex items-center group opacity-80">
+<div class="bg-surface-container-low rounded-full py-2 px-4 shadow-sm flex items-center gap-xs border border-surface-container-high">
+<div class="w-6 h-6 rounded-full bg-surface-variant flex items-center justify-center">
+<span class="material-symbols-outlined text-on-surface-variant text-[16px]" data-icon="lock">lock</span>
+</div>
+<span class="text-label-lg font-label-lg text-on-surface-variant">Geometry</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Sticky Action Card for Current Lesson -->
+<div class="absolute bottom-0 left-0 w-full px-container-padding pb-[80px] pt-4 bg-gradient-to-t from-background via-background to-transparent z-20 pointer-events-none">
+<div class="bg-surface-container-lowest rounded-[24px] p-md shadow-[0px_-4px_24px_rgba(0,0,0,0.08)] border border-surface-container-low flex justify-between items-center pointer-events-auto transition-transform duration-200 hover:-translate-y-1">
+<div>
+<h3 class="text-headline-md font-headline-md text-on-surface mb-1">Groups &amp; multiplication</h3>
+<p class="text-body-md font-body-md text-on-surface-variant flex items-center gap-1">
+                        You are here
+                    </p>
+<div class="w-24 bg-surface-container-highest rounded-full h-1.5 mt-2 overflow-hidden">
+<div class="bg-primary h-full w-[60%] rounded-full"></div>
+</div>
+</div>
+<button class="bg-secondary-container hover:bg-secondary-fixed text-on-secondary-container font-label-lg text-label-lg px-6 py-3 rounded-xl shadow-[0px_4px_12px_rgba(254,155,78,0.2)] transition-all duration-150 active:scale-95 active:shadow-sm">
+                    Continue
+                </button>
+<button aria-label="Close" class="absolute -top-3 -right-3 bg-surface-container-lowest rounded-full p-1 shadow-md border border-surface-container-low text-on-surface-variant hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined text-[20px]" data-icon="close">close</span>
+</button>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Bar (Hidden on md+ screens per blueprint) -->
+<nav class="md:hidden bg-surface-container-lowest shadow-[0px_-4px_20px_rgba(0,0,0,0.05)] docked full-width bottom-0 rounded-t-xl fixed left-0 w-full z-50 flex justify-around items-center px-4 py-2 border-t-0">
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined mb-1 text-[24px]" data-icon="home">home</span>
+<span class="text-[12px] font-label-lg">Today</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary bg-secondary-fixed rounded-full px-4 py-1 scale-90 transition-all duration-200 ease-out" href="#">
+<span class="material-symbols-outlined filled mb-1 text-[24px]" data-icon="menu_book">menu_book</span>
+<span class="text-[12px] font-label-lg font-bold">Learn</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined mb-1 text-[24px]" data-icon="leaderboard">leaderboard</span>
+<span class="text-[12px] font-label-lg">Progress</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined mb-1 text-[24px]" data-icon="person">person</span>
+<span class="text-[12px] font-label-lg">Profile</span>
+</a>
+</nav>
+<script>
+        // Simple script to center the map on the active node on load
+        document.addEventListener('DOMContentLoaded', () => {
+            const container = document.getElementById('map-container');
+            // Approximate scroll to show the middle section where active node is
+            container.scrollTop = 150;
+        });
+    </script>
+</body></html>

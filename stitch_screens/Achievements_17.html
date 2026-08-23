@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>EduCloud - Achievements</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;700&amp;family=Plus+Jakarta+Sans:wght@700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-container-highest": "#e3e2e0",
+                      "surface-tint": "#3b6a1b",
+                      "tertiary-container": "#4f9ac7",
+                      "surface-variant": "#e3e2e0",
+                      "secondary-fixed": "#ffdcc5",
+                      "error-container": "#ffdad6",
+                      "tertiary-fixed-dim": "#86cffe",
+                      "outline": "#72796a",
+                      "on-primary": "#ffffff",
+                      "on-primary-container": "#133200",
+                      "primary-fixed": "#baf293",
+                      "on-background": "#1a1c1a",
+                      "tertiary-fixed": "#c7e7ff",
+                      "on-tertiary-container": "#002f45",
+                      "inverse-primary": "#9fd67a",
+                      "surface-container": "#efeeeb",
+                      "primary-container": "#6da04b",
+                      "secondary": "#944b00",
+                      "error": "#ba1a1a",
+                      "on-error": "#ffffff",
+                      "primary-fixed-dim": "#9fd67a",
+                      "surface-dim": "#dbdad7",
+                      "on-tertiary-fixed-variant": "#004c6c",
+                      "surface": "#faf9f6",
+                      "background": "#faf9f6",
+                      "surface-container-high": "#e9e8e5",
+                      "surface-bright": "#faf9f6",
+                      "inverse-on-surface": "#f2f1ee",
+                      "on-secondary-fixed-variant": "#703700",
+                      "on-secondary-container": "#6e3600",
+                      "on-primary-fixed": "#0a2100",
+                      "tertiary": "#00658e",
+                      "on-tertiary": "#ffffff",
+                      "on-secondary": "#ffffff",
+                      "secondary-fixed-dim": "#ffb783",
+                      "surface-container-lowest": "#ffffff",
+                      "inverse-surface": "#2f312f",
+                      "primary": "#3b6a1b",
+                      "on-surface-variant": "#42493c",
+                      "secondary-container": "#fe9b4e",
+                      "on-primary-fixed-variant": "#235102",
+                      "on-tertiary-fixed": "#001e2e",
+                      "on-surface": "#1a1c1a",
+                      "on-secondary-fixed": "#301400",
+                      "outline-variant": "#c2c9b8",
+                      "surface-container-low": "#f4f3f1",
+                      "on-error-container": "#93000a"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "stack-gap": "16px",
+                      "xs": "4px",
+                      "sm": "8px",
+                      "xl": "32px",
+                      "lg": "24px",
+                      "md": "16px",
+                      "unit": "4px",
+                      "container-padding": "20px"
+              },
+              "fontFamily": {
+                      "body-md": [
+                              "Be Vietnam Pro"
+                      ],
+                      "headline-lg": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "display-lg": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "headline-lg-mobile": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "headline-md": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "label-lg": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "body-lg": [
+                              "Be Vietnam Pro"
+                      ]
+              },
+              "fontSize": {
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "1.5",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-lg": [
+                              "28px",
+                              {
+                                      "lineHeight": "1.3",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "display-lg": [
+                              "36px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "800"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "24px",
+                              {
+                                      "lineHeight": "1.3",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "headline-md": [
+                              "22px",
+                              {
+                                      "lineHeight": "1.3",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "label-lg": [
+                              "14px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "1.6",
+                                      "fontWeight": "500"
+                              }
+                      ]
+              }
+            },
+          }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .icon-fill {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md min-h-screen relative pb-24 md:pb-0 overflow-x-hidden antialiased selection:bg-primary-fixed selection:text-on-primary-fixed">
+<!-- Header Section -->
+<header class="w-full px-container-padding py-md pt-8">
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface">Achievements</h1>
+</header>
+<!-- Main Content Canvas -->
+<main class="w-full px-container-padding flex flex-col items-center justify-center pt-4 pb-12">
+<!-- Interactive Illustration Area: Badge Tree -->
+<div class="relative w-full max-w-[320px] aspect-[4/5] flex items-center justify-center mb-8">
+<!-- Organic floating background glow to ground the illustration -->
+<div class="absolute inset-0 bg-primary-fixed-dim/20 rounded-full blur-[40px] -z-10 transform translate-y-8 scale-90"></div>
+<img alt="Achievement Tree Illustration" class="w-full h-full object-contain drop-shadow-2xl hover:scale-[1.02] transition-transform duration-500 ease-out" data-alt="A beautiful, tactile 3D-style illustration of a playful, leafy green tree set against a warm cream background. The tree serves as an 'achievement board'. Nestled within its lush, organic canopy are five distinct, crafted badges holding shiny, colorful stars (gold, blue, bronze). The style mimics a high-quality physical storybook or claymation, featuring soft, diffuse ambient shadows, rounded edges, and a comforting, educational aesthetic. Lighting is warm and welcoming." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB4SozvG5Qaohr0Ve0vU-aZoMIDmcjd1sitTZ8wWmMBc66lUXw0XTcVjInnyaXAMKdeFQcaqWOl4VNOvo9ME9mL4GmcSSVLmPEOjnQMRRFMxARv3IuG1om9m7DM7goD4AShiUicTrcpaNy6dlJ5GvMc6MvHdHJQiXFTgmZGkFRNKQq-O-ZSQfRMHZ7zCuUh98e2NhQLcVYRFNZ5T52GUG50JvOz43YDRturYBu6n1A-Vzt4PWxtmdIvvKHjEt-sUEP2oc4oRtuxj3M"/>
+</div>
+<!-- Summary & Actions -->
+<div class="flex flex-col items-center space-y-6">
+<div class="text-center space-y-1">
+<p class="font-body-md text-body-md text-on-surface-variant">You've earned</p>
+<!-- Highlighted Number to draw attention -->
+<p class="font-headline-lg text-headline-lg text-on-surface">6 badges</p>
+</div>
+<!-- Primary Action Button - Styled with tactile depth -->
+<button class="bg-secondary-container hover:bg-secondary-fixed text-on-secondary-container font-label-lg text-label-lg px-8 py-4 rounded-full shadow-[0px_8px_24px_-4px_rgba(254,155,78,0.4)] hover:shadow-[0px_4px_12px_-2px_rgba(254,155,78,0.3)] active:shadow-none active:translate-y-1 transition-all duration-200">
+                View all
+            </button>
+</div>
+</main>
+<!-- Navigation Shell - BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-2 bg-surface-container-lowest dark:bg-inverse-surface shadow-[0px_-4px_20px_rgba(0,0,0,0.05)] rounded-t-xl">
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-surface-variant px-4 py-1 hover:text-primary dark:hover:text-primary-fixed-dim transition-colors group" href="#">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform duration-200">home</span>
+<span class="font-label-lg text-[10px] mt-1">Today</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-surface-variant px-4 py-1 hover:text-primary dark:hover:text-primary-fixed-dim transition-colors group" href="#">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform duration-200">menu_book</span>
+<span class="font-label-lg text-[10px] mt-1">Learn</span>
+</a>
+<!-- Active Tab: Progress -->
+<a class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim bg-secondary-fixed dark:bg-on-secondary-fixed-variant rounded-full px-6 py-1 scale-90 transition-all duration-200 ease-out shadow-inner" href="#">
+<span class="material-symbols-outlined icon-fill">leaderboard</span>
+<span class="font-label-lg text-[10px] mt-1">Progress</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-surface-variant px-4 py-1 hover:text-primary dark:hover:text-primary-fixed-dim transition-colors group" href="#">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform duration-200">person</span>
+<span class="font-label-lg text-[10px] mt-1">Profile</span>
+</a>
+</nav>
+</body></html>

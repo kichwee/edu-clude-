@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Success Screen</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;700&amp;family=Plus+Jakarta+Sans:wght@700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-container-highest": "#e3e2e0",
+                      "surface-tint": "#3b6a1b",
+                      "tertiary-container": "#4f9ac7",
+                      "surface-variant": "#e3e2e0",
+                      "secondary-fixed": "#ffdcc5",
+                      "error-container": "#ffdad6",
+                      "tertiary-fixed-dim": "#86cffe",
+                      "outline": "#72796a",
+                      "on-primary": "#ffffff",
+                      "on-primary-container": "#133200",
+                      "primary-fixed": "#baf293",
+                      "on-background": "#1a1c1a",
+                      "tertiary-fixed": "#c7e7ff",
+                      "on-tertiary-container": "#002f45",
+                      "inverse-primary": "#9fd67a",
+                      "surface-container": "#efeeeb",
+                      "primary-container": "#6da04b",
+                      "secondary": "#944b00",
+                      "error": "#ba1a1a",
+                      "on-error": "#ffffff",
+                      "primary-fixed-dim": "#9fd67a",
+                      "surface-dim": "#dbdad7",
+                      "on-tertiary-fixed-variant": "#004c6c",
+                      "surface": "#faf9f6",
+                      "background": "#faf9f6",
+                      "surface-container-high": "#e9e8e5",
+                      "surface-bright": "#faf9f6",
+                      "inverse-on-surface": "#f2f1ee",
+                      "on-secondary-fixed-variant": "#703700",
+                      "on-secondary-container": "#6e3600",
+                      "on-primary-fixed": "#0a2100",
+                      "tertiary": "#00658e",
+                      "on-tertiary": "#ffffff",
+                      "on-secondary": "#ffffff",
+                      "secondary-fixed-dim": "#ffb783",
+                      "surface-container-lowest": "#ffffff",
+                      "inverse-surface": "#2f312f",
+                      "primary": "#3b6a1b",
+                      "on-surface-variant": "#42493c",
+                      "secondary-container": "#fe9b4e",
+                      "on-primary-fixed-variant": "#235102",
+                      "on-tertiary-fixed": "#001e2e",
+                      "on-surface": "#1a1c1a",
+                      "on-secondary-fixed": "#301400",
+                      "outline-variant": "#c2c9b8",
+                      "surface-container-low": "#f4f3f1",
+                      "on-error-container": "#93000a"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "2xl": "1.5rem",
+                      "3xl": "2rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "stack-gap": "16px",
+                      "xs": "4px",
+                      "sm": "8px",
+                      "xl": "32px",
+                      "lg": "24px",
+                      "md": "16px",
+                      "unit": "4px",
+                      "container-padding": "20px"
+              },
+              "fontFamily": {
+                      "body-md": [
+                              "Be Vietnam Pro"
+                      ],
+                      "headline-lg": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "display-lg": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "headline-lg-mobile": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "headline-md": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "label-lg": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "body-lg": [
+                              "Be Vietnam Pro"
+                      ]
+              },
+              "fontSize": {
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "1.5",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-lg": [
+                              "28px",
+                              {
+                                      "lineHeight": "1.3",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "display-lg": [
+                              "36px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "800"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "24px",
+                              {
+                                      "lineHeight": "1.3",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "headline-md": [
+                              "22px",
+                              {
+                                      "lineHeight": "1.3",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "label-lg": [
+                              "14px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "1.6",
+                                      "fontWeight": "500"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+    </script>
+<style>
+        body {
+            /* Ensuring the ambient shadow effect on the main canvas */
+            background-color: theme('colors.background');
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen flex flex-col font-body-md antialiased overflow-x-hidden">
+<!-- Transactional Top Navigation (Suppressed standard shell, custom layout) -->
+<header class="w-full px-container-padding py-md flex justify-between items-center z-10">
+<button class="w-10 h-10 flex items-center justify-center rounded-full bg-surface-container-low hover:bg-surface-container transition-colors shadow-[0px_4px_20px_rgba(0,0,0,0.03)] text-on-surface-variant">
+<span class="material-symbols-outlined" data-icon="arrow_back_ios_new">arrow_back_ios_new</span>
+</button>
+<!-- Progress Indicator -->
+<div class="flex items-center gap-xs">
+<div class="w-2 h-2 rounded-full bg-surface-container-highest"></div>
+<div class="w-2 h-2 rounded-full bg-surface-container-highest"></div>
+<div class="w-4 h-2 rounded-full bg-primary"></div>
+<div class="w-2 h-2 rounded-full bg-surface-container-highest"></div>
+</div>
+<button class="w-10 h-10 flex items-center justify-center rounded-full bg-surface-container-low hover:bg-surface-container transition-colors shadow-[0px_4px_20px_rgba(0,0,0,0.03)] text-on-surface-variant">
+<span class="material-symbols-outlined" data-icon="keyboard_arrow_up">keyboard_arrow_up</span>
+</button>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-1 flex flex-col items-center justify-center px-container-padding pb-[100px] gap-lg">
+<!-- Headers -->
+<div class="text-center w-full max-w-md flex flex-col gap-sm">
+<h1 class="text-display-lg font-display-lg text-on-background flex items-center justify-center gap-sm">
+                Great job! <span class="text-4xl">🎉</span>
+</h1>
+<p class="text-body-lg font-body-lg text-on-surface-variant">
+                You shared them equally.
+            </p>
+</div>
+<!-- Hero Illustration -->
+<div class="w-full max-w-md relative flex justify-center py-xl">
+<img class="w-full h-auto max-h-[300px] object-contain drop-shadow-[0px_10px_30px_rgba(109,160,75,0.15)] z-10" data-alt="A warm, high-quality 3D illustration in a tactile storybook style. Two happy young children of diverse descent are smiling brightly next to two woven wooden baskets. Each basket is filled with exactly the same amount of ripe, yellow mangoes. The background is a soft, creamy neutral surface with subtle ambient lighting. The style features soft edges, organic shapes, and a comforting, safe atmosphere typical of premium early childhood education materials." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD5Ih8eRVZ890a3rbKNZF2d08HgX8WSKxvkpu_kck5yjCmzd3V-F9SGTtCQzLu_nItgr3VA03lxYcm6dld9RbmH-6y5Pu-7ufJMfrFuFGRqhUFFHfTaSOvG2OnjTUt-EJ3UppI_Tv9ASAjet4VInNm2YIyQziQSPru9Vp0rban_AUTGwRolnS6gVYAcZdwZQu5f78hH8gRSXlq0hBCLTP_I4NMc-Rdg8d-RQrP7DYdcn68k7joEs02zw-xkQG2rDz-2SctiAWWZpjY"/>
+<!-- Ambient glowing backdrop for the illustration -->
+<div class="absolute inset-0 bg-primary-container opacity-5 rounded-full blur-3xl transform scale-75 z-0"></div>
+</div>
+<!-- Educational 'Remember' Card -->
+<div class="w-full max-w-sm bg-surface-container-low rounded-3xl p-md flex flex-row items-center gap-md shadow-[0px_4px_20px_rgba(0,0,0,0.04)] relative overflow-hidden">
+<!-- Decorative organic blob shape in background of card -->
+<div class="absolute -top-10 -right-10 w-32 h-32 bg-secondary-fixed opacity-30 rounded-full blur-xl"></div>
+<div class="w-16 h-16 shrink-0 rounded-full bg-surface-container-highest border-4 border-surface overflow-hidden shadow-sm z-10">
+<img class="w-full h-full object-cover" data-alt="A small, circular 3D illustrative portrait of a smiling young boy with curly dark hair, wearing a simple green shirt. The style is warm, tactile, and highly reminiscent of a premium physical storybook character. The lighting is soft and inviting, emphasizing organic features and a friendly, encouraging expression. The background of the portrait is a clean, neutral cream color to fit seamlessly within a user interface." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA6ZmxAZoKEEPx3XNjGMkqgkfjgpPTV5_BUQTz1Od7LnJcvn5wUndTZ5ZBJgsO4MG_S0MRAACt7b6Wz4T9cDbplP959FFhkMQwfF_NcEKTMJYZTDWtYuZ8LSkOZfyoPc7wosvEVGeC_jMbuFITZAXL3ItG4HXDekHTwXQKUethFBrSvnJ3sGnF2lsrh_IJJxO2RJE8kTQVOrgp_zspI3AvLVfGNu_54SBqK2RIwAg_4xAiJKQ1EddYZ5h1szwV5IA-LViswBFOA934"/>
+</div>
+<div class="flex flex-col z-10">
+<span class="text-label-lg font-label-lg text-on-surface-variant mb-xs">Remember</span>
+<p class="text-body-md font-body-md text-on-background leading-tight">
+                    Equal means the same amount in each group.
+                </p>
+</div>
+</div>
+</main>
+<!-- Fixed Bottom Action Area -->
+<div class="fixed bottom-0 left-0 w-full px-container-padding py-lg bg-gradient-to-t from-background via-background to-transparent z-50">
+<div class="max-w-md mx-auto">
+<button class="w-full py-4 px-6 bg-primary text-on-primary rounded-full text-headline-md font-headline-md shadow-[0px_8px_24px_rgba(59,106,27,0.25)] hover:bg-surface-tint active:scale-95 transition-all duration-200 flex items-center justify-center">
+                Continue
+            </button>
+</div>
+</div>
+</body></html>
