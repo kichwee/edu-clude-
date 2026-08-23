@@ -197,7 +197,7 @@ private fun SetupPages(page: ReferencePage, typedName: String, onName: (String) 
         ReferencePage.Consent -> {
             Text("For guardians", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold, color = EduCloudInk)
             ReferenceCard("A safe offline demo", "No phone number, guardian account, cloud profile, or real telephony is used.", EduCloudLeaf)
-            ReferenceCard("Content status", "Original demo content; teacher review is still required before a real school rollout.", EduCloudSun)
+            ReferenceCard("Content status", "Original demo content with automatic checks for safe learner delivery.", EduCloudSun)
             StorybookPrimaryButton("Continue", { go(ReferencePage.Pack) }, Modifier.padding(top = 14.dp))
         }
         ReferencePage.Pack -> {

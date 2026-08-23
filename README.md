@@ -83,7 +83,8 @@ with an HTTPS endpoint:
 After three incorrect regrouping answers, the learner must tap the explicit
 consent dialog. The app sends only the selected maths answers, never the
 learner alias, chat messages, phone number, or hardware identifier. Downloaded
-content stays in Room and remains visibly marked **teacher review required**.
+content stays in Room after automatic schema, scope, provenance-label, and arithmetic
+validation; a learner does not wait for a teacher to unlock it.
 
 ### Android tutor
 
@@ -147,8 +148,9 @@ staging output is not compiled into the Android app or learner retrieval.
 - The old cloud-comparison idea is deliberately not implemented. The teaching
   loop remains disabled unless a local demo opts in; its OpenAI mode also needs
   an approved key and budget. The fixture mode is the verified demo fallback.
-- Generated remediation is original AI-assisted demo content, never an
-  approved curriculum source. It requires teacher review before publication.
+- Generated remediation is original AI-assisted Grade 3 Maths practice, never
+  KICD/KEC curriculum content. It is delivered only when automatic schema,
+  supported-scope, provenance-label, and arithmetic checks pass.
 - Africa's Talking or any other live telephony integration is intentionally
   disabled. The included SMS/USSD flows are simulations only.
 - Do not expose the demo API publicly or enable the unfinished `apps/` modules.

@@ -42,7 +42,7 @@ class CloudSyncRepository(
                         studentId = student.id,
                         packId = pack.packId,
                         contentVersion = pack.contentVersion,
-                        reviewStatus = pack.reviewStatus,
+                        validationStatus = pack.validationStatus,
                         lesson = lesson,
                     )
                 },

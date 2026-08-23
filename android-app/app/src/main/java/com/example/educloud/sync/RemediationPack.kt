@@ -12,7 +12,7 @@ data class RemediationPack(
     @SerialName("content_version") val contentVersion: String,
     val label: String,
     @SerialName("target_skill") val targetSkill: String,
-    @SerialName("review_status") val reviewStatus: String,
+    @SerialName("validation_status") val validationStatus: String,
     val provenance: String,
     val lessons: List<RemediationLesson>,
 )
@@ -36,15 +36,16 @@ data class RemediationPracticeQuestion(
     val answer: Int,
 )
 
-/** Reject malformed, non-reviewable, or mathematically invalid downloaded content. */
+/** Reject malformed, out-of-scope, or mathematically invalid downloaded content. */
 fun RemediationPack.isSafeOfflinePatch(): Boolean =
     schemaVersion == "1" &&
         targetSkill == "two_digit_subtraction_regrouping" &&
-        reviewStatus == "teacher_review_required" &&
+        validationStatus == "automatic_validation_passed" &&
+        provenance.contains("automatically validated", ignoreCase = true) &&
         lessons.size == 1 &&
         lessons.all { lesson ->
             lesson.id.isNotBlank() &&
-                lesson.source.contains("teacher review required", ignoreCase = true) &&
+                lesson.source.contains("automatic checks passed", ignoreCase = true) &&
                 lesson.teachingSteps.size == 3 &&
                 lesson.practiceQuestions.size == 3 &&
                 lesson.practiceQuestions.all { question ->

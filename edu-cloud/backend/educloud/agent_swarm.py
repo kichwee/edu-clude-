@@ -128,7 +128,7 @@ class RemediationPackPayload(BaseModel):
     content_version: str
     label: str
     target_skill: SkillId
-    review_status: Literal["teacher_review_required"]
+    validation_status: Literal["automatic_validation_passed"]
     provenance: str
     lessons: list[RemediationLesson] = Field(min_length=1, max_length=1)
 
@@ -269,16 +269,17 @@ def run_teaching_loop(telemetry: TelemetryRequest) -> RemediationPackPayload:
         content_version=f"remediation-{pack_id.hex[:12]}",
         label="Personalised Grade 3 Maths remediation",
         target_skill=assessment.target_skill,
-        review_status="teacher_review_required",
+        validation_status="automatic_validation_passed",
         provenance=(
-            "AI-generated original hackathon demo remediation from anonymised error patterns; "
-            "not an approved curriculum source and requires teacher review before publication."
+            "AI-generated original Grade 3 Maths remediation from anonymised error patterns; "
+            "automatically validated for schema, supported scope, provenance label, and arithmetic. "
+            "Not KICD/KEC curriculum content."
         ),
         lessons=[
             RemediationLesson(
                 id=f"remediation-{pack_id.hex[:12]}-regrouping",
                 topic=draft.title,
-                source="Personalised AI demo remediation · teacher review required",
+                source="Personalised Grade 3 Maths practice · automatic checks passed",
                 keywords=["subtraction", "regrouping", "borrow", "tens", "ones"],
                 micro_lesson=draft.micro_lesson,
                 teaching_steps=draft.teaching_steps,

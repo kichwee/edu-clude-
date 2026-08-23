@@ -1,4 +1,4 @@
-"""Persistence for anonymised, teacher-review-required remediation packs."""
+"""Persistence for anonymised, automatically validated remediation packs."""
 
 from django.db import models
 

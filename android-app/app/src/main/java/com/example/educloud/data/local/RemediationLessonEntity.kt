@@ -10,7 +10,7 @@ import com.example.educloud.sync.toContentLesson
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
-/** Locally persisted, review-required remediation content for one learner profile. */
+/** Locally persisted, automatically validated remediation content for one learner profile. */
 @Entity(
     tableName = "remediation_lessons",
     indices = [Index(value = ["studentId"]), Index(value = ["packId"])],
@@ -20,7 +20,7 @@ data class RemediationLessonEntity(
     val studentId: Int,
     val packId: String,
     val contentVersion: String,
-    val reviewStatus: String,
+    val validationStatus: String,
     val topic: String,
     val source: String,
     val keywordsJson: String,
@@ -47,14 +47,14 @@ data class RemediationLessonEntity(
             studentId: Int,
             packId: String,
             contentVersion: String,
-            reviewStatus: String,
+            validationStatus: String,
             lesson: RemediationLesson,
         ): RemediationLessonEntity = RemediationLessonEntity(
             lessonId = lesson.id,
             studentId = studentId,
             packId = packId,
             contentVersion = contentVersion,
-            reviewStatus = reviewStatus,
+            validationStatus = validationStatus,
             topic = lesson.topic,
             source = lesson.source,
             keywordsJson = json.encodeToString(lesson.keywords),

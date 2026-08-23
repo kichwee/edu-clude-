@@ -17,7 +17,7 @@ import com.example.educloud.data.model.Student
  */
 @Database(
     entities = [Student::class, Interaction::class, Streak::class, LessonSearchEntity::class, ContentPackStateEntity::class, RemediationLessonEntity::class],
-    version = 4,
+    version = 5,
     exportSchema = true
 )
 abstract class EduCloudDatabase : RoomDatabase() {
@@ -44,7 +44,7 @@ abstract class EduCloudDatabase : RoomDatabase() {
                 )
                     // Learner aliases and learning history are sensitive and must never be
                     // silently erased merely because an upgrade needs a migration.
-                    .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4)
+                    .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5)
                     .build()
                 INSTANCE = instance
                 instance
@@ -81,6 +81,32 @@ abstract class EduCloudDatabase : RoomDatabase() {
                         "`teachingStepsJson` TEXT NOT NULL, `definition` TEXT NOT NULL, `practiceQuestionsJson` TEXT NOT NULL, " +
                         "PRIMARY KEY(`lessonId`))"
                 )
+                db.execSQL("CREATE INDEX IF NOT EXISTS `index_remediation_lessons_studentId` ON `remediation_lessons` (`studentId`)")
+                db.execSQL("CREATE INDEX IF NOT EXISTS `index_remediation_lessons_packId` ON `remediation_lessons` (`packId`)")
+            }
+        }
+
+        /** Replaces the learner-blocking review label with an automatic validation result. */
+        internal val MIGRATION_4_5 = object : Migration(4, 5) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL(
+                    "CREATE TABLE IF NOT EXISTS `remediation_lessons_new` (" +
+                        "`lessonId` TEXT NOT NULL, `studentId` INTEGER NOT NULL, `packId` TEXT NOT NULL, " +
+                        "`contentVersion` TEXT NOT NULL, `validationStatus` TEXT NOT NULL, `topic` TEXT NOT NULL, " +
+                        "`source` TEXT NOT NULL, `keywordsJson` TEXT NOT NULL, `microLesson` TEXT NOT NULL, " +
+                        "`teachingStepsJson` TEXT NOT NULL, `definition` TEXT NOT NULL, `practiceQuestionsJson` TEXT NOT NULL, " +
+                        "PRIMARY KEY(`lessonId`))"
+                )
+                db.execSQL(
+                    "INSERT INTO `remediation_lessons_new` " +
+                        "(`lessonId`, `studentId`, `packId`, `contentVersion`, `validationStatus`, `topic`, `source`, " +
+                        "`keywordsJson`, `microLesson`, `teachingStepsJson`, `definition`, `practiceQuestionsJson`) " +
+                        "SELECT `lessonId`, `studentId`, `packId`, `contentVersion`, 'automatic_validation_passed', " +
+                        "`topic`, `source`, `keywordsJson`, `microLesson`, `teachingStepsJson`, `definition`, " +
+                        "`practiceQuestionsJson` FROM `remediation_lessons`"
+                )
+                db.execSQL("DROP TABLE `remediation_lessons`")
+                db.execSQL("ALTER TABLE `remediation_lessons_new` RENAME TO `remediation_lessons`")
                 db.execSQL("CREATE INDEX IF NOT EXISTS `index_remediation_lessons_studentId` ON `remediation_lessons` (`studentId`)")
                 db.execSQL("CREATE INDEX IF NOT EXISTS `index_remediation_lessons_packId` ON `remediation_lessons` (`packId`)")
             }

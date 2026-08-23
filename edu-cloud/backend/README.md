@@ -39,8 +39,8 @@ phone number, session ID, and service code, returns a stateless `CON`/`END`
 menu, and has a short gateway throttle. The current learning tree is:
 `Learn → Grade (1–12) → Subject → Topic → Lesson → Check → feedback`. Only the
 small, original Grade 3 Maths demonstration branch is available; every other
-grade and subject returns an explicit unpublished state. The examples are marked as
-pending teacher review, not KICD/KEC content. It must be presented as
+grade and subject returns an explicit unpublished state. The examples are
+automatically validated original content, not KICD/KEC content. It must be presented as
 **Sandbox**, not a live service. Keep the token out of source control,
 screenshots, and demo recordings.
 
@@ -52,8 +52,8 @@ need separate authentication, consent, persistence, provider, and security work.
 This is a separate, **disabled-by-default** hackathon-only route. It accepts
 only a random local learner UUID, explicit demo consent, and three to ten
 incorrect two-digit subtraction attempts; it rejects names, phones, chat text,
-unbounded input, correct attempts, and unsupported skills. It persists a
-review-required remediation JSON patch, not the raw attempts.
+unbounded input, correct attempts, and unsupported skills. It persists an
+automatically validated remediation JSON patch, not the raw attempts.
 
 To show the deterministic local demonstration:
 
@@ -68,5 +68,5 @@ calling an external provider. To invoke OpenAI’s structured-output stages,
 use `AGENT_SWARM_MODE=openai`, set `OPENAI_API_KEY` in the server environment,
 and keep `OPENAI_MODEL=gpt-4o-mini` (or an approved replacement) server-side.
 There is deliberately no production mode: authentication, durable consent,
-rate limits, audit logging, retention/deletion controls, teacher approval, and
-an operational review are required first.
+rate limits, audit logging, retention/deletion controls, and an operational
+security review are required first.

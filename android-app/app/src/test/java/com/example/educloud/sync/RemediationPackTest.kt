@@ -15,13 +15,13 @@ class RemediationPackTest {
             contentVersion = "remediation-9430e2131399",
             label = "Personalised Grade 3 Maths remediation",
             targetSkill = "two_digit_subtraction_regrouping",
-            reviewStatus = "teacher_review_required",
-            provenance = "AI-generated original demo remediation; teacher review required.",
+            validationStatus = "automatic_validation_passed",
+            provenance = "AI-generated original demo remediation; automatically validated for arithmetic.",
             lessons = listOf(
                 RemediationLesson(
                     id = "remediation-9430e2131399-regrouping",
                     topic = "Trade one ten, then subtract",
-                    source = "Personalised AI demo remediation · teacher review required",
+                    source = "Personalised Grade 3 Maths practice · automatic checks passed",
                     keywords = listOf("subtraction", "regrouping", "borrow", "tens", "ones"),
                     microLesson = "Trade one ten for ten ones before subtracting the ones column.",
                     teachingSteps = listOf("Check ones", "Trade a ten", "Subtract ones then tens"),
@@ -39,7 +39,7 @@ class RemediationPackTest {
         val match = Grade3MathContent.find("Help me regroup when I subtract", listOf(lesson))
 
         assertEquals("remediation-9430e2131399-regrouping", lesson.id)
-        assertTrue(lesson.source.contains("teacher review required"))
+        assertTrue(lesson.source.contains("automatic checks passed"))
         assertTrue(lesson.passage.contains("45 - 29 = 16"))
         assertEquals(lesson.id, match?.id)
     }
