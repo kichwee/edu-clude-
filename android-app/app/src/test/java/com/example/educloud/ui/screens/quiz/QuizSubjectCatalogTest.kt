@@ -13,9 +13,14 @@ class QuizSubjectCatalogTest {
     }
 
     @Test
-    fun displayLabelsAndUnsupportedDeepLinksAreUnavailable() {
-        assertNull(QuizSubjectCatalog.questionsFor("Mathematics"))
-        assertNull(QuizSubjectCatalog.questionsFor("english"))
-        assertTrue(QuizSubjectCatalog.unavailableMessage("Mathematics").contains("not available"))
+    fun displayLabelsNormalizeToCanonicalIdsWhileUnknownSubjectsStayUnavailable() {
+        // Display labels resolve through normalize() to the same canonical bank;
+        // genuinely unknown subjects still get no bank and the honest message.
+        assertEquals(
+            QuizSubjectCatalog.questionsFor(QuizSubjectCatalog.MATHEMATICS_ID),
+            QuizSubjectCatalog.questionsFor("Mathematics"),
+        )
+        assertNull(QuizSubjectCatalog.questionsFor("history"))
+        assertTrue(QuizSubjectCatalog.unavailableMessage("History").contains("not available"))
     }
 }

@@ -7,11 +7,25 @@ package com.example.educloud.ui.screens.quiz
 internal object QuizSubjectCatalog {
     const val MATHEMATICS_ID = "math"
 
-    fun questionsFor(subjectId: String): List<QuizQuestion>? = questionBanks[subjectId]
+    fun normalize(raw: String): String {
+        return when (raw.trim().lowercase()) {
+            "math", "mathematics", "grade 3 mathematics", "grade3 math", "grade3math" -> MATHEMATICS_ID
+            "english" -> "english"
+            "kiswahili" -> "kiswahili"
+            "science", "science & tech", "science and tech" -> "science"
+            "social-studies", "social studies" -> "social-studies"
+            "creative-arts", "creative arts" -> "creative-arts"
+            else -> raw.trim().lowercase()
+        }
+    }
 
-    fun unavailableMessage(subjectId: String): String =
-        "Quick checks are not available for ${subjectId.ifBlank { "this subject" }}. " +
+    fun questionsFor(subjectId: String): List<QuizQuestion>? = questionBanks[normalize(subjectId)]
+
+    fun unavailableMessage(subjectId: String): String {
+        val display = subjectId.ifBlank { "this subject" }
+        return "Quick checks are not available for $display. " +
             "This MVP currently supports Grade 3 Mathematics only."
+    }
 
     private val questionBanks: Map<String, List<QuizQuestion>> = mapOf(
         MATHEMATICS_ID to listOf(
