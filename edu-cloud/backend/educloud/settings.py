@@ -74,6 +74,21 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 DATA_UPLOAD_MAX_MEMORY_SIZE = 16 * 1024
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 10
 
+# Python 3.14 + Django 5.0.6 incompatibility: the default ``mail_admins``
+# handler renders a technical-500 template for every logged 5xx even when no
+# ADMINS are configured, and that render crashes (template Context.__copy__).
+# With an empty ADMINS list the handler could never deliver anything anyway,
+# so request errors go to the console instead.  All other defaults stand.
+from django.utils.log import DEFAULT_LOGGING
+
+LOGGING = {
+    **DEFAULT_LOGGING,
+    "loggers": {
+        **DEFAULT_LOGGING["loggers"],
+        "django.request": {"handlers": ["console"], "level": "ERROR", "propagate": False},
+    },
+}
+
 if not DEBUG:
     SECURE_CONTENT_TYPE_NOSNIFF = True
     X_FRAME_OPTIONS = "DENY"
@@ -126,3 +141,23 @@ if AGENT_SWARM_MODE not in {"fixture", "openai"}:
     raise RuntimeError("AGENT_SWARM_MODE must be 'fixture' or 'openai'.")
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
 OPENAI_MODEL = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
+
+# Interest re-explanation (V2 Layer 2). Disabled unless a deployment opts in,
+# mirroring the teaching loop's posture: no explicit mode, no route, no calls.
+# ``fixture`` proves the re-explain contract without external calls; ``live``
+# serves ox-alpha via OpenRouter first, with Claude Haiku and direct
+# OpenAI/open-weight as backups.
+# An empty value (e.g. a blank slot in .env) means the default: disabled.
+REEXPLAIN_MODE = (os.getenv("REEXPLAIN_MODE", "disabled").strip().lower() or "disabled")
+if REEXPLAIN_MODE not in {"disabled", "fixture", "live"}:
+    raise RuntimeError("REEXPLAIN_MODE must be 'disabled', 'fixture' or 'live'.")
+ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY", "")
+ANTHROPIC_MODEL = os.getenv("ANTHROPIC_MODEL", "claude-sonnet-5")
+# OpenRouter slot (OpenAI-compatible endpoint). Leave the key blank to skip it.
+OPENROUTER_BASE_URL = os.getenv("OPENROUTER_BASE_URL", "https://openrouter.ai/api/v1")
+OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY", "")
+OPENROUTER_MODEL = os.getenv("OPENROUTER_MODEL", "ox-alpha")
+# Cost and abuse controls: one tap is one call, responses are cached per
+# (lesson, domain), and each pseudonymous learner has an hourly tap cap.
+REEXPLAIN_MAX_REQUESTS_PER_LEARNER_HOUR = int(os.getenv("REEXPLAIN_MAX_REQUESTS_PER_LEARNER_HOUR", "12"))
+REEXPLAIN_CACHE_TTL_SECONDS = int(os.getenv("REEXPLAIN_CACHE_TTL_SECONDS", "86400"))

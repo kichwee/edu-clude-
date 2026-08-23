@@ -245,6 +245,11 @@ fun ChatScreen(
                                 onClick = { viewModel.sendSuggestedMessage("Tell me a story about counting in twos") },
                                 label = { Text("✨ Story") },
                             )
+                            AssistChip(
+                                onClick = viewModel::explainMyWay,
+                                enabled = state.canExplainMyWay && !state.isExplainingMyWay,
+                                label = { Text("🔁 Explain it my way") },
+                            )
                         }
                     }
                     items(state.messages, key = { it.id }) { msg ->

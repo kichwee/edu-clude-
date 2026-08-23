@@ -6,6 +6,7 @@ plugins {
 }
 
 val edgeSyncBaseUrl = providers.gradleProperty("edgeSyncBaseUrl").orElse("").get()
+val reexplainBaseUrl = providers.gradleProperty("reexplainBaseUrl").orElse(edgeSyncBaseUrl).get()
 
 android {
     namespace = "com.example.educloud"
@@ -18,6 +19,7 @@ android {
         versionName = "1.0.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField("String", "EDGE_SYNC_BASE_URL", "\"${edgeSyncBaseUrl.replace("\\", "\\\\").replace("\"", "\\\"")}\"")
+        buildConfigField("String", "REEXPLAIN_BASE_URL", "\"${reexplainBaseUrl.replace("\\", "\\\\").replace("\"", "\\\"")}\"")
     }
 
     buildTypes {

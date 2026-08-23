@@ -3,12 +3,20 @@ package com.example.educloud.ui.screens.chat
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.educloud.ai.LlmTutorExplainer
 import com.example.educloud.ai.TutorResponseEngine
+import com.example.educloud.content.ContentLesson
 import com.example.educloud.data.model.Interaction
 import com.example.educloud.data.repository.LearningRepository
 import com.example.educloud.data.repository.OfflineLessonRepository
 import com.example.educloud.data.repository.StudentRepository
 import com.example.educloud.content.sourceLabel
+import com.example.educloud.sync.MAX_LEARNER_QUESTION_CHARS
+import com.example.educloud.sync.MAX_SOURCE_EXCERPT_CHARS
+import com.example.educloud.sync.ReexplainOutcome
+import com.example.educloud.sync.ReexplainRequestPayload
+import com.example.educloud.sync.ReexplainService
+import com.example.educloud.sync.validatedServerExplanation
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
@@ -29,6 +37,8 @@ data class ChatState(
     val isOpenAiConnected: Boolean = false,
     val studentId: Int? = null,
     val inputError: String? = null,
+    val canExplainMyWay: Boolean = false,
+    val isExplainingMyWay: Boolean = false,
 )
 
 class ChatViewModel(
@@ -36,10 +46,13 @@ class ChatViewModel(
     private val studentRepository: StudentRepository,
     private val learningRepository: LearningRepository,
     private val offlineLessonRepository: OfflineLessonRepository,
+    private val reexplainService: ReexplainService = ReexplainService(),
 ) : ViewModel() {
 
     private val tutorResponseEngine = TutorResponseEngine(context)
     private var nextMessageId = 0L
+    private var lastLesson: ContentLesson? = null
+    private var lastQuestion: String = ""
 
     private val _state = MutableStateFlow(ChatState())
     val state: StateFlow<ChatState> = _state.asStateFlow()
@@ -111,6 +124,11 @@ class ChatViewModel(
 
             try {
                 val lesson = offlineLessonRepository.retrieve(text, subject, 3, studentId)
+                if (lesson != null) {
+                    lastLesson = lesson
+                    lastQuestion = text
+                    _state.update { it.copy(canExplainMyWay = true) }
+                }
                 var fullResponse = ""
                 tutorResponseEngine.answer(
                     subject = subject,
@@ -156,6 +174,91 @@ class ChatViewModel(
                 _state.update { it.copy(isThinking = false) }
             }
         }
+    }
+
+    /**
+     * Layer-2 re-explanation: one tap, one bounded cloud call through the Django
+     * service, re-checked by [validatedServerExplanation] against the canonical
+     * local lesson. Any failure — offline, throttled, contract-invalid, or no
+     * interest chips chosen — falls back to the deterministic story so the
+     * learner never hits a dead end. Never a retry loop.
+     */
+    fun explainMyWay() {
+        val lesson = lastLesson
+        if (_state.value.isThinking || _state.value.isExplainingMyWay) return
+        if (lesson == null) {
+            _state.update { it.copy(inputError = "Ask about a lesson first, then I can explain it your way!") }
+            return
+        }
+
+        viewModelScope.launch {
+            _state.update { it.copy(
+                isExplainingMyWay = true,
+                messages = it.messages + ChatMessage(newMessageId(), "", isFromUser = false, isStreaming = true),
+            )}
+            try {
+                val deviceId = studentRepository.activeStudent.first()?.deviceId
+                val interests = studentRepository.interestDomains.first()
+                val outcome = if (deviceId == null || interests.isEmpty()) null else reexplainService.reexplain(
+                    ReexplainRequestPayload(
+                        consent = true,
+                        learnerId = deviceId,
+                        lessonId = lesson.id,
+                        analogyDomain = interests.first(),
+                        sourceExcerpt = lesson.passage.take(MAX_SOURCE_EXCERPT_CHARS),
+                        verifiedAnswer = lesson.verifiedAnswer?.take(64),
+                        learnerQuestion = lastQuestion.take(MAX_LEARNER_QUESTION_CHARS),
+                    ),
+                )
+                val validated = (outcome as? ReexplainOutcome.Ready)
+                    ?.let { validatedServerExplanation(it.payload, lesson) }
+                    ?.getOrNull()
+                if (validated != null) {
+                    replaceLastBubble("$validated\n\n${lesson.sourceLabel()} · ✨ explained your way")
+                    recordReexplainInteraction(lesson, validated)
+                } else {
+                    serveDeterministicStory(lesson)
+                }
+            } catch (_: Exception) {
+                serveDeterministicStory(lesson)
+            } finally {
+                _state.update { it.copy(isExplainingMyWay = false) }
+            }
+        }
+    }
+
+    private suspend fun serveDeterministicStory(lesson: ContentLesson) {
+        replaceLastBubble(
+            LlmTutorExplainer.explainGrounded(
+                question = lastQuestion.ifBlank { lesson.topic },
+                lesson = lesson,
+                mode = LlmTutorExplainer.ExplainerMode.STORY,
+            )
+        )
+    }
+
+    private fun replaceLastBubble(text: String) {
+        _state.update { state ->
+            val messages = state.messages.toMutableList()
+            if (messages.isNotEmpty()) {
+                messages[messages.lastIndex] = messages.last().copy(text = text, isStreaming = false)
+            }
+            state.copy(messages = messages)
+        }
+    }
+
+    private suspend fun recordReexplainInteraction(lesson: ContentLesson, explanation: String) {
+        val studentId = _state.value.studentId ?: return
+        learningRepository.recordInteraction(
+            Interaction(
+                studentId = studentId,
+                question = "Explain it my way",
+                aiResponse = explanation,
+                ragSources = "${lesson.id}|${lesson.sourceLabel()}",
+                subject = _state.value.subject,
+                channel = "app-reexplain",
+            ),
+        )
     }
 
     private fun newMessageId(): Long = nextMessageId++

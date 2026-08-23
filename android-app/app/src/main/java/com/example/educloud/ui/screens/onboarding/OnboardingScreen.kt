@@ -31,6 +31,7 @@ import com.example.educloud.theme.EduCloudMutedInk
 import com.example.educloud.theme.EduCloudSun
 import com.example.educloud.theme.PrimaryContainer
 import com.example.educloud.theme.PrimaryFixed
+import com.example.educloud.sync.ANALOGY_DOMAINS
 import com.example.educloud.theme.SurfaceContainerLow
 
 @Composable
@@ -66,7 +67,8 @@ fun OnboardingScreen(
                 Text(
                     text = when (state.step) {
                         0 -> "Let's personalise your space."
-                        else -> "Choose your learning level."
+                        1 -> "Choose your learning level."
+                        else -> "Pick what makes learning fun."
                     },
                     style = MaterialTheme.typography.bodyLarge,
                     color = EduCloudMutedInk,
@@ -79,7 +81,7 @@ fun OnboardingScreen(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                repeat(2) { i ->
+                repeat(3) { i ->
                     val isActive = i == state.step
                     Box(
                         modifier = Modifier
@@ -112,6 +114,10 @@ fun OnboardingScreen(
                             }
                         )
                         1 -> GradeStep()
+                        2 -> InterestStep(
+                            selected = state.interests,
+                            onToggle = viewModel::toggleInterest,
+                        )
                     }
                 }
             }
@@ -135,7 +141,7 @@ fun OnboardingScreen(
 
                 Button(
                     onClick = {
-                        if (state.step < 1) viewModel.nextStep()
+                        if (state.step < 2) viewModel.nextStep()
                         else viewModel.completeOnboarding()
                     },
                     modifier = Modifier.weight(1f),
@@ -149,7 +155,7 @@ fun OnboardingScreen(
                             color = MaterialTheme.colorScheme.onPrimary
                         )
                     } else {
-                        Text(if (state.step < 1) "Continue" else "Start learning")
+                        Text(if (state.step < 2) "Continue" else "Start learning")
                     }
                 }
             }
@@ -238,8 +244,7 @@ private fun GradeStep() {
 }
 
 @Composable
-private fun GradePill(grade: String, ageRange: String, available: Boolean) {
-    val bg = if (available) PrimaryFixed.copy(.5f) else SurfaceContainerLow
+private fun GradePill(grade: String, ageRange: String, available: Boolean) {    val bg = if (available) PrimaryFixed.copy(.5f) else SurfaceContainerLow
     val border = if (available) EduCloudLeaf.copy(.4f) else Color(0xFFDBDAD7)
     Row(
         modifier = Modifier
@@ -283,6 +288,84 @@ private fun GradePill(grade: String, ageRange: String, available: Boolean) {
                     color = EduCloudMutedInk,
                 )
             }
+        }
+    }
+}
+
+@Composable
+private fun InterestStep(selected: Set<String>, onToggle: (String) -> Unit) {
+    val labels = mapOf(
+        "sports" to "⚽ Sports",
+        "animals" to "🐘 Animals",
+        "music" to "🥁 Music",
+        "transport" to "🚌 Transport",
+        "food" to "🥭 Food",
+        "games" to "🎲 Games",
+        "nature" to "🌦️ Nature",
+        "money" to "🪙 Money",
+    )
+    Column {
+        Text(
+            "What do you love?",
+            style = MaterialTheme.typography.headlineMedium,
+            fontWeight = FontWeight.ExtraBold,
+            color = EduCloudInk,
+        )
+        Spacer(Modifier.height(6.dp))
+        Text(
+            "Pick up to 3. Hard lessons can be explained through them, and you can change these any time.",
+            style = MaterialTheme.typography.bodyMedium,
+            color = EduCloudMutedInk,
+        )
+        Spacer(Modifier.height(20.dp))
+        ANALOGY_DOMAINS.chunked(2).forEach { rowDomains ->
+            Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                rowDomains.forEach { domain ->
+                    InterestChip(
+                        label = labels[domain] ?: domain,
+                        selected = domain in selected,
+                        onClick = { onToggle(domain) },
+                        modifier = Modifier.weight(1f),
+                    )
+                }
+                if (rowDomains.size == 1) Spacer(Modifier.weight(1f))
+            }
+            Spacer(Modifier.height(10.dp))
+        }
+    }
+}
+
+@Composable
+private fun InterestChip(
+    label: String,
+    selected: Boolean,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val bg = if (selected) PrimaryFixed.copy(.5f) else SurfaceContainerLow
+    val border = if (selected) EduCloudLeaf.copy(.4f) else Color(0xFFDBDAD7)
+    Row(
+        modifier = modifier
+            .clip(RoundedCornerShape(16.dp))
+            .background(bg)
+            .border(1.5.dp, border, RoundedCornerShape(16.dp))
+            .clickable(onClick = onClick)
+            .padding(horizontal = 14.dp, vertical = 12.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+        Text(
+            label,
+            style = MaterialTheme.typography.bodyMedium,
+            color = if (selected) EduCloudLeaf else EduCloudInk,
+        )
+        if (selected) {
+            Icon(
+                Icons.Filled.CheckCircle,
+                contentDescription = "Selected",
+                tint = EduCloudLeaf,
+                modifier = Modifier.size(18.dp),
+            )
         }
     }
 }

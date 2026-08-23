@@ -6,9 +6,11 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
+import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.example.educloud.data.local.StudentDao
 import com.example.educloud.data.model.Student
+import com.example.educloud.sync.sanitizeInterestDomains
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -21,6 +23,7 @@ class StudentRepository(
     companion object {
         val KEY_ONBOARDING_DONE = booleanPreferencesKey("onboarding_done")
         val KEY_STUDENT_ID = intPreferencesKey("student_id")
+        val KEY_INTEREST_DOMAINS = stringPreferencesKey("interest_domains")
     }
 
     val onboardingDone: Flow<Boolean> = context.dataStore.data.map { prefs ->
@@ -29,6 +32,17 @@ class StudentRepository(
 
     val currentStudentId: Flow<Int?> = context.dataStore.data.map { prefs ->
         prefs[KEY_STUDENT_ID]
+    }
+
+    /** Declared interest chips (amended V2 D7): bounded, local-only, changeable. */
+    val interestDomains: Flow<List<String>> = context.dataStore.data.map { prefs ->
+        prefs[KEY_INTEREST_DOMAINS]?.split(",")?.filter(String::isNotBlank).orEmpty()
+    }
+
+    suspend fun saveInterestDomains(domains: List<String>) {
+        context.dataStore.edit { prefs ->
+            prefs[KEY_INTEREST_DOMAINS] = sanitizeInterestDomains(domains).joinToString(",")
+        }
     }
 
     val activeStudent: Flow<Student?> = studentDao.getActiveStudent()

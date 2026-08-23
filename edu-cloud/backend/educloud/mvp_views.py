@@ -30,10 +30,19 @@ from pydantic import ValidationError
 from .ussd_learning import learning_reply
 from .agent_swarm import AgentSwarmError, TelemetryRequest, run_teaching_loop, telemetry_digest
 from .models import RemediationPack
+from .reexplain import (
+    ReexplainError,
+    ReexplainRequest,
+    build_reexplain_provider,
+    reexplain_cache_key,
+    validated_reexplain,
+)
 
 
 MAX_SIMULATOR_INPUT_CHARS = 64
 SANDBOX_REQUESTS_PER_MINUTE = 30
+REEXPLAIN_BODY_LIMIT_BYTES = 2048
+REEXPLAIN_RATE_WINDOW_SECONDS = 3600
 logger = logging.getLogger(__name__)
 
 
@@ -161,7 +170,7 @@ def _sync_disabled_response() -> JsonResponse:
 @require_POST
 @csrf_exempt
 def sync_telemetry(request: HttpRequest) -> JsonResponse:
-    """Create one review-required pack from explicit, pseudonymous demo telemetry."""
+    """Create one automatically validated pack from explicit, pseudonymous demo telemetry."""
     if not _sync_is_enabled():
         return _sync_disabled_response()
     if len(request.body) > 8_192:
@@ -230,9 +239,102 @@ def _pack_receipt(pack: RemediationPack, status: int) -> JsonResponse:
             "processing_mode": "synchronous_demo",
             "pack_id": str(payload["pack_id"]),
             "content_version": pack.content_version,
-            "review_status": payload["review_status"],
+            "validation_status": payload["validation_status"],
             "request_id": str(pack.request_id),
             "remediation_url": "/api/v1/sync/remediation",
         },
         status=status,
+    )
+
+
+def _reexplain_rate_limited(learner_id: UUID) -> bool:
+    """Throttle per pseudonymous learner without retaining any identifier.
+
+    The cache key keeps only a hash, mirroring the sandbox-callback throttle;
+    the window is process-local and deliberately generous for one-tap use.
+    """
+    learner_hash = hashlib.sha256(str(learner_id).encode("utf-8")).hexdigest()
+    key = f"reexplain-rate:{learner_hash}"
+    if cache.add(key, 1, timeout=REEXPLAIN_RATE_WINDOW_SECONDS):
+        return False
+    try:
+        return cache.incr(key) > settings.REEXPLAIN_MAX_REQUESTS_PER_LEARNER_HOUR
+    except ValueError:
+        # A cache eviction is safe: treat this as a fresh, permitted request.
+        cache.set(key, 1, timeout=REEXPLAIN_RATE_WINDOW_SECONDS)
+        return False
+
+
+@require_POST
+@csrf_exempt
+def tutor_reexplain(request: HttpRequest) -> JsonResponse:
+    """Re-explain one canonical lesson through a declared interest chip.
+
+    One tap is one bounded provider call.  Responses are validated against the
+    contract (lesson-ID echo, word limit, verified-answer preservation) before
+    they are cached and returned; any failure is a clean 503 that the client
+    answers with its deterministic explanation — never a retry loop.  Only the
+    shared (lesson, domain) response is cached; no learner data is stored.
+    """
+    if settings.REEXPLAIN_MODE == "disabled":
+        return JsonResponse(
+            {"error": "The interest re-explanation service is disabled. Enable only for a configured demo or deployment."},
+            status=404,
+        )
+    if len(request.body) > REEXPLAIN_BODY_LIMIT_BYTES:
+        return JsonResponse({"error": "Re-explanation request is too large."}, status=400)
+    try:
+        raw_request = json.loads(request.body)
+    except (UnicodeDecodeError, json.JSONDecodeError):
+        return JsonResponse({"error": "Re-explanation must be a JSON object."}, status=400)
+    if not isinstance(raw_request, Mapping):
+        return JsonResponse({"error": "Re-explanation must be a JSON object."}, status=400)
+    # Consent is checked before validating or processing any learning content.
+    if raw_request.get("consent") is not True:
+        return JsonResponse(
+            {"error": "Explicit learner or guardian consent is required before re-explanation."}, status=400
+        )
+    try:
+        reexplain = ReexplainRequest.model_validate(raw_request)
+    except (ValidationError, ValueError) as exc:
+        return JsonResponse({"error": f"Invalid re-explanation request: {exc}"}, status=400)
+
+    if _reexplain_rate_limited(reexplain.learner_id):
+        return JsonResponse({"error": "Too many re-explanation requests for this learner right now."}, status=429)
+
+    cache_key = reexplain_cache_key(reexplain.lesson_id, reexplain.analogy_domain)
+    cached = cache.get(cache_key)
+    if cached:
+        return JsonResponse(
+            {
+                **cached,
+                "status": "ready",
+                "lesson_id": reexplain.lesson_id,
+                "analogy_domain": reexplain.analogy_domain,
+                "cached": True,
+            }
+        )
+
+    try:
+        provider = build_reexplain_provider()
+        draft = provider.reexplain(reexplain)
+        result = validated_reexplain(reexplain, draft)
+    except ReexplainError as exc:
+        logger.info("reexplain_unavailable", extra={"reason": str(exc)})
+        return JsonResponse({"status": "unavailable", "error": str(exc)}, status=503)
+    except Exception:
+        logger.exception("Re-explanation provider failed unexpectedly")
+        return JsonResponse(
+            {"status": "unavailable", "error": "The re-explanation service could not prepare a response."}, status=503
+        )
+
+    result["provider"] = provider.name
+    cache.set(cache_key, result, timeout=settings.REEXPLAIN_CACHE_TTL_SECONDS)
+    return JsonResponse(
+        {
+            **result,
+            "status": "ready",
+            "analogy_domain": reexplain.analogy_domain,
+            "cached": False,
+        }
     )
