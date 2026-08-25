@@ -7,6 +7,7 @@ import com.example.educloud.ai.IrtEngine
 import com.example.educloud.data.model.Interaction
 import com.example.educloud.data.repository.LearningRepository
 import com.example.educloud.data.repository.StudentRepository
+import com.example.educloud.habit.HabitEngine
 import com.example.educloud.sync.CloudSyncWorker
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -34,6 +35,15 @@ data class QuizState(
     val studentId: Int? = null,
     val unavailableMessage: String? = null,
     val remediationMessage: String? = null,
+    /** Habit-shell ceremony data; arrives shortly after [isFinished] flips true. */
+    val lessonResult: LessonResult? = null,
+)
+
+/** What this lesson earned: mastery XP (D11), streak state and milestones just crossed. */
+data class LessonResult(
+    val xpGained: Int,
+    val currentStreak: Int,
+    val newMilestones: List<HabitEngine.Milestone> = emptyList(),
 )
 
 class QuizViewModel(
@@ -51,6 +61,14 @@ class QuizViewModel(
     }
 
     fun init(subject: String) {
+        // Idempotent: LaunchedEffect re-fires on activity recreation and must
+        // not wipe an in-flight quiz or the finished ceremony (rotation safety).
+        val current = _state.value
+        if (current.subject == subject &&
+            (current.currentQuestion != null || current.unavailableMessage != null || current.isFinished)
+        ) {
+            return
+        }
         viewModelScope.launch {
             val student = studentRepository.activeStudent.first()
             val theta = 0.0 // TODO: load from DB IRT parameters
@@ -111,9 +129,43 @@ class QuizViewModel(
 
     fun nextQuestion() {
         val current = _state.value
-        if (current.unavailableMessage != null) return
+        if (current.unavailableMessage != null || current.isFinished) return
         if (current.totalAnswered >= DEMO_QUESTION_COUNT) {
             _state.update { it.copy(isFinished = true) }
+            // D11: a perfect lesson is the one mastery event a quick-check can pay.
+            val studentId = current.studentId
+            if (studentId != null && current.totalAnswered > 0) {
+                viewModelScope.launch {
+                    try {
+                        val before = learningRepository.getStreakOnce(studentId)
+                            ?.let { HabitEngine.Totals(it.currentStreak, it.totalXp.toInt(), it.lessonsPassed) }
+                            ?: HabitEngine.Totals(0, 0, 0)
+                        learningRepository.updateStreak(studentId)
+                        val perfect = current.score == current.totalAnswered
+                        if (perfect) {
+                            learningRepository.addMasteryXp(studentId, HabitEngine.XpEvent.LESSON_PASSED)
+                        }
+                        val after = learningRepository.getStreakOnce(studentId)
+                        _state.update { state ->
+                            state.copy(
+                                lessonResult = LessonResult(
+                                    xpGained = if (perfect) HabitEngine.xpFor(HabitEngine.XpEvent.LESSON_PASSED) else 0,
+                                    currentStreak = after?.currentStreak ?: 1,
+                                    newMilestones = after?.let { s ->
+                                        HabitEngine.newlyReached(
+                                            before,
+                                            HabitEngine.Totals(s.currentStreak, s.totalXp.toInt(), s.lessonsPassed),
+                                        )
+                                    } ?: emptyList(),
+                                ),
+                            )
+                        }
+                    } catch (ignored: Exception) {
+                        // Offline-first: a failed award must never crash the celebration;
+                        // totals stay at their last honest values and the next lesson retries.
+                    }
+                }
+            }
             return
         }
         val nextIndex = current.questionIndex + 1

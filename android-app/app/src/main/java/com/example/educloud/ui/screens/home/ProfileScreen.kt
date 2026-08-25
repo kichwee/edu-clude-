@@ -25,6 +25,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -41,6 +42,8 @@ import com.example.educloud.theme.PrimaryFixed
 import com.example.educloud.theme.SecondaryFixed
 import com.example.educloud.theme.SurfaceContainerLowest
 import com.example.educloud.theme.TertiaryFixed
+import com.example.educloud.data.model.Streak
+import com.example.educloud.habit.HabitEngine
 import com.example.educloud.ui.components.AmbientCard
 import com.example.educloud.ui.components.EduBottomNav
 import com.example.educloud.ui.components.EduNavTab
@@ -54,17 +57,36 @@ data class Achievement(
 )
 
 /**
- * ProfileScreen — profile + achievements stub.
+ * ProfileScreen — profile + achievements.
  * Adapts Achievements_17.html / the Profile tab concept.
+ *
+ * Honest by design (plan §8): XP is the mastery-only total (D11) and every
+ * achievement comes from [HabitEngine] milestone tables over real Room data.
  */
 @Composable
 fun ProfileScreen(
     learnerAlias: String,
     grade: String = "Grade 3",
-    xpPoints: Int = 340,
-    achievements: List<Achievement> = sampleAchievements,
+    streak: Streak? = null,
     onNavigateTab: (EduNavTab) -> Unit,
 ) {
+    val xpPoints = streak?.totalXp?.toInt() ?: 0
+    val achievements = remember(streak) {
+        HabitEngine.milestonesFor(
+            // Collection-album rule (D13): streak badges reflect the personal best,
+            // so a later reset never strips an earned badge from the profile.
+            streakDays = streak?.longestStreak ?: 0,
+            totalXp = xpPoints,
+            lessonsPassed = streak?.lessonsPassed ?: 0,
+        ).map { m ->
+            Achievement(
+                title = m.title,
+                description = achievementDescription(m.id),
+                earned = true,
+                emoji = m.emoji,
+            )
+        }
+    }
     Scaffold(
         bottomBar = {
             EduBottomNav(activeTab = EduNavTab.Profile, onTabSelected = onNavigateTab)
@@ -145,9 +167,20 @@ fun ProfileScreen(
 
                 Spacer(Modifier.height(12.dp))
 
-                achievements.forEach { a ->
-                    AchievementRow(achievement = a)
-                    Spacer(Modifier.height(10.dp))
+                if (achievements.isEmpty()) {
+                    AmbientCard(modifier = Modifier.fillMaxWidth(), containerColor = SurfaceContainerLowest, cornerRadius = 16) {
+                        Text(
+                            text = "Pass your first lesson to earn a badge 🌱",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = EduCloudMutedInk,
+                            modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
+                        )
+                    }
+                } else {
+                    achievements.forEach { a ->
+                        AchievementRow(achievement = a)
+                        Spacer(Modifier.height(10.dp))
+                    }
                 }
 
                 Spacer(Modifier.height(16.dp))
@@ -198,10 +231,9 @@ private fun AchievementRow(achievement: Achievement) {
     }
 }
 
-private val sampleAchievements = listOf(
-    Achievement("First Lesson",   "Completed your first lesson",      earned = true,  emoji = "📖"),
-    Achievement("Quick Learner",  "Finished 3 lessons in a day",      earned = true,  emoji = "⚡"),
-    Achievement("Math Star",      "Scored 100% on a maths quiz",      earned = false, emoji = "⭐"),
-    Achievement("Week Warrior",   "Learned 5 days in a row",          earned = false, emoji = "🏆"),
-    Achievement("Equal Shares",   "Mastered the Equal Shares lesson",  earned = true,  emoji = "🥭"),
-)
+/** Kind-level blurb for a milestone id (streak_7 → streak copy). Unknown ids stay generic. */
+private fun achievementDescription(id: String): String = when {
+    id.startsWith("streak") -> "Learning day after day"
+    id.startsWith("xp")     -> "Mastery points earned"
+    else                    -> "Lessons passed"
+}

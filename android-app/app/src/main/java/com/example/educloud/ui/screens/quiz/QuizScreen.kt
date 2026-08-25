@@ -1,6 +1,9 @@
 package com.example.educloud.ui.screens.quiz
 
 import androidx.compose.animation.*
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -14,11 +17,16 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.example.educloud.habit.HabitEngine
+import com.example.educloud.ui.components.DuoGreen
+import com.example.educloud.ui.components.DuoGreenDark
 import com.example.educloud.ui.components.StorybookPage
+import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -34,10 +42,14 @@ fun QuizScreen(
     }
 
     if (state.isFinished) {
+        val result = state.lessonResult
         QuizResultsScreen(
             score = state.score,
             total = state.totalAnswered,
             subject = subject,
+            xpGained = result?.xpGained ?: 0,
+            currentStreak = result?.currentStreak ?: 0,
+            newMilestones = result?.newMilestones ?: emptyList(),
             canRequestPersonalisedRemediation = state.score < state.totalAnswered && state.subject == QuizSubjectCatalog.MATHEMATICS_ID,
             remediationMessage = state.remediationMessage,
             onRequestPersonalisedRemediation = viewModel::requestPersonalisedRemediation,
@@ -185,6 +197,9 @@ fun QuizResultsScreen(
     score: Int,
     total: Int,
     subject: String,
+    xpGained: Int = 0,
+    currentStreak: Int = 0,
+    newMilestones: List<HabitEngine.Milestone> = emptyList(),
     canRequestPersonalisedRemediation: Boolean = false,
     remediationMessage: String? = null,
     onRequestPersonalisedRemediation: () -> Unit = {},
@@ -206,6 +221,17 @@ fun QuizResultsScreen(
                 style = MaterialTheme.typography.headlineMedium,
                 fontWeight = FontWeight.Bold
             )
+
+            // ── Milestone ceremony: chips stagger in for each threshold just crossed ──
+            if (newMilestones.isNotEmpty()) {
+                Spacer(Modifier.height(20.dp))
+                Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                    newMilestones.forEachIndexed { index, milestone ->
+                        MilestoneChip(milestone = milestone, index = index)
+                    }
+                }
+            }
+
             if (canRequestPersonalisedRemediation) {
                 Spacer(Modifier.height(24.dp))
                 OutlinedButton(
@@ -229,9 +255,41 @@ fun QuizResultsScreen(
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
-            
+
+            // ── Habit earnings: mastery-only XP (D11) and the live streak (D10) ──
+            if (xpGained > 0 || currentStreak > 0) {
+                Spacer(Modifier.height(16.dp))
+                Row(horizontalArrangement = Arrangement.spacedBy(10.dp), verticalAlignment = Alignment.CenterVertically) {
+                    if (xpGained > 0) {
+                        Box(
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(16.dp))
+                                .background(DuoGreen.copy(alpha = 0.15f))
+                                .padding(horizontal = 12.dp, vertical = 6.dp),
+                        ) {
+                            Text(
+                                text = "+$xpGained XP",
+                                style = MaterialTheme.typography.labelLarge,
+                                fontWeight = FontWeight.Bold,
+                                color = DuoGreenDark,
+                            )
+                        }
+                    }
+                    if (currentStreak > 0) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Text("🔥", modifier = Modifier.padding(end = 4.dp))
+                            Text(
+                                text = "$currentStreak-day streak",
+                                style = MaterialTheme.typography.labelLarge,
+                                fontWeight = FontWeight.Bold,
+                            )
+                        }
+                    }
+                }
+            }
+
             Spacer(Modifier.height(48.dp))
-            
+
             Button(
                 onClick = onDone,
                 modifier = Modifier.fillMaxWidth().height(56.dp),
@@ -258,6 +316,33 @@ fun QuizResultsScreen(
                 }) { Text("I agree") }
             },
             dismissButton = { TextButton(onClick = { showConsentDialog = false }) { Text("Keep it offline") } },
+        )
+    }
+}
+
+/** Spring-pops in after [index] * 150 ms so milestones arrive as a small ceremony. */
+@Composable
+private fun MilestoneChip(milestone: HabitEngine.Milestone, index: Int) {
+    val scale = remember { Animatable(0f) }
+    LaunchedEffect(Unit) {
+        delay(index * 150L)
+        scale.animateTo(1f, spring(dampingRatio = Spring.DampingRatioMediumBouncy, stiffness = Spring.StiffnessMedium))
+    }
+    Row(
+        modifier = Modifier
+            .scale(scale.value)
+            .clip(RoundedCornerShape(20.dp))
+            .background(DuoGreen.copy(alpha = 0.15f))
+            .padding(horizontal = 12.dp, vertical = 8.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(milestone.emoji)
+        Spacer(Modifier.width(6.dp))
+        Text(
+            text = milestone.title,
+            style = MaterialTheme.typography.labelLarge,
+            fontWeight = FontWeight.Bold,
+            color = DuoGreenDark,
         )
     }
 }

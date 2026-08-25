@@ -19,6 +19,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -43,18 +45,21 @@ import com.example.educloud.ui.components.StorybookPage
 /**
  * ProgressScreen — adapts Your_Progress_15.html.
  *
- * Shows the learner's weekly stats (Lessons / Time / Topics) and
+ * Shows the learner's rolling-week stats (Answers / Time / Topics) and
  * a motivational banner, with a Canvas-drawn explorer illustration.
+ * All numbers are Room-derived (plan §8); zeros mean "not yet", never placeholders.
  */
 @Composable
 fun ProgressScreen(
     learnerAlias: String,
-    lessonsCount: Int = 12,
-    minutesLearned: Int = 135,
-    topicsCount: Int = 7,
-    currentStreak: Int = 5,
+    viewModel: ProgressViewModel,
     onNavigateTab: (EduNavTab) -> Unit,
 ) {
+    val state by viewModel.state.collectAsState()
+    val streak = state.streak
+    val currentStreak = streak?.currentStreak ?: 0
+    val weekly = state.weekly
+
     Scaffold(
         bottomBar = {
             EduBottomNav(activeTab = EduNavTab.Progress, onTabSelected = onNavigateTab)
@@ -132,9 +137,9 @@ fun ProgressScreen(
 
                 Spacer(Modifier.height(20.dp))
 
-                // ── "This week" stats grid ─────────────────────────────────
+                // ── "This week" stats grid (rolling 7 days, real data) ──────
                 Text(
-                    text = "THIS WEEK",
+                    text = "LAST 7 DAYS",
                     style = MaterialTheme.typography.labelMedium,
                     color = EduCloudMutedInk,
                     fontWeight = FontWeight.Bold,
@@ -145,10 +150,15 @@ fun ProgressScreen(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(10.dp),
                 ) {
-                    val timeLabel = if (minutesLearned >= 60) "${minutesLearned / 60}h ${minutesLearned % 60}m" else "${minutesLearned}m"
-                    StatCard(Modifier.weight(1f), "Lessons",  lessonsCount.toString())
-                    StatCard(Modifier.weight(1f), "Time",     timeLabel)
-                    StatCard(Modifier.weight(1f), "Topics",   topicsCount.toString())
+                    val minutes = weekly.minutesLearnedThisWeek.toInt()
+                    val timeLabel = when {
+                        minutes <= 0 -> "—"
+                        minutes >= 60 -> "${minutes / 60}h ${minutes % 60}m"
+                        else -> "${minutes}m"
+                    }
+                    StatCard(Modifier.weight(1f), "Answers", weekly.answersThisWeek.toString())
+                    StatCard(Modifier.weight(1f), "Time",    timeLabel)
+                    StatCard(Modifier.weight(1f), "Topics",  weekly.topicsTouchedThisWeek.toString())
                 }
 
                 Spacer(Modifier.height(16.dp))
@@ -167,7 +177,7 @@ fun ProgressScreen(
                         horizontalArrangement = Arrangement.SpaceBetween,
                     ) {
                         Text(
-                            text = "Keep going! 💪",
+                            text = if (currentStreak > 0) "Keep going! 💪" else "Start your streak today! 🌱",
                             style = MaterialTheme.typography.bodyLarge,
                             fontWeight = FontWeight.Bold,
                             color = OnSecondaryContainer,

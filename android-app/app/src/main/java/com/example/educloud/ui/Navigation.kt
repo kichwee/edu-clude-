@@ -6,6 +6,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -31,6 +32,7 @@ import com.example.educloud.ui.screens.home.HomeViewModel
 import com.example.educloud.ui.screens.home.LearningPathScreen
 import com.example.educloud.ui.screens.home.ProfileScreen
 import com.example.educloud.ui.screens.home.ProgressScreen
+import com.example.educloud.ui.screens.home.ProgressViewModel
 import com.example.educloud.ui.screens.home.StitchExperienceScreen
 import com.example.educloud.ui.screens.featurephone.FeaturePhoneScreen
 import com.example.educloud.ui.screens.featurephone.FeaturePhoneViewModel
@@ -240,8 +242,16 @@ fun EduCloudNavigation() {
         }
 
         composable("progress") {
+            val viewModel: ProgressViewModel = viewModel(
+                factory = object : ViewModelProvider.Factory {
+                    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                        return ProgressViewModel(app.studentRepository, app.learningRepository) as T
+                    }
+                }
+            )
             ProgressScreen(
                 learnerAlias = activeStudent?.alias.orEmpty(),
+                viewModel = viewModel,
                 onNavigateTab = { tab ->
                     when (tab) {
                         EduNavTab.Today    -> navController.navigate("home") { popUpTo("home") { inclusive = false } }
@@ -254,8 +264,18 @@ fun EduCloudNavigation() {
         }
 
         composable("profile") {
+            val studentId = activeStudent?.id
+            // remember() pins the cold Room flow so recompositions don't
+            // tear down and re-subscribe the invalidation observer each frame.
+            val streak: com.example.educloud.data.model.Streak? = if (studentId != null) {
+                val streakFlow = remember(studentId) { app.learningRepository.getStreak(studentId) }
+                streakFlow.collectAsState(initial = null).value
+            } else {
+                null
+            }
             ProfileScreen(
                 learnerAlias = activeStudent?.alias.orEmpty(),
+                streak = streak,
                 onNavigateTab = { tab ->
                     when (tab) {
                         EduNavTab.Today    -> navController.navigate("home") { popUpTo("home") { inclusive = false } }
@@ -290,7 +310,9 @@ fun EduCloudNavigation() {
             val viewModel: QuizViewModel = viewModel(
                 factory = object : ViewModelProvider.Factory {
                     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                        return QuizViewModel(context, app.studentRepository, app.learningRepository) as T
+                        // Application context only: the ViewModel outlives the Activity
+                        // and must not retain a destroyed instance across rotations.
+                        return QuizViewModel(context.applicationContext, app.studentRepository, app.learningRepository) as T
                     }
                 }
             )
