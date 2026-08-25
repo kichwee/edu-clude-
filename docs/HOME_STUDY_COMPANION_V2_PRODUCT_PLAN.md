@@ -226,7 +226,7 @@ deterministic explanation, never a dead end.
 
 | Rule | Implementation |
 |---|---|
-| Connectivity grace | Missed days during no-connectivity auto-apply freezes; streak never breaks on network loss alone |
+| Connectivity grace *(amended 25 Aug 2026)* | One automatic freeze token per rolling week absorbs a single missed day; longer gaps reset the streak (personal best preserved). Multi-day no-connectivity awareness is deferred future work — the original "never breaks on network loss alone" promise exceeded the shipped engine and is retired rather than built to yet |
 | Mastery-only XP | `lesson_passed`, `review_stabilized`, `first_try_correct_after_struggle` — nothing else pays |
 | Errors welcome | Wrong answer → kind correction → hint chip → one-tap "Explain it my way" |
 | No leaderboards | Personal bests, collection albums, milestone ceremonies (Duolingo-grade animation polish) |
