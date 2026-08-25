@@ -17,7 +17,7 @@ import com.example.educloud.data.model.Student
  */
 @Database(
     entities = [Student::class, Interaction::class, Streak::class, LessonSearchEntity::class, ContentPackStateEntity::class, RemediationLessonEntity::class],
-    version = 5,
+    version = 6,
     exportSchema = true
 )
 abstract class EduCloudDatabase : RoomDatabase() {
@@ -44,7 +44,7 @@ abstract class EduCloudDatabase : RoomDatabase() {
                 )
                     // Learner aliases and learning history are sensitive and must never be
                     // silently erased merely because an upgrade needs a migration.
-                    .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5)
+                    .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6)
                     .build()
                 INSTANCE = instance
                 instance
@@ -109,6 +109,15 @@ abstract class EduCloudDatabase : RoomDatabase() {
                 db.execSQL("ALTER TABLE `remediation_lessons_new` RENAME TO `remediation_lessons`")
                 db.execSQL("CREATE INDEX IF NOT EXISTS `index_remediation_lessons_studentId` ON `remediation_lessons` (`studentId`)")
                 db.execSQL("CREATE INDEX IF NOT EXISTS `index_remediation_lessons_packId` ON `remediation_lessons` (`packId`)")
+            }
+        }
+
+        /** Habit-shell columns: mastery-only XP total, lessons passed and freeze-token bookkeeping. */
+        internal val MIGRATION_5_6 = object : Migration(5, 6) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE `streaks` ADD COLUMN `totalXp` INTEGER NOT NULL DEFAULT 0")
+                db.execSQL("ALTER TABLE `streaks` ADD COLUMN `freezeLastUsedDay` INTEGER")
+                db.execSQL("ALTER TABLE `streaks` ADD COLUMN `lessonsPassed` INTEGER NOT NULL DEFAULT 0")
             }
         }
     }

@@ -16,21 +16,40 @@ interface StreakDao {
     @Query("SELECT * FROM streaks WHERE studentId = :studentId")
     suspend fun getStreakOnce(studentId: Int): Streak?
 
-    @Query("""
-        UPDATE streaks SET 
+    @Query(
+        """
+        UPDATE streaks SET
             currentStreak = :currentStreak,
             longestStreak = :longestStreak,
             lastActivityDate = :lastActivityDate,
-            totalDaysLearned = totalDaysLearned + 1
+            freezeAvailable = :freezeAvailable,
+            freezeLastUsedDay = :freezeLastUsedDay,
+            totalDaysLearned = totalDaysLearned + :daysAdded
         WHERE studentId = :studentId
-    """)
-    suspend fun updateStreak(
+        """
+    )
+    suspend fun applyTransition(
         studentId: Int,
         currentStreak: Int,
         longestStreak: Int,
-        lastActivityDate: Long
+        lastActivityDate: Long,
+        freezeAvailable: Boolean,
+        freezeLastUsedDay: Long?,
+        daysAdded: Int,
     )
 
-    @Query("UPDATE streaks SET freezeAvailable = 0 WHERE studentId = :studentId")
-    suspend fun useFreeze(studentId: Int)
+    /** Mastery-only XP (D11): callers may only pass HabitEngine.xpFor(event) values. */
+    @Query("UPDATE streaks SET totalXp = totalXp + :xp WHERE studentId = :studentId")
+    suspend fun addXp(studentId: Int, xp: Int)
+
+    /** LESSON_PASSED pays XP and advances the lessons-passed counter in one statement. */
+    @Query(
+        """
+        UPDATE streaks SET
+            totalXp = totalXp + :xp,
+            lessonsPassed = lessonsPassed + 1
+        WHERE studentId = :studentId
+        """
+    )
+    suspend fun addXpAndLessonPassed(studentId: Int, xp: Int)
 }

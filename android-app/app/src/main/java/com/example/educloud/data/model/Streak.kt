@@ -25,6 +25,9 @@ data class Streak(
     val currentStreak: Int = 0,
     val longestStreak: Int = 0,
     val lastActivityDate: Long? = null,   // epoch millis of last interaction day
-    val freezeAvailable: Boolean = true,  // 1 freeze per 7 days
-    val totalDaysLearned: Int = 0
+    val freezeAvailable: Boolean = true,  // 1 auto-freeze token per rolling week (D10)
+    val totalDaysLearned: Int = 0,
+    val totalXp: Long = 0,                // mastery-only XP; never raw activity (D11)
+    val lessonsPassed: Int = 0,           // lifetime lessons with a perfect quick-check (D11)
+    val freezeLastUsedDay: Long? = null,  // epoch-day the token was consumed
 )
