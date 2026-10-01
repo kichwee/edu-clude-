@@ -33,7 +33,8 @@ import kotlinx.coroutines.delay
 fun QuizScreen(
     subject: String,
     viewModel: QuizViewModel,
-    onBack: () -> Unit
+    onBack: () -> Unit,
+    onExplainMyWay: (String) -> Unit = {},
 ) {
     val state by viewModel.state.collectAsState()
 
@@ -53,6 +54,10 @@ fun QuizScreen(
             canRequestPersonalisedRemediation = state.score < state.totalAnswered && state.subject == QuizSubjectCatalog.MATHEMATICS_ID,
             remediationMessage = state.remediationMessage,
             onRequestPersonalisedRemediation = viewModel::requestPersonalisedRemediation,
+            onExplainMyWay = {
+                val missed = "Help me with today's regrouping questions"
+                onExplainMyWay(missed)
+            },
             onDone = onBack
         )
         return
@@ -108,7 +113,10 @@ fun QuizScreen(
                 com.example.educloud.ui.components.DuolingoFeedbackSheet(
                     isCorrect = state.isCorrect,
                     explanation = question?.explanation ?: "",
-                    onNext = { viewModel.nextQuestion() }
+                    onNext = { viewModel.nextQuestion() },
+                    onExplainMyWay = question?.text?.let { text ->
+                        { onExplainMyWay(text) }
+                    },
                 )
             }
         }
@@ -203,6 +211,7 @@ fun QuizResultsScreen(
     canRequestPersonalisedRemediation: Boolean = false,
     remediationMessage: String? = null,
     onRequestPersonalisedRemediation: () -> Unit = {},
+    onExplainMyWay: () -> Unit = {},
     onDone: () -> Unit
 ) {
     val percentage = (score.toFloat() / total.toFloat()) * 100
@@ -234,6 +243,13 @@ fun QuizResultsScreen(
 
             if (canRequestPersonalisedRemediation) {
                 Spacer(Modifier.height(24.dp))
+                OutlinedButton(
+                    onClick = onExplainMyWay,
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    Text("Explain it my way")
+                }
+                Spacer(Modifier.height(8.dp))
                 OutlinedButton(
                     onClick = { showConsentDialog = true },
                     modifier = Modifier.fillMaxWidth(),

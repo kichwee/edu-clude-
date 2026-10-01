@@ -37,6 +37,15 @@ interface InteractionDao {
     @Query("SELECT COUNT(*) FROM interactions WHERE studentId = :studentId AND createdAt >= :since")
     fun observeInteractionsSince(studentId: Int, since: Long): Flow<Int>
 
+    /** Quiz rows record isCorrect; tutor chats do not. Drives the featured daily goal. */
+    @Query(
+        """
+        SELECT COUNT(*) FROM interactions
+        WHERE studentId = :studentId AND createdAt >= :since AND isCorrect IS NOT NULL
+        """
+    )
+    fun observeQuizAnswersSince(studentId: Int, since: Long): Flow<Int>
+
     @Query("SELECT SUM(timeTakenMs) FROM interactions WHERE studentId = :studentId AND createdAt >= :since")
     fun observeTimeLearnedSince(studentId: Int, since: Long): Flow<Long?>
 

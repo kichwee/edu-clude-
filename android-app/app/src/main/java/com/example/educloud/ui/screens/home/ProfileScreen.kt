@@ -24,7 +24,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -47,6 +50,7 @@ import com.example.educloud.habit.HabitEngine
 import com.example.educloud.ui.components.AmbientCard
 import com.example.educloud.ui.components.EduBottomNav
 import com.example.educloud.ui.components.EduNavTab
+import com.example.educloud.ui.components.InterestChipGrid
 import com.example.educloud.ui.components.StorybookPage
 
 data class Achievement(
@@ -68,21 +72,25 @@ fun ProfileScreen(
     learnerAlias: String,
     grade: String = "Grade 3",
     streak: Streak? = null,
+    viewModel: ProfileViewModel,
+    onOpenUssdSimulator: () -> Unit = {},
     onNavigateTab: (EduNavTab) -> Unit,
 ) {
+    val profileState by viewModel.state.collectAsState()
     val xpPoints = streak?.totalXp?.toInt() ?: 0
-    val achievements = remember(streak) {
+    val earnedIds = remember(streak) {
         HabitEngine.milestonesFor(
-            // Collection-album rule (D13): streak badges reflect the personal best,
-            // so a later reset never strips an earned badge from the profile.
             streakDays = streak?.longestStreak ?: 0,
             totalXp = xpPoints,
             lessonsPassed = streak?.lessonsPassed ?: 0,
-        ).map { m ->
+        ).map { it.id }.toSet()
+    }
+    val achievements = remember(earnedIds) {
+        HabitEngine.catalogMilestones().map { m ->
             Achievement(
                 title = m.title,
                 description = achievementDescription(m.id),
-                earned = true,
+                earned = m.id in earnedIds,
                 emoji = m.emoji,
             )
         }
@@ -167,20 +175,28 @@ fun ProfileScreen(
 
                 Spacer(Modifier.height(12.dp))
 
-                if (achievements.isEmpty()) {
-                    AmbientCard(modifier = Modifier.fillMaxWidth(), containerColor = SurfaceContainerLowest, cornerRadius = 16) {
-                        Text(
-                            text = "Pass your first lesson to earn a badge 🌱",
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = EduCloudMutedInk,
-                            modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
-                        )
-                    }
-                } else {
-                    achievements.forEach { a ->
-                        AchievementRow(achievement = a)
-                        Spacer(Modifier.height(10.dp))
-                    }
+                achievements.forEach { a ->
+                    AchievementRow(achievement = a)
+                    Spacer(Modifier.height(10.dp))
+                }
+
+                Spacer(Modifier.height(8.dp))
+                Text("What you love", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = EduCloudInk)
+                Spacer(Modifier.height(6.dp))
+                Text(
+                    "Hard lessons can be explained through these. Pick up to 3.",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = EduCloudMutedInk,
+                )
+                Spacer(Modifier.height(12.dp))
+                InterestChipGrid(
+                    selected = profileState.interests,
+                    onToggle = viewModel::toggleInterest,
+                )
+
+                Spacer(Modifier.height(8.dp))
+                TextButton(onClick = onOpenUssdSimulator) {
+                    Text("Open feature-phone demo", color = EduCloudMutedInk)
                 }
 
                 Spacer(Modifier.height(16.dp))

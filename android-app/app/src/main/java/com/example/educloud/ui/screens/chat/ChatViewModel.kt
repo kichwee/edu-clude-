@@ -39,6 +39,8 @@ data class ChatState(
     val inputError: String? = null,
     val canExplainMyWay: Boolean = false,
     val isExplainingMyWay: Boolean = false,
+    val interestDomains: List<String> = emptyList(),
+    val selectedAnalogyDomain: String = "",
 )
 
 class ChatViewModel(
@@ -57,9 +59,16 @@ class ChatViewModel(
     private val _state = MutableStateFlow(ChatState())
     val state: StateFlow<ChatState> = _state.asStateFlow()
 
-    fun init(subject: String) {
+    fun init(subject: String, openingPrompt: String = "") {
+        val extra = openingPrompt.ifBlank { PendingTutorPrompt.take() }
         viewModelScope.launch {
+            val alreadyOpen = _state.value.subject == subject && _state.value.messages.isNotEmpty()
+            if (alreadyOpen) {
+                if (extra.isNotBlank()) sendSuggestedMessage(extra)
+                return@launch
+            }
             val student = studentRepository.activeStudent.first()
+            val interests = studentRepository.interestDomains.first()
             val isOpenAiActive = com.example.educloud.ai.OpenAiTutorService.checkApiHealth()
             val greeting = "Hi ${student?.alias ?: "friend"}! 🌟 I’m your Grade 3 Maths buddy. Ask me a number question, try a challenge, or ask for a story. I can explore lessons from Terms 1, 2 and 3 with you."
 
@@ -68,8 +77,19 @@ class ChatViewModel(
                 studentId = student?.id,
                 isOomMode = tutorResponseEngine.isLowMemory,
                 isOpenAiConnected = isOpenAiActive,
+                interestDomains = interests,
+                selectedAnalogyDomain = interests.firstOrNull().orEmpty(),
                 messages = listOf(ChatMessage(newMessageId(), greeting, isFromUser = false))
             )
+            if (extra.isNotBlank()) {
+                sendSuggestedMessage(extra)
+            }
+        }
+    }
+
+    fun selectAnalogyDomain(domain: String) {
+        if (domain in _state.value.interestDomains) {
+            _state.update { it.copy(selectedAnalogyDomain = domain) }
         }
     }
 
@@ -199,12 +219,13 @@ class ChatViewModel(
             try {
                 val deviceId = studentRepository.activeStudent.first()?.deviceId
                 val interests = studentRepository.interestDomains.first()
-                val outcome = if (deviceId == null || interests.isEmpty()) null else reexplainService.reexplain(
+                val domain = _state.value.selectedAnalogyDomain.ifBlank { interests.firstOrNull().orEmpty() }
+                val outcome = if (deviceId == null || domain.isBlank()) null else reexplainService.reexplain(
                     ReexplainRequestPayload(
                         consent = true,
                         learnerId = deviceId,
                         lessonId = lesson.id,
-                        analogyDomain = interests.first(),
+                        analogyDomain = domain,
                         sourceExcerpt = lesson.passage.take(MAX_SOURCE_EXCERPT_CHARS),
                         verifiedAnswer = lesson.verifiedAnswer?.take(64),
                         learnerQuestion = lastQuestion.take(MAX_LEARNER_QUESTION_CHARS),

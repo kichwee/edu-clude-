@@ -7,6 +7,7 @@ import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,19 +16,20 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AutoStories
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.OfflineBolt
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -48,26 +50,33 @@ import com.example.educloud.theme.EduCloudLine
 import com.example.educloud.theme.EduCloudMutedInk
 import com.example.educloud.theme.EduCloudOrange
 import com.example.educloud.theme.EduCloudSurface
-import com.example.educloud.theme.OnPrimaryContainer
-import com.example.educloud.theme.PrimaryContainer
 import com.example.educloud.ui.components.AmbientCard
 import com.example.educloud.ui.components.EduBottomNav
 import com.example.educloud.ui.components.EduNavTab
-import com.example.educloud.ui.components.OfflineReadyPill
 import com.example.educloud.ui.components.StorybookPage
 import com.example.educloud.ui.components.TactileButton
 
-/** Native Compose interpretation of the Stitch Today Dashboard — enhanced with
- *  EduBottomNav, learner avatar, animated offline dot, and Stitch hero card.
- */
+/** Featured home loop: daily goal, Grade 3 Maths check, tutor, optional class-code revision. */
 @Composable
 internal fun StitchTodayDashboard(
     learnerName: String,
     streak: Streak?,
+    quizAnswersToday: Int,
+    dailyGoalMet: Boolean,
+    dailyGoalTarget: Int,
     onOpenLearningJourney: () -> Unit,
-    onOpenUssdSimulator: () -> Unit,
+    onOpenQuiz: () -> Unit,
+    onOpenTutor: () -> Unit,
+    onOpenTonightFromClass: () -> Unit = {},
+    onOpenProgress: () -> Unit = {},
+    pathNextTitle: String? = null,
     onNavigateTab: (EduNavTab) -> Unit = {},
 ) {
+    val xp = streak?.totalXp?.toInt() ?: 0
+    val currentStreak = streak?.currentStreak ?: 0
+    val freezeReady = streak?.freezeAvailable != false
+    val goalProgress = (quizAnswersToday.toFloat() / dailyGoalTarget.toFloat()).coerceIn(0f, 1f)
+
     Scaffold(
         bottomBar = {
             EduBottomNav(
@@ -87,14 +96,12 @@ internal fun StitchTodayDashboard(
             ) {
                 Spacer(Modifier.height(18.dp))
 
-                // ── Top app bar ─────────────────────────────────────────────
                 Row(
                     Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                        // Learner avatar
                         Box(
                             modifier = Modifier
                                 .size(42.dp)
@@ -122,98 +129,179 @@ internal fun StitchTodayDashboard(
                     AnimatedOfflinePill()
                 }
 
-                // ── Hero: curriculum navigation card ───────────────────────
+                Row(
+                    Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                ) {
+                    HabitChip("🔥", if (currentStreak > 0) "$currentStreak-day streak" else "Start a streak")
+                    HabitChip("⭐", "$xp XP")
+                    HabitChip("🧊", if (freezeReady) "Freeze ready" else "Freeze used")
+                }
+
                 AmbientCard(modifier = Modifier.fillMaxWidth(), containerColor = EduCloudLeaf, cornerRadius = 28) {
                     Column(Modifier.padding(20.dp)) {
-                        Text("TODAY'S LESSON",
+                        Text(
+                            "TODAY'S GOAL",
                             style = MaterialTheme.typography.labelMedium,
                             color = Color.White.copy(alpha = .84f),
                             fontWeight = FontWeight.Bold,
                             letterSpacing = androidx.compose.ui.unit.TextUnit(1.2f, androidx.compose.ui.unit.TextUnitType.Sp),
                         )
                         Spacer(Modifier.height(6.dp))
-                        Text("Start a Maths adventure!",
+                        Text(
+                            if (dailyGoalMet) "Goal done — keep practising!" else "Finish today's Maths check",
                             style = MaterialTheme.typography.headlineMedium,
                             color = Color.White,
                             fontWeight = FontWeight.ExtraBold,
                         )
-                        Text("Pick a term, choose a topic, and solve a playful challenge.",
+                        Text(
+                            "Three regrouping questions. A perfect check earns mastery XP. Mistakes get a hint, never a heart.",
                             style = MaterialTheme.typography.bodyMedium,
                             color = Color.White.copy(alpha = .9f),
                         )
-                        Spacer(Modifier.height(16.dp))
-                        Surface(
-                            color = Color.White.copy(alpha = .16f),
-                            shape = RoundedCornerShape(12.dp),
-                        ) {
-                            Text(
-                                "Grade 3 · Terms 1, 2 and 3",
-                                modifier = Modifier.padding(horizontal = 12.dp, vertical = 7.dp),
-                                color = Color.White,
-                                style = MaterialTheme.typography.labelMedium,
-                            )
-                        }
+                        Spacer(Modifier.height(12.dp))
+                        LinearProgressIndicator(
+                            progress = { goalProgress },
+                            modifier = Modifier.fillMaxWidth().height(8.dp).clip(RoundedCornerShape(99.dp)),
+                            color = Color.White,
+                            trackColor = Color.White.copy(alpha = .28f),
+                        )
+                        Spacer(Modifier.height(6.dp))
+                        Text(
+                            "$quizAnswersToday / $dailyGoalTarget questions today",
+                            style = MaterialTheme.typography.labelMedium,
+                            color = Color.White.copy(alpha = .9f),
+                        )
                         Spacer(Modifier.height(18.dp))
                         TactileButton(
-                            text = "Explore Grade 3 Maths",
-                            onClick = onOpenLearningJourney,
+                            text = if (dailyGoalMet) "Practise again" else "Start today's check",
+                            onClick = onOpenQuiz,
                             containerColor = Color.White,
                             contentColor = EduCloudLeaf,
                         )
                     }
                 }
 
-                // ── Plan mini-cards ─────────────────────────────────────────
-                Text("Your plan", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = EduCloudInk)
                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                    DashboardMiniCard(Modifier.weight(1f), Icons.Filled.AutoStories, "1 lesson",   "about 10 min", EduCloudLake)
-                    DashboardMiniCard(Modifier.weight(1f), Icons.Filled.CheckCircle, "Quick check", "3 questions",  EduCloudOrange)
+                    DashboardMiniCard(
+                        Modifier.weight(1f).clickable(onClick = onOpenTutor),
+                        Icons.Filled.AutoStories,
+                        "Ask the tutor",
+                        "Explain it my way",
+                        EduCloudLake,
+                    )
+                    DashboardMiniCard(
+                        Modifier.weight(1f).clickable(onClick = onOpenLearningJourney),
+                        Icons.Filled.CheckCircle,
+                        "More lessons",
+                        "Grade 3 catalogue",
+                        EduCloudOrange,
+                    )
                 }
 
-                // ── Offline info card ───────────────────────────────────────
-                AmbientCard(modifier = Modifier.fillMaxWidth(), containerColor = EduCloudSurface, cornerRadius = 20) {
-                    Row(Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
-                        Surface(color = EduCloudLake.copy(alpha = .12f), shape = RoundedCornerShape(14.dp)) {
-                            Icon(Icons.Filled.OfflineBolt, null, tint = EduCloudLake,
-                                modifier = Modifier.padding(10.dp).size(24.dp))
-                        }
-                        Spacer(Modifier.width(12.dp))
-                        Column(Modifier.weight(1f)) {
-                            Text("Learning from your local pack",
-                                style = MaterialTheme.typography.titleSmall,
+                if (!pathNextTitle.isNullOrBlank()) {
+                    AmbientCard(
+                        modifier = Modifier.fillMaxWidth().clickable(onClick = onOpenProgress),
+                        containerColor = EduCloudSurface,
+                        cornerRadius = 20,
+                    ) {
+                        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                            Text(
+                                "YOUR PATH",
+                                style = MaterialTheme.typography.labelMedium,
+                                color = EduCloudLeaf,
                                 fontWeight = FontWeight.Bold,
+                            )
+                            Text(
+                                pathNextTitle,
+                                style = MaterialTheme.typography.titleMedium,
+                                fontWeight = FontWeight.ExtraBold,
                                 color = EduCloudInk,
                             )
-                            Text("Every answer shows its supporting lesson source.",
+                            Text(
+                                "This week's chart and the Grade 3 path are on Progress.",
                                 style = MaterialTheme.typography.bodySmall,
                                 color = EduCloudMutedInk,
                             )
                         }
                     }
-                    Spacer(Modifier.height(12.dp))
-                    TactileButton(
-                        text = "Try the USSD simulator",
-                        onClick = onOpenUssdSimulator,
-                        containerColor = EduCloudLake,
-                        contentColor = Color.White,
-                    )
                 }
 
-                // ── Streak label ───────────────────────────────────────────
-                streak?.takeIf { it.currentStreak > 0 }?.let {
-                    Text("🔥 ${it.currentStreak}-day learning streak",
-                        style = MaterialTheme.typography.labelLarge,
-                        color = EduCloudLeaf,
-                        fontWeight = FontWeight.Bold,
-                    )
+                AmbientCard(modifier = Modifier.fillMaxWidth(), containerColor = EduCloudSurface, cornerRadius = 20) {
+                    Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Text(
+                            "OPTIONAL CLASS CODE",
+                            style = MaterialTheme.typography.labelMedium,
+                            color = EduCloudOrange,
+                            fontWeight = FontWeight.Bold,
+                        )
+                        Text(
+                            "Tonight from class",
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.ExtraBold,
+                            color = EduCloudInk,
+                        )
+                        Text(
+                            "If a teacher shared a class code, practise that skill here. No names, no cameras.",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = EduCloudMutedInk,
+                        )
+                        TactileButton(
+                            text = "Enter a class code",
+                            onClick = onOpenTonightFromClass,
+                            containerColor = EduCloudOrange,
+                        )
+                    }
                 }
+
+                AmbientCard(modifier = Modifier.fillMaxWidth(), containerColor = EduCloudSurface, cornerRadius = 20) {
+                    Row(Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
+                        Surface(color = EduCloudLake.copy(alpha = .12f), shape = RoundedCornerShape(14.dp)) {
+                            Icon(
+                                Icons.Filled.OfflineBolt,
+                                null,
+                                tint = EduCloudLake,
+                                modifier = Modifier.padding(10.dp).size(24.dp),
+                            )
+                        }
+                        Spacer(Modifier.width(12.dp))
+                        Column(Modifier.weight(1f)) {
+                            Text(
+                                "Works without internet",
+                                style = MaterialTheme.typography.titleSmall,
+                                fontWeight = FontWeight.Bold,
+                                color = EduCloudInk,
+                            )
+                            Text(
+                                "The tutor uses the local Grade 3 pack. “Explain it my way” tries the cloud, then falls back to a story from that pack.",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = EduCloudMutedInk,
+                            )
+                        }
+                    }
+                }
+
                 Spacer(Modifier.height(8.dp))
             }
         }
     }
 }
 
-/** Offline-ready pill with animated pulsing dot (green when online, grey when offline). */
+@Composable
+private fun HabitChip(emoji: String, label: String) {
+    Surface(color = Color.White.copy(alpha = .86f), shape = RoundedCornerShape(99.dp),
+        border = androidx.compose.foundation.BorderStroke(1.dp, EduCloudLine)) {
+        Row(
+            modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp),
+            horizontalArrangement = Arrangement.spacedBy(4.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Text(emoji, style = MaterialTheme.typography.labelSmall)
+            Text(label, style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.Bold, color = EduCloudInk)
+        }
+    }
+}
+
 @Composable
 private fun AnimatedOfflinePill() {
     val infiniteTransition = rememberInfiniteTransition(label = "offlinePulse")

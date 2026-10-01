@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Teacher Sidekick prototype · EduCloud</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #14221b;
+      --muted: #4d5c54;
+      --leaf: #2f6f4e;
+      --cream: #f6f1e8;
+      --line: #d7cfc2;
+      --warn: #7a2e0e;
+      --warn-bg: #fbe7d6;
+    }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", system-ui, sans-serif;
+      background: var(--cream);
+      color: var(--ink);
+      line-height: 1.45;
+    }
+    main { max-width: 44rem; margin: 0 auto; padding: 1.5rem 1.25rem 3rem; }
+    .banner {
+      background: var(--warn-bg);
+      color: var(--warn);
+      border: 1px solid #e4b48a;
+      border-radius: 12px;
+      padding: 0.9rem 1rem;
+      font-weight: 600;
+    }
+    h1 { font-size: 1.6rem; margin: 1.2rem 0 0.3rem; }
+    .lede { color: var(--muted); margin-top: 0; }
+    .card {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 1.1rem 1.2rem;
+      margin-top: 1rem;
+    }
+    .code {
+      font-size: 2rem;
+      letter-spacing: 0.12em;
+      font-weight: 800;
+      color: var(--leaf);
+    }
+    button {
+      background: var(--leaf);
+      color: #fff;
+      border: 0;
+      border-radius: 999px;
+      padding: 0.7rem 1.2rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    button.secondary { background: #3d5a80; }
+    button:disabled { opacity: 0.6; cursor: not-allowed; }
+    table { width: 100%; border-collapse: collapse; margin-top: 0.6rem; }
+    th, td { text-align: left; padding: 0.45rem 0.3rem; border-bottom: 1px solid var(--line); font-size: 0.95rem; }
+    .status { min-height: 1.4rem; color: var(--muted); margin-top: 0.6rem; }
+    ul { padding-left: 1.2rem; }
+  </style>
+</head>
+<body>
+  <main>
+    <p class="banner" role="status">__BANNER__</p>
+    <h1>Tonight’s revision</h1>
+    <p class="lede">Assign Grade 3 regrouping. Learners open EduCloud with this class code. Results are item counts, not faces.</p>
+
+    <section class="card">
+      <p>Class code</p>
+      <p class="code" id="class-code">__CLASS_CODE__</p>
+      <p>Skill: <code>__SKILL_ID__</code></p>
+      <p>Items: __ITEM_IDS__</p>
+      <p>
+        <button type="button" id="assign">Assign tonight’s revision</button>
+        <button type="button" class="secondary" id="simulate">Record a demo attempt</button>
+      </p>
+      <p class="status" id="status"></p>
+    </section>
+
+    <section class="card">
+      <h2>Item results</h2>
+      <p>Learners attempted: <strong id="learners">__LEARNERS__</strong></p>
+      <table>
+        <thead>
+          <tr><th>Item</th><th>Attempts</th><th>Missed</th></tr>
+        </thead>
+        <tbody id="items">
+          __ITEM_ROWS__
+        </tbody>
+      </table>
+    </section>
+
+    <section class="card">
+      <h2>Do not say in this room</h2>
+      <ul>
+        <li>Facial recognition, cameras, or who is sleeping.</li>
+        <li>Brain, TRIBE, or that this is Athena production.</li>
+        <li>KICD-approved, or one app for all grades live today.</li>
+      </ul>
+    </section>
+  </main>
+  <script>
+    const classCode = document.getElementById("class-code").textContent.trim();
+    const statusEl = document.getElementById("status");
+
+    function renderResults(data) {
+      document.getElementById("learners").textContent = data.learners_attempted;
+      const body = document.getElementById("items");
+      body.innerHTML = (data.items || []).map(function (item) {
+        return "<tr><td><code>" + item.item_id + "</code></td><td>" + item.attempts + "</td><td>" + item.missed + "</td></tr>";
+      }).join("");
+    }
+
+    async function refresh() {
+      const response = await fetch("/api/v1/demo/homework/" + encodeURIComponent(classCode) + "/results");
+      if (!response.ok) return;
+      renderResults(await response.json());
+    }
+
+    document.getElementById("assign").addEventListener("click", async function () {
+      statusEl.textContent = "Assigning…";
+      const response = await fetch("/api/v1/demo/homework/assign", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ skill_id: "two_digit_subtraction_regrouping" }),
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        statusEl.textContent = data.error || "Could not assign.";
+        return;
+      }
+      document.getElementById("class-code").textContent = data.class_code;
+      statusEl.textContent = "Assigned. Learners use class code " + data.class_code + ".";
+      await refresh();
+    });
+
+    document.getElementById("simulate").addEventListener("click", async function () {
+      statusEl.textContent = "Recording a fixture learner…";
+      const response = await fetch("/api/v1/demo/homework/" + encodeURIComponent(classCode) + "/attempts", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          learner_token: crypto.randomUUID(),
+          attempts: [
+            { item_id: "g3-regroup-45-29", correct: false },
+            { item_id: "g3-regroup-82-37", correct: true },
+            { item_id: "g3-regroup-63-28", correct: false },
+          ],
+        }),
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        statusEl.textContent = data.error || "Could not record attempt.";
+        return;
+      }
+      renderResults(data);
+      statusEl.textContent = "Demo attempt recorded. Misses are item counts, not faces.";
+    });
+
+    setInterval(refresh, 4000);
+  </script>
+</body>
+</html>

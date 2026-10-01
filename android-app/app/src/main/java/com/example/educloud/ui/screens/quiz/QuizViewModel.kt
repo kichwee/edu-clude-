@@ -9,6 +9,10 @@ import com.example.educloud.data.repository.LearningRepository
 import com.example.educloud.data.repository.StudentRepository
 import com.example.educloud.habit.HabitEngine
 import com.example.educloud.sync.CloudSyncWorker
+import com.example.educloud.sync.HomeworkItemResult
+import com.example.educloud.sync.HomeworkService
+import com.example.educloud.sync.LearnerToken
+import com.example.educloud.sync.TonightAssignment
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
@@ -19,6 +23,7 @@ data class QuizQuestion(
     val difficulty: Float,
     val explanation: String,
     val skillId: String? = null,
+    val itemId: String? = null,
 )
 
 data class QuizState(
@@ -37,6 +42,8 @@ data class QuizState(
     val remediationMessage: String? = null,
     /** Habit-shell ceremony data; arrives shortly after [isFinished] flips true. */
     val lessonResult: LessonResult? = null,
+    val itemResults: List<HomeworkItemResult> = emptyList(),
+    val learnerToken: String? = null,
 )
 
 /** What this lesson earned: mastery XP (D11), streak state and milestones just crossed. */
@@ -49,7 +56,8 @@ data class LessonResult(
 class QuizViewModel(
     private val context: Context,
     private val studentRepository: StudentRepository,
-    private val learningRepository: LearningRepository
+    private val learningRepository: LearningRepository,
+    private val homeworkService: HomeworkService = HomeworkService(),
 ) : ViewModel() {
 
     private val irtEngine = IrtEngine()
@@ -58,7 +66,10 @@ class QuizViewModel(
 
     companion object {
         private const val DEMO_QUESTION_COUNT = 3
+        private const val MAX_QUESTION_TIME_MS = 10 * 60 * 1000
     }
+
+    private var questionShownAtMs: Long = 0L
 
     fun init(subject: String) {
         // Idempotent: LaunchedEffect re-fires on activity recreation and must
@@ -76,6 +87,7 @@ class QuizViewModel(
             _state.value = QuizState(
                 subject = subject,
                 studentId = student?.id,
+                learnerToken = LearnerToken.current(context),
                 theta = theta,
                 currentQuestion = questionBank?.let { getNextQuestion(it, theta, 0) },
                 unavailableMessage = if (questionBank == null) {
@@ -84,6 +96,9 @@ class QuizViewModel(
                     null
                 },
             )
+            if (_state.value.currentQuestion != null) {
+                questionShownAtMs = System.currentTimeMillis()
+            }
         }
     }
 
@@ -98,13 +113,19 @@ class QuizViewModel(
             itemDifficulty = irtEngine.difficultyToB(current.currentQuestion.difficulty)
         )
 
+        val itemId = current.currentQuestion.itemId
         _state.update { it.copy(
             selectedOption = optionIndex,
             isAnswered = true,
             isCorrect = isCorrect,
             score = if (isCorrect) it.score + 1 else it.score,
             totalAnswered = it.totalAnswered + 1,
-            theta = newTheta
+            theta = newTheta,
+            itemResults = if (itemId.isNullOrBlank()) {
+                it.itemResults
+            } else {
+                it.itemResults + HomeworkItemResult(itemId = itemId, correct = isCorrect)
+            },
         )}
 
         // Persist to Room
@@ -117,6 +138,7 @@ class QuizViewModel(
                         aiResponse = current.currentQuestion.explanation,
                         isCorrect = isCorrect,
                         learnerAnswer = current.currentQuestion.options[optionIndex],
+                        timeTakenMs = elapsedMs(),
                         subject = current.subject,
                         strand = current.currentQuestion.skillId,
                         difficulty = current.currentQuestion.difficulty,
@@ -132,6 +154,7 @@ class QuizViewModel(
         if (current.unavailableMessage != null || current.isFinished) return
         if (current.totalAnswered >= DEMO_QUESTION_COUNT) {
             _state.update { it.copy(isFinished = true) }
+            reportTonightFromClassAttempts()
             // D11: a perfect lesson is the one mastery event a quick-check can pay.
             val studentId = current.studentId
             if (studentId != null && current.totalAnswered > 0) {
@@ -178,6 +201,7 @@ class QuizViewModel(
             isAnswered = false,
             isCorrect = false
         )}
+        questionShownAtMs = System.currentTimeMillis()
     }
 
     /** Queues the only cloud action after an explicit consent dialog in the UI. */
@@ -195,6 +219,23 @@ class QuizViewModel(
                 },
             )
         }
+    }
+
+    private fun reportTonightFromClassAttempts() {
+        val pack = TonightAssignment.current ?: return
+        val snapshot = _state.value
+        val token = snapshot.learnerToken ?: return
+        val results = snapshot.itemResults.filter { result -> result.itemId in pack.itemIds }
+        if (results.isEmpty()) return
+        viewModelScope.launch {
+            homeworkService.submitAttempts(pack, results, token)
+        }
+    }
+
+    private fun elapsedMs(): Int {
+        if (questionShownAtMs <= 0L) return 0
+        val elapsed = System.currentTimeMillis() - questionShownAtMs
+        return elapsed.coerceIn(0L, MAX_QUESTION_TIME_MS.toLong()).toInt()
     }
 
     private fun getNextQuestion(

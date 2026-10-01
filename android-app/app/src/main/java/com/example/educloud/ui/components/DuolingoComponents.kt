@@ -149,6 +149,7 @@ fun DuolingoFeedbackSheet(
     explanation: String,
     onNext: () -> Unit,
     modifier: Modifier = Modifier,
+    onExplainMyWay: (() -> Unit)? = null,
 ) {
     val backgroundColor = if (isCorrect) Color(0xFFD7FFB8) else Color(0xFFFFDFE0)
     val textColor = if (isCorrect) Color(0xFF2E7D32) else Color(0xFFC62828)
@@ -173,7 +174,7 @@ fun DuolingoFeedbackSheet(
                 )
                 Spacer(Modifier.width(8.dp))
                 Text(
-                    text = if (isCorrect) "Awesome job! 🎉" else "Not quite yet",
+                    text = if (isCorrect) "Awesome job! 🎉" else "Not quite yet — mistakes help you learn",
                     color = textColor,
                     fontWeight = FontWeight.ExtraBold,
                     fontSize = 20.sp
@@ -185,6 +186,12 @@ fun DuolingoFeedbackSheet(
                 style = MaterialTheme.typography.bodyMedium,
                 color = Color.Black
             )
+            if (!isCorrect && onExplainMyWay != null) {
+                Spacer(Modifier.height(12.dp))
+                TextButton(onClick = onExplainMyWay) {
+                    Text("Explain it my way", fontWeight = FontWeight.Bold, color = textColor)
+                }
+            }
             Spacer(Modifier.height(16.dp))
             DuolingoButton(
                 text = "CONTINUE",

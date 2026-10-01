@@ -21,6 +21,11 @@ object HabitEngine {
     const val XP_REVIEW_STABILIZED = 5
     const val XP_FIRST_TRY_CORRECT_AFTER_STRUGGLE = 8
 
+    /** Featured daily goal: finish the three-item Grade 3 Maths quick-check. */
+    const val DAILY_QUIZ_GOAL = 3
+
+    fun dailyQuizGoalMet(quizAnswersToday: Int): Boolean = quizAnswersToday >= DAILY_QUIZ_GOAL
+
     enum class XpEvent { LESSON_PASSED, REVIEW_STABILIZED, FIRST_TRY_CORRECT_AFTER_STRUGGLE }
 
     fun xpFor(event: XpEvent): Int = when (event) {
@@ -147,6 +152,10 @@ object HabitEngine {
 
     private val MILESTONES_BY_ID: Map<String, Milestone> =
         (STREAK_MILESTONES + XP_MILESTONES + LESSON_MILESTONES).associate { it.second.id to it.second }
+
+    /** Every badge the collection album can show, including locked ones (D13). */
+    fun catalogMilestones(): List<Milestone> =
+        (STREAK_MILESTONES + XP_MILESTONES + LESSON_MILESTONES).map { it.second }
 
     fun milestoneById(id: String): Milestone? = MILESTONES_BY_ID[id]
 }

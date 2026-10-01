@@ -50,6 +50,13 @@ The available local-only routes are:
 - `GET /api/v1/ready`
 - `POST /api/v1/demo/ussd`
 - `POST /api/v1/demo/sms`
+- `GET /demo/teacher/sidekick` — labelled school-home homework prototype (not Athena production; not facial analysis)
+- `POST /api/v1/demo/homework/assign`
+- `GET /api/v1/demo/homework/<class_code>`
+- `POST /api/v1/demo/homework/<class_code>/attempts`
+- `GET /api/v1/demo/homework/<class_code>/results`
+
+Presenter script: [docs/SCHOOL_HOME_JOIN_DEMO_SCRIPT.md](docs/SCHOOL_HOME_JOIN_DEMO_SCRIPT.md).
 
 ### Autonomous Teaching Loop — local demo only
 

@@ -7,6 +7,7 @@ plugins {
 
 val edgeSyncBaseUrl = providers.gradleProperty("edgeSyncBaseUrl").orElse("").get()
 val reexplainBaseUrl = providers.gradleProperty("reexplainBaseUrl").orElse(edgeSyncBaseUrl).get()
+val homeworkBaseUrl = providers.gradleProperty("homeworkBaseUrl").orElse(reexplainBaseUrl).get()
 
 android {
     namespace = "com.example.educloud"
@@ -20,6 +21,7 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField("String", "EDGE_SYNC_BASE_URL", "\"${edgeSyncBaseUrl.replace("\\", "\\\\").replace("\"", "\\\"")}\"")
         buildConfigField("String", "REEXPLAIN_BASE_URL", "\"${reexplainBaseUrl.replace("\\", "\\\\").replace("\"", "\\\"")}\"")
+        buildConfigField("String", "HOMEWORK_BASE_URL", "\"${homeworkBaseUrl.replace("\\", "\\\\").replace("\"", "\\\"")}\"")
     }
 
     buildTypes {
@@ -50,8 +52,12 @@ android {
 
 }
 
+// Gradle cannot provision a JDK 17 on the demo machines, so the Kotlin target is set
+// explicitly and the build runs on whichever JDK launches Gradle.
 kotlin {
-    jvmToolchain(17)
+    compilerOptions {
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
+    }
 }
 
 // CI and local demo machines may have little available memory. Running the

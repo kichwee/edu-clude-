@@ -19,7 +19,7 @@ data class Student(
     val deviceId: String,
     val alias: String,
     val grade: Int,                        // 1–6 (CBC)
-    val languagePref: String = "sw",       // "sw" | "en"
+    val languagePref: String = "en",       // English-only MVP; Kiswahili stays out of this build
     val createdAt: Long = System.currentTimeMillis(),
     val lastActive: Long = System.currentTimeMillis(),
     val consentGiven: Boolean = false,

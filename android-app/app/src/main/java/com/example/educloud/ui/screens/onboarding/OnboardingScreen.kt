@@ -31,7 +31,7 @@ import com.example.educloud.theme.EduCloudMutedInk
 import com.example.educloud.theme.EduCloudSun
 import com.example.educloud.theme.PrimaryContainer
 import com.example.educloud.theme.PrimaryFixed
-import com.example.educloud.sync.ANALOGY_DOMAINS
+import com.example.educloud.ui.components.InterestChipGrid
 import com.example.educloud.theme.SurfaceContainerLow
 
 @Composable
@@ -294,16 +294,6 @@ private fun GradePill(grade: String, ageRange: String, available: Boolean) {    
 
 @Composable
 private fun InterestStep(selected: Set<String>, onToggle: (String) -> Unit) {
-    val labels = mapOf(
-        "sports" to "⚽ Sports",
-        "animals" to "🐘 Animals",
-        "music" to "🥁 Music",
-        "transport" to "🚌 Transport",
-        "food" to "🥭 Food",
-        "games" to "🎲 Games",
-        "nature" to "🌦️ Nature",
-        "money" to "🪙 Money",
-    )
     Column {
         Text(
             "What do you love?",
@@ -318,54 +308,6 @@ private fun InterestStep(selected: Set<String>, onToggle: (String) -> Unit) {
             color = EduCloudMutedInk,
         )
         Spacer(Modifier.height(20.dp))
-        ANALOGY_DOMAINS.chunked(2).forEach { rowDomains ->
-            Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                rowDomains.forEach { domain ->
-                    InterestChip(
-                        label = labels[domain] ?: domain,
-                        selected = domain in selected,
-                        onClick = { onToggle(domain) },
-                        modifier = Modifier.weight(1f),
-                    )
-                }
-                if (rowDomains.size == 1) Spacer(Modifier.weight(1f))
-            }
-            Spacer(Modifier.height(10.dp))
-        }
-    }
-}
-
-@Composable
-private fun InterestChip(
-    label: String,
-    selected: Boolean,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    val bg = if (selected) PrimaryFixed.copy(.5f) else SurfaceContainerLow
-    val border = if (selected) EduCloudLeaf.copy(.4f) else Color(0xFFDBDAD7)
-    Row(
-        modifier = modifier
-            .clip(RoundedCornerShape(16.dp))
-            .background(bg)
-            .border(1.5.dp, border, RoundedCornerShape(16.dp))
-            .clickable(onClick = onClick)
-            .padding(horizontal = 14.dp, vertical = 12.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-    ) {
-        Text(
-            label,
-            style = MaterialTheme.typography.bodyMedium,
-            color = if (selected) EduCloudLeaf else EduCloudInk,
-        )
-        if (selected) {
-            Icon(
-                Icons.Filled.CheckCircle,
-                contentDescription = "Selected",
-                tint = EduCloudLeaf,
-                modifier = Modifier.size(18.dp),
-            )
-        }
+        InterestChipGrid(selected = selected, onToggle = onToggle)
     }
 }

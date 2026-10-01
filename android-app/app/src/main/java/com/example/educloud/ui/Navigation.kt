@@ -22,6 +22,7 @@ import com.example.educloud.EduCloudApp
 import com.example.educloud.ui.components.EduNavTab
 import com.example.educloud.ui.screens.chat.ChatScreen
 import com.example.educloud.ui.screens.chat.ChatViewModel
+import com.example.educloud.ui.screens.chat.PendingTutorPrompt
 import com.example.educloud.ui.screens.catalog.GradePickerScreen
 import com.example.educloud.ui.screens.catalog.MathCatalogueScreen
 import com.example.educloud.ui.screens.catalog.MathTermScreen
@@ -29,11 +30,13 @@ import com.example.educloud.ui.screens.catalog.MathUnitScreen
 import com.example.educloud.ui.screens.catalog.SubjectPickerScreen
 import com.example.educloud.ui.screens.home.HomeScreen
 import com.example.educloud.ui.screens.home.HomeViewModel
-import com.example.educloud.ui.screens.home.LearningPathScreen
 import com.example.educloud.ui.screens.home.ProfileScreen
+import com.example.educloud.ui.screens.home.ProfileViewModel
 import com.example.educloud.ui.screens.home.ProgressScreen
 import com.example.educloud.ui.screens.home.ProgressViewModel
 import com.example.educloud.ui.screens.home.StitchExperienceScreen
+import com.example.educloud.ui.screens.home.TonightFromClassScreen
+import com.example.educloud.ui.screens.home.TonightFromClassViewModel
 import com.example.educloud.ui.screens.featurephone.FeaturePhoneScreen
 import com.example.educloud.ui.screens.featurephone.FeaturePhoneViewModel
 import com.example.educloud.ui.screens.onboarding.OnboardingScreen
@@ -106,7 +109,9 @@ fun EduCloudNavigation() {
             HomeScreen(
                 viewModel = viewModel,
                 onOpenCatalogue = { navController.navigate("mathCatalogue") },
-                onOpenUssdSimulator = { navController.navigate("featurePhone") },
+                onOpenQuiz = { navController.navigate("quiz/math") },
+                onOpenTutor = { navController.navigate("chat/math") },
+                onOpenTonightFromClass = { navController.navigate("tonightFromClass") },
                 onNavigateTab = { tab ->
                     when (tab) {
                         EduNavTab.Today    -> { /* already here */ }
@@ -115,6 +120,37 @@ fun EduCloudNavigation() {
                         EduNavTab.Profile  -> navController.navigate("profile")
                     }
                 },
+            )
+        }
+
+        composable("tonightFromClass") {
+            val viewModel: TonightFromClassViewModel = viewModel()
+            TonightFromClassScreen(
+                viewModel = viewModel,
+                onBack = { navController.popBackStack() },
+                onOpenQuiz = { navController.navigate("quiz/math") },
+                onOpenTutor = { navController.navigate("tonightTutor") },
+            )
+        }
+
+        composable("tonightTutor") {
+            val viewModel: ChatViewModel = viewModel(
+                factory = object : ViewModelProvider.Factory {
+                    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                        return ChatViewModel(
+                            context,
+                            app.studentRepository,
+                            app.learningRepository,
+                            app.offlineLessonRepository,
+                        ) as T
+                    }
+                }
+            )
+            ChatScreen(
+                subject = "math",
+                viewModel = viewModel,
+                onBack = { navController.popBackStack() },
+                fromClass = true,
             )
         }
 
@@ -201,7 +237,7 @@ fun EduCloudNavigation() {
             ChatScreen(
                 subject = subject,
                 viewModel = viewModel,
-                onBack = { navController.popBackStack() }
+                onBack = { navController.popBackStack() },
             )
         }
 
@@ -227,20 +263,6 @@ fun EduCloudNavigation() {
             )
         }
 
-        composable("learningPath") {
-            LearningPathScreen(
-                onBack = { navController.popBackStack() },
-                onNavigateTab = { tab ->
-                    when (tab) {
-                        EduNavTab.Today    -> navController.navigate("home") { popUpTo("home") { inclusive = false } }
-                        EduNavTab.Learn    -> navController.navigate("subjectExplorer")
-                        EduNavTab.Progress -> { /* already showing progress context */ }
-                        EduNavTab.Profile  -> navController.navigate("profile")
-                    }
-                },
-            )
-        }
-
         composable("progress") {
             val viewModel: ProgressViewModel = viewModel(
                 factory = object : ViewModelProvider.Factory {
@@ -260,22 +282,35 @@ fun EduCloudNavigation() {
                         EduNavTab.Profile  -> navController.navigate("profile")
                     }
                 },
+                onOpenQuiz = { navController.navigate("quiz/math") },
+                onOpenTutor = { prompt ->
+                    if (prompt.isNotBlank()) PendingTutorPrompt.set(prompt)
+                    navController.navigate("chat/math")
+                },
+                onOpenCatalogue = { navController.navigate("mathCatalogue") },
             )
         }
 
         composable("profile") {
             val studentId = activeStudent?.id
-            // remember() pins the cold Room flow so recompositions don't
-            // tear down and re-subscribe the invalidation observer each frame.
             val streak: com.example.educloud.data.model.Streak? = if (studentId != null) {
                 val streakFlow = remember(studentId) { app.learningRepository.getStreak(studentId) }
                 streakFlow.collectAsState(initial = null).value
             } else {
                 null
             }
+            val profileViewModel: ProfileViewModel = viewModel(
+                factory = object : ViewModelProvider.Factory {
+                    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                        return ProfileViewModel(app.studentRepository) as T
+                    }
+                }
+            )
             ProfileScreen(
                 learnerAlias = activeStudent?.alias.orEmpty(),
                 streak = streak,
+                viewModel = profileViewModel,
+                onOpenUssdSimulator = { navController.navigate("featurePhone") },
                 onNavigateTab = { tab ->
                     when (tab) {
                         EduNavTab.Today    -> navController.navigate("home") { popUpTo("home") { inclusive = false } }
@@ -319,7 +354,11 @@ fun EduCloudNavigation() {
             QuizScreen(
                 subject = subject,
                 viewModel = viewModel,
-                onBack = { navController.popBackStack() }
+                onBack = { navController.popBackStack() },
+                onExplainMyWay = { question ->
+                    PendingTutorPrompt.set("Help me understand: $question")
+                    navController.navigate("chat/math")
+                },
             )
         }
     }

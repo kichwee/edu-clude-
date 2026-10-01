@@ -523,6 +523,95 @@ class ReexplainContractTests(SimpleTestCase):
         self.assertEqual("openai", chain.name)
 
 
+class HomeworkPackApiTests(SimpleTestCase):
+    def setUp(self):
+        from .homework_pack import STORE
+
+        STORE.reset()
+
+    def tearDown(self):
+        from .homework_pack import STORE
+
+        STORE.reset()
+        super().tearDown()
+
+    def test_teacher_page_is_labelled_as_a_prototype(self):
+        response = self.client.get("/demo/teacher/sidekick")
+        self.assertEqual(response.status_code, 200)
+        page = response.content.decode()
+        self.assertIn("Not Athena production", page)
+        self.assertIn("Not facial analysis", page)
+        self.assertIn("G3-HOME", page)
+
+    def test_assign_returns_the_demo_pack_without_pii(self):
+        response = self.client.post(
+            "/api/v1/demo/homework/assign",
+            data='{"skill_id": "two_digit_subtraction_regrouping"}',
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, 201)
+        pack = response.json()
+        self.assertEqual("G3-HOME", pack["class_code"])
+        self.assertEqual("two_digit_subtraction_regrouping", pack["skill_id"])
+        self.assertNotIn("name", pack)
+        self.assertNotIn("email", pack)
+        fetched = self.client.get("/api/v1/demo/homework/G3-HOME")
+        self.assertEqual(fetched.status_code, 200)
+        self.assertEqual(pack["assignment_id"], fetched.json()["assignment_id"])
+
+    def test_unknown_skill_and_pii_fields_are_rejected(self):
+        unknown = self.client.post(
+            "/api/v1/demo/homework/assign",
+            data='{"skill_id": "grade7-algebra"}',
+            content_type="application/json",
+        )
+        pii = self.client.post(
+            "/api/v1/demo/homework/assign",
+            data='{"skill_id": "two_digit_subtraction_regrouping", "name": "Jane"}',
+            content_type="application/json",
+        )
+        oversized = self.client.post(
+            "/api/v1/demo/homework/assign",
+            data='{"skill_id": "' + ("x" * 3000) + '"}',
+            content_type="application/json",
+        )
+        self.assertEqual(unknown.status_code, 400)
+        self.assertEqual(pii.status_code, 400)
+        self.assertIn("personal or biometric", pii.json()["error"])
+        self.assertEqual(oversized.status_code, 400)
+
+    def test_attempts_aggregate_item_misses_without_names(self):
+        self.client.post(
+            "/api/v1/demo/homework/assign",
+            data="{}",
+            content_type="application/json",
+        )
+        response = self.client.post(
+            "/api/v1/demo/homework/G3-HOME/attempts",
+            data=(
+                '{"learner_token": "c0a80101-7a7c-4e10-9e2a-f4f1ef2d6a01",'
+                '"attempts": ['
+                '{"item_id": "g3-regroup-45-29", "correct": false},'
+                '{"item_id": "g3-regroup-82-37", "correct": true},'
+                '{"item_id": "g3-regroup-63-28", "correct": false}]}'
+            ),
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, 201)
+        summary = response.json()
+        self.assertEqual(1, summary["learners_attempted"])
+        missed = {row["item_id"]: row["missed"] for row in summary["items"]}
+        self.assertEqual(1, missed["g3-regroup-45-29"])
+        self.assertEqual(0, missed["g3-regroup-82-37"])
+        self.assertNotIn("learner_token", summary)
+        named = self.client.post(
+            "/api/v1/demo/homework/G3-HOME/attempts",
+            data='{"learner_token": "Jane Doe", "attempts": [{"item_id": "g3-regroup-45-29", "correct": true}]}',
+            content_type="application/json",
+        )
+        self.assertEqual(named.status_code, 400)
+
+
 class ReexplainEvalHarnessTests(SimpleTestCase):
     """The offline adversarial set must pass strictly against the fixture chain."""
 

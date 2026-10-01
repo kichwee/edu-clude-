@@ -144,4 +144,20 @@ class HabitEngineTest {
         assertTrue(all.isNotEmpty())
         all.forEach { m -> assertEquals(m, HabitEngine.milestoneById(m.id)) }
     }
+
+    @Test
+    fun `daily quiz goal is three answers`() {
+        assertFalse(HabitEngine.dailyQuizGoalMet(2))
+        assertTrue(HabitEngine.dailyQuizGoalMet(3))
+        assertTrue(HabitEngine.dailyQuizGoalMet(4))
+        assertEquals(3, HabitEngine.DAILY_QUIZ_GOAL)
+    }
+
+    @Test
+    fun `catalog lists every milestone including unearned`() {
+        val catalog = HabitEngine.catalogMilestones()
+        assertEquals(11, catalog.size)
+        assertTrue(catalog.map { it.id }.containsAll(listOf("streak_3", "xp_50", "lesson_1")))
+        assertTrue(HabitEngine.milestonesFor(0, 0, 0).isEmpty())
+    }
 }

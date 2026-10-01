@@ -69,6 +69,7 @@ class LearningRepositoryTest {
         override suspend fun getAverageDifficulty(studentId: Int, subject: String, strand: String, since: Long): Float? = TODO("unused")
         override suspend fun countInteractionsSince(studentId: Int, since: Long): Int = TODO("unused")
         override fun observeInteractionsSince(studentId: Int, since: Long): Flow<Int> = TODO("unused")
+        override fun observeQuizAnswersSince(studentId: Int, since: Long): Flow<Int> = TODO("unused")
         override fun observeTimeLearnedSince(studentId: Int, since: Long): Flow<Long?> = TODO("unused")
         override fun observeTopicsSince(studentId: Int, since: Long): Flow<Int> = TODO("unused")
         override suspend fun getPendingSyncInteractions(studentId: Int): List<Interaction> = TODO("unused")
@@ -143,5 +144,18 @@ class LearningRepositoryTest {
         fun at(hour: Long) = ZonedDateTime.of(2026, 8, 24, 0, 0, 0, 0, nairobi).toInstant().toEpochMilli() + hour * 3_600_000
 
         assertEquals(0L, LearningRepository.epochDayOf(at(23), nairobi) - LearningRepository.epochDayOf(at(0), nairobi))
+    }
+
+    @Test
+    fun `start of local day is midnight in that zone`() {
+        val nairobi = ZoneId.of("Africa/Nairobi")
+        val afternoon = ZonedDateTime.of(2026, 8, 26, 16, 14, 0, 0, nairobi).toInstant().toEpochMilli()
+        val start = LearningRepository.startOfLocalDayMillis(afternoon, nairobi)
+        val expected = ZonedDateTime.of(2026, 8, 26, 0, 0, 0, 0, nairobi).toInstant().toEpochMilli()
+        assertEquals(expected, start)
+        assertEquals(
+            LearningRepository.epochDayOf(afternoon, nairobi),
+            LearningRepository.epochDayOf(start, nairobi),
+        )
     }
 }

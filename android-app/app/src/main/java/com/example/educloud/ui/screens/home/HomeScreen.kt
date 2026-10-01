@@ -9,15 +9,24 @@ import com.example.educloud.ui.components.EduNavTab
 fun HomeScreen(
     viewModel: HomeViewModel,
     onOpenCatalogue: () -> Unit,
-    onOpenUssdSimulator: () -> Unit,
+    onOpenQuiz: () -> Unit,
+    onOpenTutor: () -> Unit,
+    onOpenTonightFromClass: () -> Unit = {},
     onNavigateTab: (EduNavTab) -> Unit = {},
 ) {
     val state by viewModel.state.collectAsState()
     StitchTodayDashboard(
         learnerName = state.student?.alias.orEmpty(),
         streak = state.streak,
+        quizAnswersToday = state.quizAnswersToday,
+        dailyGoalMet = state.dailyGoalMet,
+        dailyGoalTarget = state.dailyGoalTarget,
         onOpenLearningJourney = onOpenCatalogue,
-        onOpenUssdSimulator = onOpenUssdSimulator,
+        onOpenQuiz = onOpenQuiz,
+        onOpenTutor = onOpenTutor,
+        onOpenTonightFromClass = onOpenTonightFromClass,
+        onOpenProgress = { onNavigateTab(EduNavTab.Progress) },
+        pathNextTitle = state.pathNextTitle,
         onNavigateTab = onNavigateTab,
     )
 }

@@ -1,7 +1,7 @@
 package com.example.educloud.ui.screens.home
 
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -24,18 +23,17 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.example.educloud.habit.WeekDayActivity
 import com.example.educloud.theme.EduCloudInk
-import com.example.educloud.theme.EduCloudLake
 import com.example.educloud.theme.EduCloudLeaf
 import com.example.educloud.theme.EduCloudMutedInk
-import com.example.educloud.theme.EduCloudSun
 import com.example.educloud.theme.OnSecondaryContainer
-import com.example.educloud.theme.PrimaryContainer
 import com.example.educloud.theme.SecondaryFixed
+import com.example.educloud.theme.SurfaceContainerHighest
 import com.example.educloud.theme.SurfaceContainerLowest
 import com.example.educloud.ui.components.AmbientCard
 import com.example.educloud.ui.components.EduBottomNav
@@ -43,17 +41,17 @@ import com.example.educloud.ui.components.EduNavTab
 import com.example.educloud.ui.components.StorybookPage
 
 /**
- * ProgressScreen — adapts Your_Progress_15.html.
- *
- * Shows the learner's rolling-week stats (Answers / Time / Topics) and
- * a motivational banner, with a Canvas-drawn explorer illustration.
- * All numbers are Room-derived (plan §8); zeros mean "not yet", never placeholders.
+ * Progress: a 7-day activity chart, honest weekly counts, then the Grade 3
+ * learning-path chart (moved here from the unused full-screen route).
  */
 @Composable
 fun ProgressScreen(
     learnerAlias: String,
     viewModel: ProgressViewModel,
     onNavigateTab: (EduNavTab) -> Unit,
+    onOpenQuiz: () -> Unit,
+    onOpenTutor: (String) -> Unit,
+    onOpenCatalogue: () -> Unit,
 ) {
     val state by viewModel.state.collectAsState()
     val streak = state.streak
@@ -75,7 +73,6 @@ fun ProgressScreen(
             ) {
                 Spacer(Modifier.height(16.dp))
 
-                // ── Header ────────────────────────────────────────────────
                 Text(
                     text = "Your progress",
                     style = MaterialTheme.typography.headlineMedium,
@@ -91,53 +88,18 @@ fun ProgressScreen(
 
                 Spacer(Modifier.height(20.dp))
 
-                // ── Illustration hero (Canvas-drawn explorer) ─────────────
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(180.dp)
-                        .clip(RoundedCornerShape(20.dp))
-                        .background(MaterialTheme.colorScheme.surfaceContainerLow),
-                ) {
-                    Canvas(modifier = Modifier.fillMaxSize()) {
-                        // Warm glow backdrop
-                        drawCircle(EduCloudLeaf.copy(.10f), radius = size.width * .4f,
-                            center = Offset(size.width * .25f, size.height * .5f))
-                        // Map (rectangle)
-                        drawRoundRect(Color(0xFFFFF9C4),
-                            topLeft = Offset(size.width * .55f, size.height * .2f),
-                            size = androidx.compose.ui.geometry.Size(size.width * .32f, size.height * .55f),
-                            cornerRadius = androidx.compose.ui.geometry.CornerRadius(12f, 12f))
-                        // Map lines
-                        repeat(4) { i ->
-                            drawLine(EduCloudLeaf.copy(.25f),
-                                start = Offset(size.width * .58f, size.height * (.28f + i * .12f)),
-                                end   = Offset(size.width * .84f, size.height * (.28f + i * .12f)),
-                                strokeWidth = 2.5f)
-                        }
-                        // Explorer body (simplified)
-                        drawCircle(Color(0xFFFFDCC5), radius = size.minDimension * .10f,
-                            center = Offset(size.width * .28f, size.height * .35f))
-                        drawRoundRect(EduCloudLeaf.copy(.6f),
-                            topLeft = Offset(size.width * .18f, size.height * .5f),
-                            size = androidx.compose.ui.geometry.Size(size.width * .2f, size.height * .35f),
-                            cornerRadius = androidx.compose.ui.geometry.CornerRadius(14f, 14f))
-                        // Hat
-                        drawRoundRect(Color(0xFFB97836),
-                            topLeft = Offset(size.width * .175f, size.height * .18f),
-                            size = androidx.compose.ui.geometry.Size(size.width * .21f, size.height * .10f),
-                            cornerRadius = androidx.compose.ui.geometry.CornerRadius(8f, 8f))
-                        // Stars / sparkles
-                        val starColor = EduCloudSun
-                        listOf(Offset(.70f, .15f), Offset(.82f, .22f), Offset(.76f, .30f)).forEach { (fx, fy) ->
-                            drawCircle(starColor.copy(.6f), radius = 5f, center = Offset(size.width * fx, size.height * fy))
-                        }
-                    }
-                }
+                Text(
+                    text = "DAYS YOU PRACTISED",
+                    style = MaterialTheme.typography.labelMedium,
+                    color = EduCloudMutedInk,
+                    fontWeight = FontWeight.Bold,
+                    letterSpacing = androidx.compose.ui.unit.TextUnit(1.5f, androidx.compose.ui.unit.TextUnitType.Sp),
+                )
+                Spacer(Modifier.height(8.dp))
+                WeekActivityChart(days = state.weekDays)
 
                 Spacer(Modifier.height(20.dp))
 
-                // ── "This week" stats grid (rolling 7 days, real data) ──────
                 Text(
                     text = "LAST 7 DAYS",
                     style = MaterialTheme.typography.labelMedium,
@@ -156,49 +118,192 @@ fun ProgressScreen(
                         minutes >= 60 -> "${minutes / 60}h ${minutes % 60}m"
                         else -> "${minutes}m"
                     }
-                    StatCard(Modifier.weight(1f), "Answers", weekly.answersThisWeek.toString())
-                    StatCard(Modifier.weight(1f), "Time",    timeLabel)
-                    StatCard(Modifier.weight(1f), "Topics",  weekly.topicsTouchedThisWeek.toString())
+                    val answersLabel = if (weekly.answersThisWeek <= 0) "—" else weekly.answersThisWeek.toString()
+                    val topicsLabel = if (weekly.topicsTouchedThisWeek <= 0) "—" else weekly.topicsTouchedThisWeek.toString()
+                    StatCard(Modifier.weight(1f), "Answers", answersLabel)
+                    StatCard(Modifier.weight(1f), "Time", timeLabel)
+                    StatCard(Modifier.weight(1f), "Topics", topicsLabel)
+                }
+
+                if (weekly.answersThisWeek <= 0) {
+                    Spacer(Modifier.height(8.dp))
+                    Text(
+                        text = "Not enough evidence yet. Finish today's Maths check to see this week.",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = EduCloudMutedInk,
+                    )
                 }
 
                 Spacer(Modifier.height(16.dp))
 
-                // ── Streak banner ────────────────────────────────────────────
                 AmbientCard(
                     modifier = Modifier.fillMaxWidth(),
                     containerColor = SecondaryFixed.copy(.35f),
                     cornerRadius = 20,
                 ) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp, vertical = 14.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                    ) {
-                        Text(
-                            text = if (currentStreak > 0) "Keep going! 💪" else "Start your streak today! 🌱",
-                            style = MaterialTheme.typography.bodyLarge,
-                            fontWeight = FontWeight.Bold,
-                            color = OnSecondaryContainer,
-                        )
-                        if (currentStreak > 0) {
-                            Row(verticalAlignment = Alignment.CenterVertically) {
-                                Text("🔥", modifier = Modifier.padding(end = 4.dp))
-                                Text(
-                                    text = "$currentStreak day streak",
-                                    style = MaterialTheme.typography.labelLarge,
-                                    color = EduCloudLeaf,
-                                    fontWeight = FontWeight.Bold,
-                                )
+                    Column(Modifier.padding(horizontal = 16.dp, vertical = 14.dp)) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                        ) {
+                            Text(
+                                text = if (currentStreak > 0) "Keep going! 💪" else "Start your streak today! 🌱",
+                                style = MaterialTheme.typography.bodyLarge,
+                                fontWeight = FontWeight.Bold,
+                                color = OnSecondaryContainer,
+                            )
+                            if (currentStreak > 0) {
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    Text("🔥", modifier = Modifier.padding(end = 4.dp))
+                                    Text(
+                                        text = "$currentStreak day streak",
+                                        style = MaterialTheme.typography.labelLarge,
+                                        color = EduCloudLeaf,
+                                        fontWeight = FontWeight.Bold,
+                                    )
+                                }
                             }
                         }
+                        Spacer(Modifier.height(6.dp))
+                        Text(
+                            text = "${streak?.totalXp?.toInt() ?: 0} mastery XP  ·  freeze ${if (streak?.freezeAvailable != false) "ready" else "used"}",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = EduCloudMutedInk,
+                        )
                     }
+                }
+
+                Spacer(Modifier.height(24.dp))
+
+                Text(
+                    text = "LEARNING PATH",
+                    style = MaterialTheme.typography.labelMedium,
+                    color = EduCloudMutedInk,
+                    fontWeight = FontWeight.Bold,
+                    letterSpacing = androidx.compose.ui.unit.TextUnit(1.5f, androidx.compose.ui.unit.TextUnitType.Sp),
+                )
+                Spacer(Modifier.height(4.dp))
+                Text(
+                    text = "Grade 3 Maths in this app. Topics not in the pack stay off this list.",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = EduCloudMutedInk,
+                )
+                Spacer(Modifier.height(12.dp))
+                AmbientCard(
+                    modifier = Modifier.fillMaxWidth(),
+                    containerColor = SurfaceContainerLowest,
+                    cornerRadius = 20,
+                ) {
+                    LearningPathSection(
+                        items = state.pathItems,
+                        onItemClick = { item ->
+                            when (item.kind) {
+                                PathKind.Quiz -> onOpenQuiz()
+                                PathKind.Tutor -> onOpenTutor(item.tutorPrompt)
+                            }
+                        },
+                        onSeeAllTopics = onOpenCatalogue,
+                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
+                    )
                 }
 
                 Spacer(Modifier.height(24.dp))
             }
         }
+    }
+}
+
+@Composable
+internal fun WeekActivityChart(days: List<WeekDayActivity>, modifier: Modifier = Modifier) {
+    AmbientCard(modifier = modifier.fillMaxWidth(), containerColor = SurfaceContainerLowest, cornerRadius = 20) {
+        Column(Modifier.padding(horizontal = 12.dp, vertical = 14.dp)) {
+            if (days.isEmpty()) {
+                Text(
+                    "Days light up only after you practise.",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = EduCloudMutedInk,
+                )
+            } else {
+                val practised = days.count { it.active }
+                Text(
+                    if (practised == 0) {
+                        "No practice days recorded yet. Empty days stay empty."
+                    } else {
+                        "$practised of the last 7 days had practice."
+                    },
+                    style = MaterialTheme.typography.bodySmall,
+                    color = EduCloudMutedInk,
+                )
+                Spacer(Modifier.height(12.dp))
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(6.dp),
+                    verticalAlignment = Alignment.Bottom,
+                ) {
+                    days.forEach { day ->
+                        WeekDayColumn(day = day, modifier = Modifier.weight(1f))
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun WeekDayColumn(day: WeekDayActivity, modifier: Modifier = Modifier) {
+    val status = when {
+        day.active && day.isToday -> "practised today"
+        day.active -> "practised"
+        day.isToday -> "today, no practice yet"
+        else -> "no practice"
+    }
+    Column(
+        modifier = modifier.semantics(mergeDescendants = true) {
+            contentDescription = "${day.label} ${day.dayOfMonth}, $status"
+        },
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Box(
+            modifier = Modifier
+                .height(72.dp)
+                .fillMaxWidth(),
+            contentAlignment = Alignment.BottomCenter,
+        ) {
+            val barHeight = if (day.active) 72.dp else 14.dp
+            val barColor = when {
+                day.active && day.isToday -> EduCloudLeaf
+                day.active -> EduCloudLeaf.copy(alpha = 0.72f)
+                else -> SurfaceContainerHighest
+            }
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(barHeight)
+                    .clip(RoundedCornerShape(10.dp))
+                    .then(
+                        if (!day.active && day.isToday) {
+                            Modifier.border(2.dp, EduCloudLeaf.copy(alpha = 0.45f), RoundedCornerShape(10.dp))
+                        } else {
+                            Modifier
+                        },
+                    )
+                    .background(barColor),
+            )
+        }
+        Spacer(Modifier.height(6.dp))
+        Text(
+            text = day.label,
+            style = MaterialTheme.typography.labelSmall,
+            fontWeight = if (day.isToday) FontWeight.Bold else FontWeight.Normal,
+            color = if (day.isToday) EduCloudLeaf else EduCloudMutedInk,
+        )
+        Text(
+            text = day.dayOfMonth.toString(),
+            style = MaterialTheme.typography.labelSmall,
+            color = EduCloudInk,
+            fontWeight = if (day.isToday) FontWeight.Bold else FontWeight.Normal,
+        )
     }
 }
 

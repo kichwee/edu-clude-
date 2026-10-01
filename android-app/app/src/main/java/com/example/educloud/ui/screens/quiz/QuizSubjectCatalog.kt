@@ -36,6 +36,7 @@ internal object QuizSubjectCatalog {
                 difficulty = 0.3f,
                 explanation = "Trade 1 ten from 4 tens. Then 15 - 9 = 6 and 3 - 2 = 1, so the answer is 16.",
                 skillId = "two_digit_subtraction_regrouping",
+                itemId = "g3-regroup-45-29",
             ),
             QuizQuestion(
                 text = "What is 82 - 37?",
@@ -44,6 +45,7 @@ internal object QuizSubjectCatalog {
                 difficulty = 0.4f,
                 explanation = "Trade 1 ten so 12 - 7 = 5. Then 7 - 3 = 4, so the answer is 45.",
                 skillId = "two_digit_subtraction_regrouping",
+                itemId = "g3-regroup-82-37",
             ),
             QuizQuestion(
                 text = "What is 63 - 28?",
@@ -52,6 +54,7 @@ internal object QuizSubjectCatalog {
                 difficulty = 0.5f,
                 explanation = "Trade 1 ten so 13 - 8 = 5. Then 5 - 2 = 3, so the answer is 35.",
                 skillId = "two_digit_subtraction_regrouping",
+                itemId = "g3-regroup-63-28",
             )
         )
     )

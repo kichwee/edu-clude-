@@ -9,7 +9,10 @@ class QuizSubjectCatalogTest {
 
     @Test
     fun canonicalMathIdResolvesTheQuestionBank() {
-        assertEquals(3, QuizSubjectCatalog.questionsFor(QuizSubjectCatalog.MATHEMATICS_ID)?.size)
+        assertEquals(
+            listOf("g3-regroup-45-29", "g3-regroup-82-37", "g3-regroup-63-28"),
+            QuizSubjectCatalog.questionsFor(QuizSubjectCatalog.MATHEMATICS_ID)?.map { it.itemId },
+        )
     }
 
     @Test

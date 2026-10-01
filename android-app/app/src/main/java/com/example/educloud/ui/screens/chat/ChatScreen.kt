@@ -3,9 +3,11 @@ package com.example.educloud.ui.screens.chat
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -29,6 +31,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.educloud.sync.HOMEWORK_TUTOR_PROMPT
+import com.example.educloud.sync.INTEREST_CHIP_LABELS
 import com.example.educloud.theme.EduCloudInk
 import com.example.educloud.theme.EduCloudLake
 import com.example.educloud.theme.EduCloudLeaf
@@ -45,15 +49,18 @@ import com.example.educloud.ui.components.StorybookPage
 fun ChatScreen(
     subject: String,
     viewModel: ChatViewModel,
-    onBack: () -> Unit
+    onBack: () -> Unit,
+    fromClass: Boolean = false,
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val listState = rememberLazyListState()
     val keyboard = LocalSoftwareKeyboardController.current
 
-    // Initialize when subject changes
-    LaunchedEffect(subject) {
-        viewModel.init(subject)
+    LaunchedEffect(subject, fromClass) {
+        viewModel.init(
+            subject,
+            openingPrompt = if (fromClass) HOMEWORK_TUTOR_PROMPT else "",
+        )
     }
 
     // Auto-scroll to latest message
@@ -95,7 +102,7 @@ fun ChatScreen(
                     ) {
                         Row(horizontalArrangement = Arrangement.spacedBy(6.dp), verticalAlignment = Alignment.CenterVertically) {
                             Text(
-                                text = if (state.isOpenAiConnected) "✨ OpenAI Cloud Connected" else "📱 Local Offline Pack",
+                                text = if (state.isOpenAiConnected) "Cloud re-explain on" else "Works offline",
                                 style = MaterialTheme.typography.labelSmall,
                                 fontWeight = FontWeight.Bold,
                                 color = if (state.isOpenAiConnected) com.example.educloud.ui.components.DuoGreenDark else EduCloudMutedInk
@@ -232,24 +239,43 @@ fun ChatScreen(
                     contentPadding = PaddingValues(vertical = 16.dp)
                 ) {
                     item {
-                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                            AssistChip(
-                                onClick = { viewModel.sendSuggestedMessage("Give me a Grade 3 Maths challenge") },
-                                label = { Text("🎲 Challenge") },
-                            )
-                            AssistChip(
-                                onClick = { viewModel.sendSuggestedMessage("Give me a hint for counting in twos") },
-                                label = { Text("💡 Hint") },
-                            )
-                            AssistChip(
-                                onClick = { viewModel.sendSuggestedMessage("Tell me a story about counting in twos") },
-                                label = { Text("✨ Story") },
-                            )
-                            AssistChip(
-                                onClick = viewModel::explainMyWay,
-                                enabled = state.canExplainMyWay && !state.isExplainingMyWay,
-                                label = { Text("🔁 Explain it my way") },
-                            )
+                        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                            Row(
+                                modifier = Modifier.horizontalScroll(rememberScrollState()),
+                                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                            ) {
+                                AssistChip(
+                                    onClick = { viewModel.sendSuggestedMessage("Give me a Grade 3 Maths challenge") },
+                                    label = { Text("🎲 Challenge") },
+                                )
+                                AssistChip(
+                                    onClick = { viewModel.sendSuggestedMessage("Give me a hint for counting in twos") },
+                                    label = { Text("💡 Hint") },
+                                )
+                                AssistChip(
+                                    onClick = { viewModel.sendSuggestedMessage("Tell me a story about counting in twos") },
+                                    label = { Text("✨ Story") },
+                                )
+                                AssistChip(
+                                    onClick = viewModel::explainMyWay,
+                                    enabled = state.canExplainMyWay && !state.isExplainingMyWay,
+                                    label = { Text("🔁 Explain it my way") },
+                                )
+                            }
+                            if (state.interestDomains.isNotEmpty()) {
+                                Row(
+                                    modifier = Modifier.horizontalScroll(rememberScrollState()),
+                                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                                ) {
+                                    state.interestDomains.forEach { domain ->
+                                        FilterChip(
+                                            selected = domain == state.selectedAnalogyDomain,
+                                            onClick = { viewModel.selectAnalogyDomain(domain) },
+                                            label = { Text(INTEREST_CHIP_LABELS[domain] ?: domain) },
+                                        )
+                                    }
+                                }
+                            }
                         }
                     }
                     items(state.messages, key = { it.id }) { msg ->

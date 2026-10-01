@@ -109,6 +109,9 @@ class LearningRepository(
             )
         }
 
+    fun observeQuizAnswersSince(studentId: Int, sinceMillis: Long): Flow<Int> =
+        interactionDao.observeQuizAnswersSince(studentId, sinceMillis)
+
     suspend fun getPendingSyncInteractions(studentId: Int): List<Interaction> =
         interactionDao.getPendingSyncInteractions(studentId)
 
@@ -123,5 +126,9 @@ class LearningRepository(
          */
         internal fun epochDayOf(millis: Long, zone: ZoneId = ZoneId.systemDefault()): Long =
             Instant.ofEpochMilli(millis).atZone(zone).toLocalDate().toEpochDay()
+
+        /** Inclusive start of the learner's local calendar day. */
+        internal fun startOfLocalDayMillis(millis: Long, zone: ZoneId = ZoneId.systemDefault()): Long =
+            Instant.ofEpochMilli(millis).atZone(zone).toLocalDate().atStartOfDay(zone).toInstant().toEpochMilli()
     }
 }

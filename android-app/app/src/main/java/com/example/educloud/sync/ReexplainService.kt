@@ -28,6 +28,17 @@ val ANALOGY_DOMAINS = listOf(
 )
 
 const val MAX_INTEREST_CHIPS = 3
+
+val INTEREST_CHIP_LABELS = mapOf(
+    "sports" to "⚽ Sports",
+    "animals" to "🐘 Animals",
+    "music" to "🥁 Music",
+    "transport" to "🚌 Transport",
+    "food" to "🥭 Food",
+    "games" to "🎲 Games",
+    "nature" to "🌦️ Nature",
+    "money" to "🪙 Money",
+)
 const val MAX_SOURCE_EXCERPT_CHARS = 600
 const val MAX_LEARNER_QUESTION_CHARS = 240
 
